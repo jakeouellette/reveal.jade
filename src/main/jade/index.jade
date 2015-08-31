@@ -1,77 +1,8 @@
 extends ./layout.jade
 
 block slides
-  // Intro
   section
-    p Jake Ouellette @Jakeout
-    img(src='resources/twitter_logo.png', height='200', class='noborder')
-  section
-    div.fragment.dimafter
-      h1 I heard you like Plugins
-    h2.fragment(data-autoslide=0) Architecting plugins for extensibility
-    +notes.
-      I'm Jake Ouellette, software engineer at Twitter, this is my talk.
-      Add this is a talk about extensibility
-  section
-    p.fragment plugins ?
-    +notes
-      ul
-        li talk about plugin development
-        li wanted talk focused on extensibility
-        li plugins are the architectural detail of how we extend gradle
-        li obstensibly, had to write a talk about plugins
-      p that said, is a talk about good SE
-      p please learn broadly
-  section
-    p my perspectives
-    +notes
-      p I've done a lot of Gradle plugin development.
-      p Last year I gave a similar talk to this
-      p and it motivated me to change a bunch of things
-      p in our plugins. point out my flaws
-  section
-    p fabric
-    img(src='resources/fabric_logo.png', height='300', class='noborder')
-    +notes
-      p What have I built?  I work at Twitter, on Twitter's Mobile platform, fabric. 
-      p Fabric is a suite of Mobile SDKs which developers use to enhance their application
-      p One example build tool is Crashlytics.
-  section
-    p crashlytics
-    img(src='resources/crashlytics_logo.png', height='300', class='noborder')
-    +notes.
-      Crashes as a service.
-  section
-    p crashes-as-a-service
-    img(src='resources/fabric_app.png', height='800', class='noborder')
-  section
-    // TODO: land on first fragment automatically
-    p.fragment.dimafter foo()
-    p.fragment.dimafter a()
-    p.fragment foo()
-    +notes.
-      When you compile your app, you might have a method foo
-      But when it gets compiled, a tool called proguard converts it into 'a'
-      There's a file during your build which says "a() -&gt; foo()"
-      We send these files to our backend and allow you to inspect your crashes
-  section
-    img(src='resources/crashlytics_logo.png', height='300', class='noborder')
-    p A gradle plugin
-    +notes.
-      so all of this is a gradle plugin built on top of the android plugin for gradle
-  section
-    img(src='resources/android_robot.png', height='300', class='noborder')
-    p integrates with android
-  section
-    h2 overview
-    ul
-      li.fragment.dimafter teach you about extensible software
-      li.fragment.dimafter contrast gradle to other tools
-      li.fragment focus on extensibility within gradle
-    +notes
-      p OK, so what is this talk about:
-  // End of introduction
-  // Problem statement, defining extensibility
+    strong Highly Cohesive Software Programming
   section
     p let's pretend you're a software engineer
     p.fragment Senior Jawa Developer
@@ -80,54 +11,59 @@ block slides
       Let's pretend you're a software engineer
       Let's say I have a mythical language called Jawa,
   section
-    p.fragment.dimafter new build!
-    p.fragment apply plugin: 'jawa'
-    +notes.
-      and And so you get excited, and start a new gradle build
+    p.fragment.dimafter new feature
   section
-    p.fragment.dimafter now you hook it up to ci & translation service
-    p.fragment apply plugin: 'ci-3po'
-    +notes.
-      now you hook it up to be uploaded to a ci & translation service
+    p.fragment.dimafter a service to upload translations to ci
+    p.fragment ci-3po
   section
     p.fragment.dimafter awesome. 
-    p.fragment.dimafter You hook up a plugin that converts resources into d3 visualizations in jawa
-    p.fragment apply plugin: 'r2d3'
+    p.fragment.dimafter Your teammate just finished a tool to convert resources into d3 visualizations in jawa
+    p.fragment r2d3
+    +notes.
+      and they push it up
   section
-    p.fragment.dimafter BUILD FAILED
+    p let's make them work together
+    img.fragment.noborder(src='resources/c3po_r2d2_1.gif')
     p.fragment oh dear
     +notes.
-      It turns out, r-2-d3 and ci-3po were both messing with your resources.
-      you see, ci-3po is an unextensible plugin that is also translating
-      your resources for your jawa app as you build.
+      It turns out, r-2-d3 and ci-3po were both mutating the same file resources
+      you see, r2d3 was built unextensibly
   section
-    p so now you're stuck.
+    p They're tangled together
     div.fragment
       img.noborder(src='resources/r2po.png')
-      em source: http://celebrityskinned.com/
     +notes.
-      you have to pick one of the two tools, or try
-      to hack them apart
+      you have to hack them apart
   section
-    p extensibility is a spectrum
+    p Programming can be like wiring up a switchboard
+    img(src='resources/switchboard.jpg', height='300', class='noborder')
+  section
+    img(src='resources/switchboard_3.jpg', height='300', class='noborder')
+    +notes.
+      If two people really far away keep calling each other, it'd get pretty tiring to wire them up
+  section
+    img(src='resources/switchboard_2.jpg', height='300', class='noborder')
+    +notes.
+      And can you imagine, if every time you had to call someone, you had to call another operator?
+  section
+    p `Cohesion`: Nearby things are related
+  section
+    p `Tight Coupling`: Unrelated things cannot be separated
+  section
+    p Cohesion is a spectrum
     p.fragment has 2 sides, light and dark
     +notes.
       Extensibility is a spectrum.
       You can go all in on extensibility, or you can make
       it impossible for others to play in your walled garden
-  // How can we recognize extensibility is?
   section
-    p.fragment.dimafter Unextensible: ci-3po + other plugins = impossible
-    p.fragment.dimafter More Extensible: ci-3po + other plugins = feasible
-    p.fragment Most extensible: ci-3po's components separable
+    p High Cohesion
+    p.fragment.replaceafter Enables MVC
+    p.fragment.replaceafter Minimizes changes to code
+    p.fragment.replaceafter Makes things easier to test
+    p.fragment Enables Separation of Concerns
   section
-    p be selfish
-    p.fragment.replaceafter extensibility
-    p.fragment.replaceafter high cohesion
-    p.fragment.replaceafter easy-to-extend with mocks
-    p.fragment.replaceafter easy-to-reuse elsewhere
-    p.fragment easy-to-understand
-    p.fragment
+    p High Cohesion: Make things easy to understand
       p.fragment.replaceafter
         img.noborder(src='resources/xkcd_star_wars.png', width='900')
         em source: http://xkcd.com/657/
@@ -141,26 +77,428 @@ block slides
       p compared to primer, with very few characters, is nearly incomprehensible
       p a movie, about time travel
   section
-    p.fragment.dimafter Extensible Software in Two Steps:
-    ol
-      li.fragment.dimafter Build many layers
-      li.fragment Each layer only solves its own problems
+      p Overview
+      ul
+        li.fragment.dimafter "object oriented" programming
+        li.fragment.dimafter cohesiveness?
     +notes.
-      The first step in this may not be possible if business requirements prevent
-      you. E.g., maybe you need to tightly couple translation to CI uploads,
-      but there's no reason to couple it to compilation.
   section
-    p modularity.jawa ?
+    p What is object oriented Programming, anyway?
+  section
+    p OO, the great pancea?
+  section
+    Most people misunderstand what it is
+  section
+    Most schools start out with something like this
+    +codeexample
+      | class Point {
+      |   final int x, y
+      | 
+      |   public int getX() { return x }
+      |   ...
+  section
+    p lisp
+    +codeexample
+      | 
+      | (lambda () x)
+      | 
     +notes.
-      You'll notice I'm not advocating a modularity system to you to achieve extensibility
-      OSGi, Java 9, j2ee WARs, Android services
+      Not too different from a lambda function in a functional language
   section
-    p To learn how to build extensible Gradle plugins,
-    p you must first learn to how program.
+    +codeexample
+      | 
+      | (lambda (var) 
+      |   (cond (= var "x") 
+      |     x 
+      |     y))
+      | 
+    +notes.
+      Ok, maybe one that determines if it should return x or y
   section
-    p what do advocates recommend?
+    p C
+    +codeexample
+      | 
+      | point-&gt;x
+      | 
   section
-    p SOLID-OO
+    p ok, does mutation help?
+    +codeexample
+      | class Point {
+      |   int x, y
+      | 
+      |   public void setX(int x) { this.x = x }
+      |   ...
+    +notes.
+      Easily represent as a struct in a lower order language
+      If no mutation
+  section
+    p C
+    p point-&gt;x = 5
+  section
+    p Besides: Immutability ain't needed
+    +codeexample
+      | class Point {
+      |   int x, y
+      | 
+      |   public Point setX(int newX) { 
+      |     new Point(newX, y) 
+      |   }
+      |   ...
+    +notes.
+      Value objects, transformed into themself
+  section
+    +codeexample
+      | class IntPoint implements Point {
+      |   int x, y
+      | 
+      |   public int getX() { return x }
+      |   ...
+    +notes.
+      Ok, what about when you start representing abstractions?
+  section
+    +codeexample
+      | class DoublePoint implements Point {
+      |   double x, y
+      |   
+      |   public int getX() { return (int)x }
+      |   ...
+    +notes.
+      Now you can use the same APIs with different underlying representation
+  section
+    p A good example?
+    +notes.
+      is that really a good example though? In this case it's just
+      data that is varying, not behavior
+  section
+    +codeexample
+      | class Image implements Drawable {
+      |   int currentFrame = ...
+      | 
+      |   public void draw(Graphics g) { ... }
+      |     ...
+    +notes.
+      Let's use a behavioral abstraction
+  section
+    +codeexample
+      | class Gif implements Drawable {
+      |   int currentFrame = ...
+      | 
+      |   public void draw(Graphics g) { ... }
+      |     ...
+    +notes.
+      Now you can represent new abstractions
+  section
+    An object is a first-class, dynamically dispatched behavior.
+    +notes.
+      http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
+      dynamic dispatch in C: http://www.cs.rit.edu/~ats/books/ooc.pdf
+      http://lwn.net/Articles/444910/
+  section
+    p Dynamic dispatch is sometimes called 
+    ul 
+      li.fragment.dimafter "message passing"
+      li.fragment.dimafter "late binding"
+      li.fragment.dimafter "dynamic binding"
+      li.fragment.dimafter "polymorphism" 
+    +notes.
+      Polymorphism is what java devs are used to hearing
+  section
+    p Optional, but #[strong not essential:]
+    ul
+      li.fragment mutable state
+      li.fragment inheritance
+      li.fragment classes
+      li.fragment.fragment identity
+  section
+    p Mutable state
+    +notes.
+      Compose a program of value objects, state changes
+      through creation of new objects
+  section
+    +codeexample
+      | class Gif implements Drawable {
+      |   int currentFrame = ...
+      | 
+      +codeblock
+        |   public Pair&lt;Frame, Drawable&gt; draw() { 
+      |    return new Pair(
+      |      getFrame(), 
+      |      new Gif(currentFrame++));
+      |   }
+      | ...
+      +notes.
+        We can create the same Gif by returning
+        a frame of the image, no mutation required
+  section
+    p inheritance
+    +notes.
+      composition can be isometric
+      Go: Dynamic dispatch
+      In java, inheritance is a means to achieve dispatch, so essential,
+      but extends is not:
+  section
+    +codeexample
+      |  interface Drawable {
+      |    public void draw(Graphics g);
+      |  }
+  section
+    Others might pass around that thing
+    +codeexample
+      |  public void setDrawable(Drawable d);
+    +notes.
+      Must be something that extends that type
+  section
+    p Inherits interface, can be used as type:
+    +codeexample
+      |  public class Gif implements Drawable {
+      |    public void draw(Graphics g) {
+      | 
+  section
+    p Does not inherit interface, can't be used
+    +codeexample
+      |  public class Artist {
+      |    public void draw(Graphics g);
+      | 
+    +notes.
+      Artist doesn't extend the interface, so can't be used.
+      You could wrap this artist, but there's a lot of downsides there
+  section
+    p Go: Interfaces are protocols
+    +codeexample
+      |  type Drawable interface {
+      |    Draw() 
+      |  }
+    p
+      em anything with Draw can be used by anything needing a Drawable
+    +notes.
+      Languages like go can define new protocols / interfaces
+      Existing types didn't inherit them explicitly.
+  section
+    p you don't need inheritance in all languages to do polymorphism
+  section
+    p identity, e.g., ==
+    +notes.
+      Compare by reference
+  section
+    p a.id.equals(b.id)
+    +notes.
+      If this is needed for objects, can be added to specific implementation
+      if things are using this explicitly, it is tightly coupling and preventing
+      dynamic dispatch on equals, so may cause issues.
+  section
+    p Objects are useful
+    p.fragment If they have state, they don't expose it
+  section
+    p Use objects to achieve high level conceptual programming.
+    p.fragment.replaceafter Law of demeter
+    p.fragment Principle of Least Surprise
+  section
+    p Don't do things to my data, ask me to do things.
+  section
+    p Law of demeter: 
+    p.fragment when one wants a dog to walk, 
+    p.fragment one does not command the dog's legs to walk directly; 
+    p.fragment instead one commands the dog which then commands its own legs.
+  section
+    p A method may only call things in direct scope
+  section
+    p So let's say this circle represents an object with a method
+    img(src='resources/lod_1.png', height='300', class='noborder')
+  section
+    p It can call a method of it's own class
+    img(src='resources/lod_2.png', height='300', class='noborder')
+    +codeexample
+      | this.draw()
+  section
+    p Or methods of objects injected in
+    img(src='resources/lod_4.png', height='300', class='noborder')
+    +codeexample
+      | graphics.draw()
+  section
+    p Or methods of objects it made
+    img(src='resources/lod_5.png', height='300', class='noborder')
+    +codeexample
+      | local = new Gif()
+      | local.draw()
+  section
+    p Or methods of objects in it's class
+    img(src='resources/lod_3.png', height='300', class='noborder')
+    +codeexample
+      | this.helper.draw()
+  section
+    p If you can do it anyway, why am I doing it for you?
+  section
+    p Law of demeter is about #[em behavior] of objects
+  section
+    p A lot of data is hierarchical
+    +codeexample
+      | "person": [
+      |   "head": [ "hair": "brown", "eyes": "blue" ], 
+      |   "legs": 2]
+  section
+    p Can be encoded as objects
+    +codeexample
+      | person = new Person(
+      |   new Head(new Hair("brown"), new Eyes("blue")), 
+      |   new Legs(2), ...)
+  section
+    p Does this violate law of demeter?
+    +codeexample
+      | person.hair.color
+  section
+    p Here, person is just immutable data-structure
+  section
+    p Not the same "badness"
+  section
+    +codeexample
+      | public class PersonPainter implements Drawable {
+      |   public PersonPainter(Person p)
+    +notes. 
+      One benefit of immutable abstractions is it makes
+      parameter lists simpler
+  section
+    +codeexample
+      | public class PersonPainter implements Drawable {
+      |   public PersonPainter(Hair h, Legs l, ...)
+    +notes.
+      Could be passing in each individual component.
+  section
+    p violating the law
+    +codeexample
+      | public class View {
+      |   public void paint() {
+      +codeblock
+        |     if (personPainter.getPerson()
+        |           .hair().equals("brown") {
+      |       // Vary paint style
+      |     }
+    +notes.
+      What happens when a higher level class reaches into
+      a bheavior object's inner state?
+  section
+    p With Inheritance: Easy to add new classes 
+    +codeexample
+      | public class PersonPainter implements Drawable {
+      |   public void draw(Graphics g) {
+      |      ...
+      |   }
+  section
+    +codeexample
+      | public class DogPainter implements Drawable {
+      |   public void draw(Graphics g) {
+      |      ...
+      |   }
+  section
+    p New classes for same behaviors through extends
+    div(style="background:#fff;")
+      img(src='resources/new_class.gif', height='150', class='noborder')
+  section
+    p Let's say you want to add a behavior
+    +codeexample
+      | 
+      |   public void drawOutline(Graphics g) {
+      | 
+  section
+    +codeexample
+      |  interface Drawable {
+      |    public void draw(Graphics g);
+      +codeblock
+        |    public void drawOutline(Graphics g);
+      |  }
+  section
+    +codeexample
+      | public class PersonPainter implements Drawable {
+      |   public void draw(Graphics g) {
+      |      ...
+      |   }
+      | 
+      +codeblock
+        | 
+        |   public void drawOutline(Graphics g) {
+        |      ...
+  section
+    div(style="background:#fff;")
+      img(src='resources/new_function.gif', height='150', class='noborder')
+  section
+    p Could pull "Painting" behavior into single class:
+    +codeexample
+      | public class Painter {
+      | 
+      |   public void draw(Object o) {
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
+      |     ...
+      |   }
+  section
+    +codeexample
+      | public class Painter {
+      | 
+      |   public void draw(Object o) {
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
+      |   }
+      +codeblock
+        |   public void drawOutline(Object o) {
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
+      |     ...
+      |   }
+  section
+    p But then, the only way to extend types is to add to every behavior
+    +codeexample
+      | public class Painter {
+      | 
+      |   public drawOutline(Object o) {
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
+      | 
+      |     if (o instanceof Dog) {
+      |       ...
+      |     }
+      +codeblock
+        |     if (o instanceof Cat) {
+        |       ...
+        |     }
+      |     ...
+  section
+    div(style="background:#fff;")
+      img(src='resources/new_class.gif', height='300', class='noborder')
+  section
+    p this is known as the `expression problem`
+  section
+    p There are solutions
+    div.fragment(style="background:#fff;")
+      p Clojure Protocols
+      img(src='resources/protocols.gif', height='300', class='noborder')
+  section
+    p Keep data safe: Don't conflate "Person" with "Painting a Person"
+    p One is data, the other is behavior
+  section
+    p Person was just data, wouldn't ask person to paint itself
+  section
+    p In Java, must make the tradeoff between:
+    ul
+      li.fragment easy type extension
+      li.fragment easy behavior extension 
+  section
+    p AVOID mixing concepts:
+    +codeexample
+      | public class PersonPainter implements Drawable {
+      |   public void draw(Graphics g) {
+      |     ...
+      |   }
+      |   
+      |   public Color getHair() {
+  section
+    p So that's Object Orientation
+  section
+    p What leads to High Cohesion?
+  section
+    p Using SOLID
     p 
       em Martin Fowler
     ul.fragment
@@ -235,7 +573,7 @@ block slides
           |   }
         | 
         +codeblock
-          |   public List&lt;File&gt; getResources(String projectRoot) {
+          |   private List&lt;File&gt; getResources(String projectRoot) {
         |     ...
         |   }
         | }
@@ -246,14 +584,48 @@ block slides
       p so this visualize task
       p calls this getResources method
   section
+    p getResources is irreplacable, but irrelevant
+  section
+    p Unmockable.
+  section
+    p Testing requires knowledge of internals :(
+    +codeexample
+      | 
+      | PowerMock.createPartialMock(R2D3.class, 
+      |   "getResources").andReturn(files);
+      | 
+    +notes.
+      To change the behavior in unit test, you'd have to mock this get resources
+      method.
+  section
+    p Powermock requires looking at internals
+    img(src='resources/c3po_naked.jpg', height='400', class='noborder')
+    +notes.
+       a hidden collaborator
+  section
+    p No Mocks in production
+    img(src='resources/mock_programmer.gif', height='450', class='noborder')
+    +notes.
+      not like we can use them to replace behaviors.
+  section
+    p Implies an iceberg
+    img(src='resources/iceberg.jpg', height='400', class='noborder')
+    +notes.
+      The need to powermock implies a tight coupling on internal behavior, not
+      a single responsibility
+      Not taking advantage of OO facilities to separate behaviors
+  section
+    p API exists, why not make it explicit?
+  section
     p what if I extend the thing
     +codeexample
-      | class R2D3 extends FileFinder {
-      | 
       +codeblock
-        |   public visualize(String projectRoot) {
+        | class R2D3 extends FileFinder {
+      | 
+      |   public visualize(String projectRoot) {
+      +codeblock
         |     List&lt;File&gt; resources = getResources(projectRoot)
-        |     // Visualizer code
+      |     // Visualizer code
       |   }
       | }
     div.fragment 
@@ -265,6 +637,21 @@ block slides
       the problem is this method is tightly coupled
       to this class's implementation of get resources
   section
+    +codeexample
+      | 
+      | PowerMock.createPartialMock(FileFinder.class, 
+      |   "getResources").andReturn(files);
+      | 
+    +notes.
+      Still need to mock out the behavior in test, and
+      if that internal class references something mock-worthy, but it, itself, isnt,
+      then you get into tree-hierarchy searches that are complicated
+  section
+    p Hard to Swap
+    img(src='resources/swap_board.gif', height='500', class='noborder')
+    +notes.
+      hard to change behaviors, hard to swap out
+  section
     p ok i'll do it earlier
     +codeexample
       p
@@ -273,15 +660,16 @@ block slides
         | 
         +codeblock
           |   R2d3(String projectRoot) {
-          |     ResourceService finder = new FileFinder(projectRoot)
-          |     files = finder.getResources()
-          |   }
+        |     ResourceService finder = 
+        |       new FileFinder(projectRoot)
+        |     files = finder.getResources()
+        |   }
         | 
         |   public visualize() {
         |     ...
         |   }
         | }
-    div.fragment 
+    div.fragment
       p
         em multiple-responsibility through 
       p 
@@ -289,6 +677,15 @@ block slides
     +notes
       p OK, we can extract FileFinder out
       p create it ahead of time in our constructor
+  section
+    p Testing requires knowledge of internals :(
+    +codeexample
+      | 
+      | expectNew(FileFinder.class, "projectRoot")
+      |   .andReturn(files);
+      | 
+    +notes.
+      Now, in order to change the behavior you have to mock out internals.
   section
     h2 avoid new in constructors
     p.fragment dependency inversion
@@ -301,10 +698,10 @@ block slides
         | class R2D3 {
         |   List&lt;File&gt; files;
         | 
+        |   R2d3(String projectRoot) {
         +codeblock
-          |   R2d3(String projectRoot) {
           |     files = FileFinder.getResources(projectRoot)
-          |   }
+        |   }
         | }
     div.fragment 
       p
@@ -314,35 +711,40 @@ block slides
     +notes.
       OK
   section
-    p hey I fixed it
+    p Testing requires knowledge of internals :(
     +codeexample
-      | class R2D3 {
-      |   List&lt;File&gt; files;
       | 
-      +codeblock
-        |   public visualize(String projectRoot) {
-        |     FileFinder finder = new FileFinder(projectRoot)
-      |     files = finder.getResources(projectRoot)
-      |     // Visualizer code
-      |   }
-      | }
-    div.fragment 
-      p no, you didn't!
-      p
-        em multiple-responsibility
-      p
-        em ... coupling just delayed
-      +notes.
-        Fine, move it out of the constructor!!
-        NOPE! still coupled.
+      |  PowerMock.mockStaticPartial(
+      |    FileFinder.class, "getResources");
+      |  EasyMock.expect(FileFinder.getResources(...))
+      |    .andReturn(files);
+      | 
+    +notes.
+      Still mocking internals
   section
-    p good code
+    p When do statics improve code?
+    p.fragment.dimafter no this
+    p.fragment.dimafter pure functions
+    p.fragment.dimafter Still is coupling
+    +notes.
+      Avoid bleeding local scope. Handy for pure functions, good no intent to override
+  section
+    +codeexample
+      | class R2D4 extends R2D3 {
+      | 
+      |   @override
+      |   public List&lt;File&gt; getResources()
+    +notes.
+      One of the nice things about statics is they prevent inheritance
+      from being used to replace collaborator behaviors
+  section
+    p perfect code
     +codeexample
       | class R2D3 {
-      |   final &lt;File&gt; files;
+      |   final List&lt;File&gt; files;
       | 
       +codeblock
-        |   R2d3(&lt;File&gt; visualizableFiles) {
+        |   R2d3(List&lt;File&gt; visualizableFiles) {
         |     this.files = visualizableFiles;
         |   }
       | 
@@ -356,6 +758,31 @@ block slides
       out the concerns and JUST pass in the files
       you might also inject it into the
       visualize method depending on how it works
+  section
+    p perfect is the enemy of good
+    +codeexample
+      p
+        | class R2D3 {
+        |   List&lt;File&gt; files;
+        | 
+        +codeblock
+          |   public static R2D3 create(String projectRoot) {
+          |     ResourceService finder = 
+          |       new FileFinder(projectRoot)
+          |     files = finder.getResources()
+          |     return new R2D3(files)
+          |   }
+        | 
+        +codeblock
+          |   R2d3(List&lt;File&gt; visualizableFiles) {
+          |     this.files = visualizableFiles;
+          |   }
+        |   ...
+        | }
+    +notes.
+      You can make incremental refactorings that
+      get you closer to ideal. Better than passing
+      factories everywhere
   section
     p so that's 'single responsibility'
   section
@@ -372,7 +799,8 @@ block slides
       | class Ci3po {
       |   ...
       |   public translate(TaskContainer t) {
-      |     List&lt;File&gt; files = t.getByPath(:app:fileFinder").fileFinder.getResources();
+      +codeblock
+        |     List&lt;File&gt; files = t.getByPath(:app:fileFinder").fileFinder.getResources();
       |     ...
       |   }
       | }
@@ -382,24 +810,57 @@ block slides
     +notes.
       This is tightly coupled, to mock it:
   section
-    +codeexample
-      |   def collaborator() {
-      +codeblock
-        |     Ci3po.translate(new TaskContainer() {
-        |       public getByPath(String s) {
-        |         return resourceService
-        |       }
-        |       ... (40 more lines of code)
-        |     })
-      |   }
-      | }
+    p Annoying to mock.
   section
     +codeexample
-      |   def collaborator() {
+      |     Ci3po.translate(new TaskContainer() {
       +codeblock
-        |     Ci3po.translate(resourceService.getResources())
+        |       public getByPath(String s) {
+      |         return resourceService
+      |       }
+      +codeblock
+        |       ... (40 more lines of code)
+      |     })
+    +notes.
+      If we want to mock just the internal service, we have to
+      mock the full api, including the 40-some odd methods that are unused
+  section
+    p Could have been easier.
+  section
+    +codeexample
+      |     Ci3po.translate(resourceService.getResources())
+  section
+    p Cognitive load
+    img(src='resources/confused_1.gif', height='500', class='noborder')
+    +notes.
+      The cognitive load to understand mirrors the actual API usage
+  section
+    +codeexample
+      | interface ResourceService
+      |   public List&lt;File&gt; getResources()
+    p vs
+    div.fragment
+      +codeexample
+        | interface ResourceService
+        |   public List&lt;File&gt; getResources()
+        |   public void delete()
+        |   public File find(String path)
+    +notes.
+      if a class doesn't need elements of an interface
+        let's not make it more complex because of them
+  section
+    p Inevitably:
+    +codeexample
+      | class YourResourceService extends ResourceService
+      |   public delete() {
+      |     throw new UnsupportedOperationException("nooo!")
       |   }
-      | }
+      |   ...
+    div.fragment
+      p
+        em tight coupled inputs through
+      p
+        em extreme liskov substitution
   section
     +codeexample
       | interface ResourceService
@@ -409,7 +870,8 @@ block slides
         | class FileFinder
         |   public List&lt;File&gt; getResources() {
         |   ...
-        |   public void deleteFiles() {
+        +codeblock
+          |   public void deleteFiles() {
         |   ...
     +notes
       p Let's assume you've got a interface, resource service
@@ -420,7 +882,8 @@ block slides
     +codeexample
       | class Ci3po {
       |   ...
-      |   public translate(FileFinder f) {
+      +codeblock
+        |   public translate(FileFinder f) {
       |     List&lt;File&gt; = f.getResources()
       |     ...
       |   }
@@ -436,21 +899,9 @@ block slides
       want to have to build that state.
       Let me pass in what you'll use!
   section
+    p I would have to extend a real implementation.
     +codeexample
-      | interface ResourceService
-      |   public List&lt;File&gt; getResources()
-    p vs
-    div.fragment
-      +codeexample
-        | interface ResourceService
-        |   public List&lt;File&gt; getResources()
-        |   public void delete()
-        |   public File find(String path)
-    +notes.
-      if a class doesn't need elements of an interface
-        let's not make it mroe complex because of them
-  section
-    p YAGNI
+      | ci3po.translate(new FileFinder() {...});
   section
     +codeexample
       | class Ci3po {
@@ -472,14 +923,7 @@ block slides
       I'm STILL locked into creating a FileFinder,
       because you are using instanceof
   section
-    p 717 cases of instanceof in gradle github repo
-    +notes.
-      not necessarily bad, but can be
-      If you're checking more than once instanceof,
-      adding a new one requires changing the code
-      instead, ask services to do things for you
-  section
-    h2 instanceof only immutable datatypes
+    h2 instanceof only on datatypes
     p.fragment further reading: scala case classes
     // TODO: add matcher here
     // TODO: fully grep this
@@ -499,7 +943,7 @@ block slides
       |   }
       | }
     +notes.
-      Ok, now let's say Ci3po has a translator it uses
+      Ok, now let's say Ci3po has an uploader it uses
   section
     +codeexample
       | class Ci3po {
@@ -526,596 +970,52 @@ block slides
   section
     p better
     +codeexample
-      | class Ci3po {
-      | 
-      |   Uploader uploader;
-      | 
-      |   public translate(ResourceService f) {
-      +codeblock
-        |     boolean hasTranslations = uploader.hasTranslations(f.getFiles())
-      |     ...
-      |   }
-      | }
-  section
-    p demand-side problem:
-    +codeexample
-      | class YourResourceService extends ResourceService
-      |   public delete() {
-      |     throw new UnsupportedOperationException("nooo!")
-      |   }
-      |   ...
-    div.fragment
-      p
-        em tight coupled inputs through
-      p
-        em extreme liskov substitution
-    +notes
-      p What if I wrap Ci3po, but take in your resource
-      p service? If you don't implement apis
-      p and I think I have to call them, will break things
+      |  uploader.hasTranslations(files)
   section
     h2 Core Principles
     ol
       li.fragment Classes should have a single responsibility
       li.fragment Classes should not have visibility into scope they don't need.
-  // End general software engineering extensibility
   section
-    p Apply some of these principles to existing build tools
-    ul.fragment
-      li Ant
-      li Maven
-      li Gradle
+    p Real world applications
+  section
+    p per-ide onboarding instructions
+    div(style="background:#777;")
+      img(src='resources/refactoring_1_needs.png', class='noborder')
     +notes.
-      Others
-      Grunt, Gulp, WebPack bazel, rake, leinengen
+      We used to build the IDE onboarding instructions per IDE.
+      Every time a new dev needed to add onboarding instructions, they had
+      to change intellij and eclipse
+      The problem was, there was a difference between the data "what needed to be onboarded",
+      and the process of onboarding
   section
-    p.fragment ant
-    +codeexample.fragment
-      | &lt;project&gt;
-      |  
-      |   &lt;target name="clean"&gt;
-      |     &lt;delete dir="build"/&gt;
-      |   &lt;/target&gt;
-      | 
-      +codeblock 
-        |   &lt;target name="compile" dependsOn="clean"&gt;
-        |     &lt;mkdir dir="build/classes"/&gt;
-        |     &lt;javac srcdir="src" destdir="build/classes"/&gt;
-      |   &lt;/target&gt;
+    p Refactored
+    div(style="background:#777;")  
+      img(src='resources/refactoring_1.png', class='noborder')
     +notes.
-      Ant's composability model is vastly different from gradle
-      Tasks depend on other tasks, similar to gradle
+      We pulled the IDE onboarding instructions out, they were just data
+      now each IDE responds to data independently
   section
-    +codeexample
-      |   &lt;target name="compile" dependsOn="clean"&gt;
-      +codeblock 
-        |     &lt;mkdir dir="${build.classes}"/&gt;
-      |     &lt;javac srcdir="src" destdir="build/classes"/&gt;
-      |   &lt;/target&gt;
+    p view-owning-controller
+    div(style="background:#777;")
+      img(src='resources/refactoring_2.png', class='noborder')
     +notes.
-      you can replace folders with variables and get "injected"
-      behaviors, but because it's all just XML, it's hard to follow
-      no patterns or idioms
+      Another example: our view owned our controller, any time we wanted
+      to change navigation, we were manipulating classes that were constructing jlabels
+      When we need the ability for people to jump into a context for migration,
+      the code for this got really gross, so we made each view dumb.
+      Views only respond to and generate events and show sub-views. They don't transition
+      to new states. This is heirarchical, so subviews are dumb, but the higher level view
+      might have some controller logic
   section
-    div.fragment
-      img.noborder(src='resources/r2po.png')
-    +notes.
-      in ivy, if you have two things conflicting,
-      you'd manually have to edit both of their build.xmls,
-      but it's up to the ofter to allow parameter overloading
-      and APIs are not transparent
+    p dumb-views
+    div(style="background:#777;")
+      img(src='resources/refactoring_2_needs.png', class='noborder')
   section
-    p ant: no dependency management
-    p.fragment.replaceafter ant: decoupled dependency management
-  section
-    p ivy: decoupled from ant
-    +codeexample
-     | &lt;ivy-module version="2.0"&gt;
-     | &lt;dependencies&gt;
-     |   &lt;dependency org="commons-lang" name="commons-lang" rev="2.0"/&gt;
-  section
-    p decoupled=reusable
-    p.fragment android gradle support on eclipse not sufficient
-  section
-    p so we grabbed Ivy
-    p.fragment (demo)
-  section
-    p maven
-  section
-    p In maven, tasks are tightly coupled to 'the maven way'
-  section
-    p validate
-    p.fragment.unhide(data-fragment-index='1').highlight-green androidGenerateResources
-    p.fragment.unhide(data-fragment-index='3').highlight-red crashlyticsGenerateResources
-    p.fragment.unhide(data-fragment-index='2').highlight-green androidMergeResources
-    p compile
-    p test
-    p package
-    p integration-test
-    p verify
-    p install
-    p deploy
-    +notes.
-      I mentioned this in my talk last year, and since
-      Tasks work differently in maven
-      Maven declares several phases, and you can have your task run as one of them, 
-      if your plugin behavior should run between two tasks of another plugin in a phase, 
-      you’re out of luck!
-  section
-    p maven-inherit-plugin
-    +codeexample.fragment
-      | /**
-      |  * @extendsPlugin eclipse
-      |  * @goal eclipse
-      |  * @phase package
-      |  */
-    p.fragment
-      em Coupling through inheritance :(
-    +notes.
-      I've discovered the maven-inherit plugin, but the way
-      it works is your plugin inherits, it depends on another plugin
-      breaking composability
-      Maven's rigidity makes easy things easy and hard things
-      nearly impossible
-      Parallelism also impacted
-  section
-    p in maven, configuration of a project exists as XML
-    +codeexample
-      | &lt;configuration&gt;
-      |   &lt;renameManifestPackage&gt;com.jakeout.app.free&lt;/renameManifestPackage&gt;
-    +notes.
-    So the android maven plugin let you rename the package of the project
-  section
-    p.fragment.replaceafter com.jakeout.app
-    p.fragment.replaceafter com.jakeout.app.free
-    +notes.
-      So for example, if on maven
-      someone has a free version of an app, they might rename it
-  section
-    p gradle would be groovy code
-    p.fragment it's just XML
-    p.fragment so you can parse it right?
-  section
-    p wrong!
-    div.fragment
-      p variable resolution 
-      p ${app-flavor}
-  section
-    p plugins can get this state
-    p.fragment.dimafter getPluginByKey(ANDROID_MAVEN_PLUGIN)
-    p.fragment.dimafter (Xpp3Dom) plugin.getConfiguration()
-    p.fragment.dimafter extractConfigValueFrom(config, "renameManifestPackage")
-    +notes.
-      plugins get this state through calls to the maven APIs
-  section
-    p Other tooling can't read it
-  section
-    p enter maven aether
-    +notes.
-      maven has a solution for this, though I've never used it
-      it's called aether: http://www.eclipse.org/aether/
-      and it lets you run just the variable resolution
-      Even though maven seems like it's just configuration,
-      it has the same tight coupling that gradle does
-  section
-    p similar gradle problem
-    +codeexample
-      |   plugin {
-      |     id "com.trello.victor" version "0.1.4"
-      |   }
-    +notes.
-      It brings to mind gradle's new plugin { } block
-      so a friend of mine has a plugin that converts
-      resources SVGs on android
-      but the plugin block is rigid, it's a restricted DSL,
-      it must not execute code.
-  section
-    +codeexample
-      |   plugin {
-      |     id "com.trello.victor" version "0.1.5-SNAPSHOT"
-      |   }
-     +notes.
-       if he wanted to test against this dynamically, he couldnt
-  section
-    +codeexample
-      |   plugin {
-      |     id "com.trello.victor" version "$version"
-      |   }
-    p
-      em not possible
-    +notes.
-      One of the reasons this was likely made impossible is
-      so that tools can more easily inject into these files
-  section
-    p if you need parsable artifacts:
-    p.fragment.dimafter avoid groovy code
-    p.fragment.dimafter properties files
-    p.fragment.dimafter manifests
-    +notes
-      p if you need external tooling to parse the artifact
-      p avoid groovy code
-  section
-    +codeexample
-      |   dependencies {
-      |     classpath 'com.android.tools.build:gradle:1.2.3'
-      |   }
-    +notes.
-      besides, I'd argue that the classpath block
-      needs the ability to modify
-      with automated tooling even more.
-  section
-    p fabric onboarding demo
-  section
-    p so we can onboard fabric,
-    p added lines to your build.gradle
-    +notes.
-      p and suddenly, it expands from 100 lines to 1000 lines
-  section
-    p plugins and extensibility
-  section
-    p.fragment.replaceafter a little declarative code
-    p.fragment.replaceafter descriptions
-    p.fragment 'what'
-    p.fragment.replaceafter mostly imperative code
-    p.fragment.replaceafter directions
-    p.fragment 'how'
-    +notes
-      p realize most of your build build is imperative code
-  section
-    p.fragment.replaceafter 1000 lines of code
-    p.fragment 1 apply plugin
-  section
-    p plugin adds
-    p.fragment.replaceafter higher level models
-    p.fragment 'cleaner what'
-    p.fragment.replaceafter new tasks
-    p.fragment 'how'
-  section
-    p models
-    p.fragment.replaceafter android { }
-    p.fragment.replaceafter java { }
-    p.fragment.replaceafter maven { }
-    p.fragment.replaceafter osgi { }
-    +notes.
-      model building allows you to add new
-      properties to the build, better describing
-      what you have, and what you want
-  // TODO: example of bad model extension in Gradle
-  section
-    p Building on top of other plugins:
-    p Decouple plugin behavior from inter-plugin seams
-  section
-    p default user build script
-    pre.fragment
-      p android.runProguard = true
-    p.fragment BUILD SUCCESSFUL
-  section
-    p our plugin
-    pre.fragment
-      | if (buildType.runProguard) {
-      |   // mapping file upload
-      |   
-    p.fragment BUILD SUCCESSFUL
-  section
-    p Android Gradle 1.0
-    p.fragment.replaceafter android.runProguard
-    p.fragment android.minifyEnabled
-  section
-    p default user build script
-    pre.fragment
-      p android.runProguard = true
-    p.fragment BUILD SUCCESSFUL
-  section
-    p our plugin
-    pre.fragment
-      | if (buildType.runProguard)
-      |   // mapping file upload
-      |   
-    p.fragment BUILD FAILED
-    +notes.
-      The problem is, they had made a property that was write only,
-      it mapped to an underlying property. They didn't break user's
-      builds, unless user's cared about proguard
-  section
-    p necessarily unsolvable
-  section
-    p abstract away model inputs:
-    +codeexample
-      | if (buildType.hasProperty('minifyEnabled')) {
-      |   proguardEnabled = buildType.minifyEnabled
-      | } else if (buildType.hasProperty('runProguard')) {
-      |   proguardEnabled = buildType.runProguard
-      | }
-    div.fragment
-      p
-        em pass proguardEnabled forward as internal state
-    +notes.
-      you can expose this as a model object on your extensions
-  section
-    p.fragment fabric { proguardEnabled = null }
-  section
-    p.fragment fabric { proguardEnabled = android.minifyEnabled }
-  section
-    p.fragment project.extensions.create('fabric', FabricExtension)
-  section
-    +codeexample
-      | if (buildType.hasProperty('minifyEnabled')) {
-      |   proguardEnabled = buildType.minifyEnabled
-      | } else if (buildType.hasProperty('runProguard')) {
-      |   proguardEnabled = buildType.runProguard
-      +codeblock
-        | } else if (fabric.proguardEnabled != null) {
-        |   proguardEnabled = fabric.proguardEnabled
-      | }
-    +notes.
-      added to check, our state
-  section
-    p gradle tasks and extensibility
-  section
-    p generateResourcesTask.dependsOn('dex${suffix}')
-  section
-    +codeexample
-      | apply plugin('com.android.application')
-    +notes.
-      most people get proguard obfuscation through applying the android plugin
-  section
-    +codeexample
-      | apply plugin('dexguard')
-    +notes.
-      There's a paid version of proguard that is available by applying this
-  section
-    p.fragment.dimafter foo()
-    p.fragment.dimafter 漢()
-    p.fragment foo()
-  section
-    +codeexample
-      | apply plugin('dexguard')
-    p.fragment BUILD FAILED
-  section
-    +codeexample
-      |    def obfuscationTask
-      |    if (project.getPlugins().hasPlugin('dexguard')) {
-      |        obfuscationTask = "dexguard"
-      |    } else {
-      |        obfuscationTask = "dex"
-      |    }
-    div.fragment
-      p
-        em pass obfuscationTask forward as internal state
-    +notes.
-      extract out the task name early in your process,
-      you can expose this as a model object
-  section
-    p.fragment fabric { obfuscationTask = null }
-  section
-    p.fragment fabric { obfuscationTask = "dexguard" }
-  section
-    p 'java' plugin
-    p jar { } task
-  section
-    p 'fatjar' plugin
-    p fatjar { } task
-    p.fragment.replaceafter 'This is regular Jar task'
-    p.fragment Note: regular jar and war tasks are not replaced by this plugin.
-    p
-      pre.fragment
-        | project.tasks.create(FATJAR_FAT_JAR, Jar)
-    p.fragment.replaceafter
-      em tightly coupled to the jar task
-    p.fragment
-      em can't be composed with alternative jar task extensions
-    p.fragment
-      em other plugins override original jar task config
-  section
-    p solutions:
+    p Conclusions
     ul
-      li.fragment allow jar to be injected
-      li.fragment fatten before the jar task
-    +notes.
-      dependency injection, single responsibility remove this coupling 
+      li.fragment "object oriented"
+      li.fragment cohesion -- best practices
   section
-    +codeexample
-      |  def apply(Project project) {
-      |    project.task('uploadTranslations') {
-      |      ext.file = ...
-      |    } &lt;&lt; {
-      +codeblock
-        |      HttpRequest r = new HttpRequest(url)
-      |      ...
-      |    }
-    p.fragment
-      em task behavior coupled to instance of a task
-  section
-    +codeexample
-      |  // ci-3po
-      |  def apply(Project project) {
-      |    project.task('uploadTranslations') {
-      |      ext.file = ...
-      |    } &lt;&lt; {
-      +codeblock
-        |      translationUploader.upload(ext.file)
-      |    }
-  section
-    +codeexample
-      | class UploadTask extends DefaultTask {
-      |   @TaskAction
-      |    def upload() {
-      +codeblock
-        |      HttpRequest r = new HttpRequest(url)
-      |      ...
-      |    }
-      |    String url
-      |    String file
-    +notes.
-      You could, of course, override DefaultTask
-      However, it uses extends, and setters, and
-      so couples behavior to task execution
-  section
-    +codeexample
-      | class UploadTask extends DefaultTask {
-      |   @TaskAction
-      |    def upload() {
-      +codeblock
-        |      new TranslationUploader(url).upload(file)
-      |    }
-      |    String url
-      |    String file
-    +notes.
-      An easy solution is to treat tasks as behavior factories:
-      separate the responsibility of being a task from
-      the behavior creation
-  section
-    +codeexample
-      | class TranslationUploader {
-      |   private final String url;
-      |   
-      |   public TranslationUploader(String url) {
-      |     this.url = url;
-      |   }
-      |   public upload(File f) {
-      |     ...
-    p
-      em Parameters are explicit and immutable
-    +notes.
-      now you've decoupled translation from gradle
-  section
-    p extensibility: avoid mutability
-  section
-    p.fragment.dimafter foo()
-    p.fragment.dimafter a()
-    p.fragment foo()
-  section
-    p your mapping file has an identifier
-    p
-      em UUID: a() -&gt; foo()
-  section
-    p your crash has that identifier
-    p
-      em UUID: crash at a()
-  section
-    p Therefore:
-    p We need an identifier in your app
-  section
-    +codeexample
-      | &lt;string name="com.crashlytics.android.build_id" 
-      |   translatable="false"&gt;
-      | 
-      |   c69eaf36-ded8-4a75-8719-346d33193e9d
-      | 
-      | &lt;/string&gt;
-  section
-    p Implementation:
-    p Generate a new id when build starts
-  section
-    p.fragment fabric plugin generates an id
-    p.fragment android plugin uses an id
-  section
-    p multiple variants
-    p free / paid
-    p.fragment fabric plugin generates the #[span(style="color:blue;") id]
-    p.fragment free uses the #[span(style="color:blue;") id]
-    p.fragment(style="color:red;") paid uses the same #[span(style="color:blue;") id]
-  section
-    p Implementation:
-    p Generate a new id when variant build starts
-  section
-    p multiple variants (e.g., free / paid)
-    p.fragment fabric plugin generates #[span(style="color:blue;") id1]
-    p.fragment free uses #[span(style="color:blue;") id1]
-    p.fragment fabric plugin generates #[span(style="color:green;") id2]
-    p.fragment paid uses #[span(style="color:green;") id2]
-  section
-    p parallel builds variants
-    p.fragment fabric plugin generates #[span(style="color:blue;") id1]
-    p.fragment fabric plugin generates #[span(style="color:green;") id2]
-    p.fragment(style="color:red;") free uses #[span(style="color:green;") id2]
-    p.fragment paid uses #[span(style="color:green;") id2]
-  section
-    p what we want
-    p.fragment fabric plugin generates #[span(style="color:blue;") id1]
-    p.fragment fabric plugin generates #[span(style="color:green;") id2]
-    p.fragment free uses #[span(style="color:blue;") id1]
-    p.fragment paid uses #[span(style="color:green;") id2]
-  section
-    p Implementation:
-    p Generate a variant-specific input
-  section
-    p.leftalign class MergeResourcesTask {
-    p.leftalign @InputDirectory
-    p
-    p 'build/intermediates/res/values/'
-    p
-    p.fragment 'build/intermediates/res/values/build_id.xml'
-  section
-    p Android Model DSL
-    p android.variant.resValue = c69eaf36-ded8-4a75-8719-346d33193e9d
-    +notes.
-      super elegant
-  section
-    +codeexample
-      | &lt;string name="com.crashlytics.android.build_id" 
-      | 
-      |   c69eaf36-ded8-4a75-8719-346d33193e9d
-      | 
-      | &lt;/string&gt;
-    p.fragment
-      no translatable="false"
-    p.fragment
-      em LINT FAILURE
-  section
-    p android.variant.resValue coupled to specific use case
-  section
-    p Android Model DSL #2
-    p variant.registerResGeneratingTask(task, generatedResFolders)
-  section
-    p Correct abstractions facilitate users
-  section
-    p one more thing
-  section
-    p a build's output
-    p.fragment function of:
-    ul
-      li.fragment.dimafter What your project is
-      li.fragment.dimafter What you want
-      li.fragment.dimafter Your local disk cache
-      li.fragment.dimafter The Internet
-      li.fragment Tools
-        ul
-          li.fragment.dimafter Extensions to tools
-  section
-    p finding bugs can be hard
-    p.fragment UP-TO-DATE
-    +notes.
-      part of a pretty complicated system
-  section
-    p ./gradlew assemble --debug
-    +notes.
-      so you do a debug build
-  section
-    img(src='resources/programming.gif', height='400', class='noborder')
-    +notes.
-      good choice.
-  section(data-background="resources/bbmachine.gif" data-background-size="500px" data-background-repeat="repeat")
-    +notes.
-      have you ever looked at a --debug build?
-      hard to parse   
-  section
-    p Inspector
-    p
-      img(src='resources/gadget.gif', height='400', class='noborder')
-    +notes.
-      this plugin is not intended to be turned on
-      all the time, this plugin is designed for the use case
-      of "There's something wrong with my build",
-      I need help
-  section
-    p demo
-  section
-    p conclusion
-    ul
-      li.fragment Extensibility is good
-      li.fragment Gradle's model is evolving
-      li.fragment Lots of opportunities for better designs
-  section
-    p Jake Ouellette @Jakeout
-    img(src='resources/twitter_logo.png', height='300', class='noborder')
+    p thank you
+    img(src='resources/c3po_r2d2_2.gif', height='400', class='noborder')
