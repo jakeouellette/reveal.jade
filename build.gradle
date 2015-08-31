@@ -1,5 +1,5 @@
 task export(type: Exec) {
-	inputs.dir 'src/main/jade'
+  inputs.dir 'src/main/jade'
   inputs.dir 'src/main/css'
   commandLine './export.sh'
   args new File(revealjspath).getCanonicalPath()
