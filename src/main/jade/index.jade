@@ -1019,16 +1019,18 @@ block slides
   section
     p thank you
     img(src='resources/c3po_r2d2_2.gif', height='400', class='noborder')
-  section
-    // Example slide
-    div
-      div(style="float:left;")
-        img.noborder(src='resources/android_robot.png', height='300')
+  mixin imageslide(image, footer)
+    section
       div
-        h2 Android
-        ul
-          li Google
-          li Java
-          li Netrunner
-    div(style="clear:both;")
-      em (What you need to know about android)
+        div(style='float:left;')
+          img.noborder(src=image, height='300')
+       div
+         block
+      div(style='clear:both;')
+        em=footer
+  +imageslide('resources/android_robot.png', '(What you need to know about android)')
+    h2 Android
+    ul
+      li Google
+      li Java
+      li Netrunner
