@@ -1,17 +1,6 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
-def revealJsFolder = new File(revealjspath)
-
-System.out.println "Reveal.js directory:" + revealJsFolder.getCanonicalPath()
-
-
 task export(type: Exec) {
 	inputs.dir 'src/main/jade'
   inputs.dir 'src/main/css'
   commandLine './export.sh'
-  args revealJsFolder.getCanonicalPath()
+  args new File(revealjspath).getCanonicalPath()
 }
