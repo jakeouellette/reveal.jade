@@ -1,0 +1,128 @@
+.reveal .slides section .fragment.blur-non-current {
+  color: transparent;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  opacity: 1;
+  visibility: visible; }
+
+.reveal .slides section .fragment.blur-non-current.current-fragment {
+  color: inherit;
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible;
+}
+
+.reveal section img.noborder {
+  background:none;
+  border:none;
+ }
+
+.leftalign {
+  text-align: left;
+}
+
+
+.reveal .slides section .fragment.always-visible:not(visible) {
+  opacity: 1;
+  visibility: visible; 
+}
+
+.reveal .slides section .fragment.visible:not(.current-fragment).dimafter {
+  color: inherit;
+  opacity: 0.1;
+  visibility: visible; 
+}
+
+.dimafter {
+    color: inherit;
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible;
+}
+
+.reveal pre {
+  font-size: 0.70em;
+}
+
+
+.reveal .slides section pre.fragment:not(.visible):not(.current-fragment).dimcode {
+  color: rgba(255,255, 255, 1);
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible; 
+  transition-property: all;
+  transition-duration: 0s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+}
+
+.reveal .slides section span.fragment:not(.visible):not(.current-fragment).dimcode {
+  color: inherit;
+    text-shadow: inherit;
+  opacity: inherit;
+  visibility: inherit; 
+  transition-property: all;
+  transition-duration: 0s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+}
+
+.reveal .slides section .fragment.visible:not(.current-fragment).dimcode {
+  color: rgba(255,255, 255, 0.3);
+  visibility: visible; 
+}
+
+.reveal .slides section .fragment.visible.current-fragment.dimcode {
+  color: rgba(255,255, 255, 1);
+  visibility: visible; 
+}
+
+
+
+.reveal .slides section .fragment:not(.visible).unhide {
+  color: inherit;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.unhide {
+    color: inherit;
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible;
+    position:relative;
+    display:block;
+}
+
+.reveal .slides section .fragment.visible:not(.current-fragment).replaceafter2 {
+  color: inherit;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.replaceafter2 {
+    color: inherit;
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible;
+    position:relative;
+    display:inherit;
+}
+
+
+.reveal .slides section .fragment.visible:not(.current-fragment).replaceafter {
+  color: inherit;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.replaceafter {
+    color: inherit;
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: visible;
+    position:relative;
+    display:block;
+}
