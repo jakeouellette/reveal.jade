@@ -9,14 +9,14 @@ task setupRevealJs(type: Copy) {
 
 // Components are relatively static, shared by all talks
 // (E.g., special CSS)
-task setupTalkComponents(type: Copy, dependsOn: setupRevealJs) {
+task setupTalkComponents(type: Copy) {
 		from 'src/main/components'
     into talkCanonicalPath
 }
 
 // Resources change per talk
 // (E.g., images)
-task setupTalkResources(type: Copy, dependsOn: setupRevealJs) {
+task setupTalkResources(type: Copy) {
 		from 'src/main/resources'
     into (talkCanonicalPath + '/resources')
 }
