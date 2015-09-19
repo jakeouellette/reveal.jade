@@ -1,11 +1,11 @@
 extends ./layout.jade
 
 mixin appearingimgnote(image, footer)
-  div.fragment.replaceafter2
+  div.fragment.replaceafter
     +defaultimg(image)
     p=footer
 mixin appearingimg(image)
-  div.fragment.replaceafter2
+  div.fragment.replaceafter
     +defaultimg(image)
 mixin defaultimg(image)
   img.noborder(src=image, height='500', style='margin: 0 auto;')
@@ -108,10 +108,10 @@ block slides
   section
     strong Width of the project
   section
-    img.fragment.replaceafter2.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
-    img.fragment.replaceafter2.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
-    img.fragment.replaceafter2.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
-    img.fragment.replaceafter2.noborder(src='resources/software-3.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-3.png', height='500', style='margin: 0 auto;')
     aside.notes
       strong what artifacts?
       ol
@@ -152,6 +152,7 @@ block slides
     +appearingimg('resources/transitive-b-4.png')
     +appearingimg('resources/transitive-b-5.png')
     +appearingimg('resources/transitive-1.png')
+    p test2
     aside.notes
       p Might have an artifact with a dependency, represented through transitives
       p Using a dependency for a transitives
