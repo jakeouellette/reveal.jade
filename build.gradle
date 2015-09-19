@@ -1,10 +1,19 @@
 def revealjsCanonicalPath = new File(revealjspath).getCanonicalPath()
 def talkCanonicalPath = new File(talkpath).getCanonicalPath()
 
-task export(type: Exec) {
-  inputs.dir 'src/main/jade'
-  inputs.dir 'src/main/css'
-  inputs.dir 'src/main/resources'
-  inputs.dir revealjsCanonicalPath
-  commandLine './export.sh', talkCanonicalPath, revealjsCanonicalPath
+task setupRevealJs(type: Copy) {
+	  from revealjsCanonicalPath
+    into talkCanonicalPath
 }
+
+task setupTalkResources(type: Copy, dependsOn: setupRevealJs) {
+		from 'src/main'
+    into talkCanonicalPath
+}
+
+task exportJade(type: Exec, dependsOn: setupTalkResources) {
+	    inputs.dir 'src/main/jade'
+	    commandLine 'jade', 'src/main/jade', '--out', talkCanonicalPath
+}
+
+task export(dependsOn: exportJade)
