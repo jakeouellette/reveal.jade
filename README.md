@@ -11,7 +11,11 @@ clone reveal.js. Edit the gradle.properties, configure the two properties:
 
 Use grunt serve to start reveal.js.
 
-Make reveal.jade autoupdate your reveal.js project with:
+Initialize reveal.js into your project by copying it in with:
+
+    ./gradlew setupRevealJs
+
+Then, make reveal.jade autoupdate your reveal.js project with:
 
     ./gradlew -t export 
 

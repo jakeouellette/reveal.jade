@@ -4,6 +4,7 @@ def talkCanonicalPath = new File(talkpath).getCanonicalPath()
 task setupRevealJs(type: Copy) {
 	  from revealjsCanonicalPath
     into talkCanonicalPath
+    outputs.upToDateWhen { true }
 }
 
 // Components are relatively static, shared by all talks
@@ -26,3 +27,4 @@ task exportJade(type: Exec, dependsOn: setupTalkResources) {
 }
 
 task export(dependsOn: exportJade)
+export.dependsOn(setupTalkComponents)
