@@ -6,14 +6,23 @@ task setupRevealJs(type: Copy) {
     into talkCanonicalPath
 }
 
-task setupTalkResources(type: Copy, dependsOn: setupRevealJs) {
-		from 'src/main'
+// Components are relatively static, shared by all talks
+// (E.g., special CSS)
+task setupTalkComponents(type: Copy, dependsOn: setupRevealJs) {
+		from 'src/main/components'
     into talkCanonicalPath
 }
 
+// Resources change per talk
+// (E.g., images)
+task setupTalkResources(type: Copy, dependsOn: setupRevealJs) {
+		from 'src/main/resources'
+    into (talkCanonicalPath + '/resources')
+}
+
 task exportJade(type: Exec, dependsOn: setupTalkResources) {
-	    inputs.dir 'src/main/jade'
-	    commandLine 'jade', 'src/main/jade', '--out', talkCanonicalPath
+	    inputs.dir 'src/main/components/jade'
+	    commandLine 'jade', 'src/main/components/jade', '--out', talkCanonicalPath
 }
 
 task export(dependsOn: exportJade)
