@@ -14,13 +14,11 @@
 .reveal section img.noborder {
   background:none;
   border:none;
-  box-shadow:none;
  }
 
 .leftalign {
   text-align: left;
 }
-
 
 .reveal .slides section .fragment.always-visible:not(visible) {
   opacity: 1;
@@ -34,7 +32,7 @@
 }
 
 .dimafter {
-    color: inherit;
+  color: inherit;
   text-shadow: inherit;
   opacity: 1;
   visibility: visible;
@@ -43,7 +41,6 @@
 .reveal pre {
   font-size: 0.70em;
 }
-
 
 .reveal .slides section pre.fragment:not(.visible):not(.current-fragment).dimcode {
   color: rgba(255,255, 255, 1);
@@ -58,7 +55,7 @@
 
 .reveal .slides section span.fragment:not(.visible):not(.current-fragment).dimcode {
   color: inherit;
-    text-shadow: inherit;
+  text-shadow: inherit;
   opacity: inherit;
   visibility: inherit; 
   transition-property: all;
@@ -77,8 +74,6 @@
   visibility: visible; 
 }
 
-
-
 .reveal .slides section .fragment:not(.visible).unhide {
   color: inherit;
   opacity: 0;
@@ -87,14 +82,13 @@
 }
 
 .unhide {
-    color: inherit;
+  color: inherit;
   text-shadow: inherit;
   opacity: 1;
   visibility: visible;
-    position:relative;
-    display:block;
+  position:relative;
+  display:block;
 }
-
 
 .reveal .slides section .fragment.visible:not(.current-fragment).replaceafter {
   color: inherit;
@@ -104,10 +98,10 @@
 }
 
 .replaceafter {
-    color: inherit;
+  color: inherit;
   text-shadow: inherit;
   opacity: 1;
   visibility: visible;
-    position:relative;
-    display:block;
+  position:relative;
+  display:inherit;
 }
