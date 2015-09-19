@@ -15,4 +15,4 @@ Make reveal.jade autoupdate your reveal.js project with:
 
     ./gradlew -t export 
 
-This will monitor files in `src/main/jade` and `src/main/css`. If those files change, they will be rebuilt, thus updating your presentation live.
+If files in `src/main` change, they will be rebuilt, thus updating your presentation live. Specifically, files in `src/main/jade` are converted to javascript. Additionally, all files in `src/main/` are copied into your presentation. (Including the original .jade files). 
