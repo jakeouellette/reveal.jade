@@ -704,6 +704,8 @@ Here's an example of an exported presentation that's been uploaded to SlideShare
 
 ![Chrome Print Settings](https://s3.amazonaws.com/hakim-static/reveal-js/pdf-print-settings.png)
 
+Alternatively you can use the [decktape](https://github.com/astefanutti/decktape) project.
+
 ## Theming
 
 The framework comes with a few different themes included:
@@ -974,7 +976,7 @@ Reveal.initialize({
 	// other options ...
 
 	math: {
-		mathjax: 'http://cdn.mathjax.org/mathjax/latest/MathJax.js',
+		mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
 		config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
 	},
 	

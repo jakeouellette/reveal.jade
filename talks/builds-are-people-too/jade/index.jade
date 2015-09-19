@@ -1,0 +1,360 @@
+extends ./layout.jade
+
+mixin appearingimgnote(image, footer)
+  div.fragment.replaceafter
+    +defaultimg(image)
+    p=footer
+mixin appearingimg(image)
+  div.fragment.replaceafter
+    +defaultimg(image)
+mixin defaultimg(image)
+  img.noborder(src=image, height='500', style='margin: 0 auto;')
+
+block slides
+  section
+    h2 Builds are people too
+    div
+      p Presentation by Jake Ouellette (@Jakeout)
+      img(src='resources/twitter_logo.png', height='75', class='noborder')
+  section
+    p Builds
+    +appearingimg('resources/build-0.png')
+    +appearingimg('resources/build-1.png')
+    +appearingimg('resources/build-humans-1.png')
+    +appearingimg('resources/build-humans-2.png')
+    aside.notes
+      p this is a talk about your development environment
+      p Specifically, all the code you write in tools like maven, gradle, ant, rake, etc... 
+      p that power making your application
+      p But those development environments are created by you
+      p And how you set them up impacts your team
+  section
+    p About me
+    aside.notes
+      p I'm Jake Ouellette, I work @ Twitter on a team called fabric
+  section
+    p Fabric
+    img(src='resources/fabric_logo.png', height='300', class='noborder')
+    +notes
+      p What have I built?  I work at Twitter, on Twitter's Mobile platform, fabric. 
+      p Fabric is a suite of Mobile SDKs which developers use to enhance their application
+      p One example build tool is Crashlytics.
+  section
+    p crashlytics
+    img(src='resources/crashlytics_logo.png', height='300', class='noborder')
+    +notes.
+      Crashes as a service.
+  section
+    p crashes-as-a-service
+    img(src='resources/fabric_app.png', height='800', class='noborder')
+  section
+    +appearingimg('resources/build-1.png')
+    aside.notes
+      p And this is solved by a developer tool.
+      p I have had a lot of opportunities to look at people's build scripts
+  section
+    p.fragment.replaceafter big data...
+    p.fragment big "build"
+    aside.notes
+      p A lot of developers are concerned about big data
+      p But one thing they often aren't concerned is sprawling complexity of their build
+  section
+    +appearingimg('resources/build-7.png')
+    +appearingimg('resources/build-3.png')
+    aside.notes
+      p When you first start a project, you make the best build ever
+      p you understand it -- makes total sense to you
+  section
+    +appearingimg('resources/build-humans-1.png')
+    +appearingimg('resources/build-humans-2.png')
+    +appearingimg('resources/build-humans-3.png')
+    +appearingimg('resources/build-humans-4.png')
+    aside.notes
+      p Over time, you add more and more people to your team
+      p And all of these people work in your build
+  section
+    +appearingimg('resources/time-complexity-2.png')
+    +appearingimg('resources/time-complexity-3.png')
+    +appearingimg('resources/build-6.png')
+    aside.notes
+      p As more engineers join, they add more "stuff"
+      p slows down the build, from your perspective
+      p Maybe the second line shows the effort to fix it
+      p So the build might not be that complex, but the effort increases exponentially
+  section
+    +appearingimg('resources/time-complexity-1.png')
+    +appearingimg('resources/build-8.png')
+    aside.notes
+      p A new engineer joins...
+      p code has always been that way.
+      p Build's health is down
+  section
+    +defaultimg('resources/token-xkcd.png')
+    aside.notes
+      p And they go to compile, and suddenly have to wait
+  section
+    +appearingimg('resources/time-complexity-4.png')
+    aside.notes
+      p And to them, it's seriously always been this way
+      p And not their responsibility to fix it
+  section
+    p Overview
+    aside.notes
+      p What causes a big build
+      p Strategies to prevent it.
+  section
+    p What causes a complicated build?
+    +defaultimg('resources/build-10.png')
+  section
+    strong Width of the project
+  section
+    img.fragment.replaceafter.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-3.png', height='500', style='margin: 0 auto;')
+    aside.notes
+      strong what artifacts?
+      ol
+        li I have some projects where I might be building a thing
+        li But that's a small part of a bigger thing, in order to build that thing, I have to build the whole project
+        li and worse: some dependencies might be external in some way: not in my codebase, even if I am building it
+  section
+    p Wasting time building everything
+    aside.notes
+      p You spend a bunch of time building things you don't care about
+  section
+    +appearingimg('resources/split-base.png')
+    +appearingimg('resources/split-1.png')
+    aside.notes
+      p Could break everything down into parts.
+  section
+    +appearingimg('resources/split-2-combine.png')
+    +appearingimg('resources/split-3-balance.png')
+    aside.notes
+      p But then you have to change two things at once.
+  section
+    +appearingimg('resources/split-5-versions.png')
+    +appearingimg('resources/split-6-versions.png')
+    aside.notes
+      p Might have to bump one of artifacts to seen by others.
+  section
+    +appearingimgnote('resources/split-4-incremental.png', 'Support incremental builds')
+    aside.notes
+      p Including tests.
+  section
+    strong Transitive Dependencies
+  section
+    +appearingimg('resources/split-1.png')
+    +appearingimg('resources/transitive-1.png')
+    +appearingimg('resources/transitive-2.png')
+    +appearingimg('resources/transitive-3.png')
+    +appearingimg('resources/transitive-b-3.png')
+    +appearingimg('resources/transitive-b-4.png')
+    +appearingimg('resources/transitive-b-5.png')
+    +appearingimg('resources/transitive-1.png')
+    p test2
+    aside.notes
+      p Might have an artifact with a dependency, represented through transitives
+      p Using a dependency for a transitives
+      p If it is removed:
+      p have to find what broke your build
+  section
+    +appearingimgnote('resources/dependencies-5.png', 'A is coupled to parent')
+  section
+    +appearingimgnote('resources/dependencies-5.png', 'B is external')
+  section
+    p Definitely be explicit with external artifacts
+  section
+    strong Spaghetti builds
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - sdk
+    pre.leftalign    - util/devtools/buildSystems/maven
+    +defaultimg('resources/structure-2.png')
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - #[strike sdk]
+    pre.leftalign    - util/devtools/buildSystems/maven
+    +defaultimg('resources/structure-3.png')
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - maven
+    +defaultimg('resources/structure-4.png')
+    aside.notes
+      p We have a folder that moved to a subfolder,
+      p Never fixed it
+      p Permanently have to explain to new devs
+  section
+    p Keep builds simple
+    ul
+      li.fragment.dimafter Remove dead code immediately
+      li.fragment.dimafter TODO: More notes here.
+  section
+    strong Building multiple ways
+  section
+    +appearingimg('resources/behaviors-1.png')
+    +appearingimg('resources/behaviors-2.png')
+    +appearingimg('resources/behaviors-3.png')
+    +appearingimg('resources/behaviors-4.png')
+    +appearingimg('resources/behaviors-5.png')
+    +appearingimg('resources/behaviors-6.png')
+    +appearingimg('resources/behaviors-7.png')
+  section
+    +appearingimgnote('resources/split-4-incremental.png', 'maintain incremental compilation')
+  section
+    p Maximize build-consistency
+    ul
+      li.fragment.dimafter Abandon IDE builders
+      li.fragment.dimafter Make incremental builds awesome
+  section
+    strong Organic buildscript reuse
+  section
+    +appearingimg('resources/self-similarity-1.png')
+    +appearingimg('resources/self-similarity-2.png')
+    +appearingimg('resources/self-similarity-3.png')
+    +appearingimg('resources/self-similarity-4.png')
+    +appearingimg('resources/self-similarity-5.png')
+    aside.notes
+      strong who uses the build scripts?
+      ol
+        li Let's say you have a buildscript
+        li If a coworker needs one for a new project, often they'll take yours
+        li Ant lacks idioms, and so maybe, there was only one ant script ever written?
+        li And what do you do if this happens across your organization? Everyone cutting and pasting from builds. There's a lot of repetition of knowledge
+  section
+    +appearingimg('resources/plugins-1.png')
+    +appearingimg('resources/plugins-2.png')
+    +appearingimg('resources/plugins-3.png')
+    aside.notes
+      ol
+        li So yeah, if you have a build that other scripts are reusing
+        li One way to think about complexity is how many non project-specific things can be shared
+  section
+    strong Untracked build steps
+  section
+    +appearingimg('resources/sprawl-1.png')
+    +appearingimg('resources/sprawl-2.png')
+    +appearingimg('resources/sprawl-3.png')
+    +appearingimg('resources/sprawl-4.png')
+  section
+    +appearingimgnote('resources/sprawl-5.png', 'source configuration from one build')
+  section
+    +appearingimgnote('resources/sprawl-2.png', 'streamline your environment')
+    aside.notes
+      p Streamline environment
+  section
+    p Streamline environment
+    ul
+      li.fragment.dimafter Avoid for uncommitted build steps
+      li.fragment.dimafter CI build tasks 99% same as local
+      li.fragment.dimafter Keep configuration steps uniform
+    aside.notes
+      p On last one: keep config steps like env variables uniform
+  section
+    p OK!
+    aside.notes
+      p OK! that's why your build in complicated.
+  section
+    p But... when do I fix it?
+  section
+    +appearingimg('resources/time-1.png')
+    +appearingimg('resources/time-2.png')
+    aside.notes
+      ol
+        li immediately?
+        li eventually?
+  section
+    +appearingimg('resources/work-balance-1.png')
+    +appearingimg('resources/work-balance-2.png')
+    +appearingimg('resources/work-balance-3.png')
+  section
+    +appearingimg('resources/feature-vs-debt-1.png')
+    +appearingimg('resources/feature-vs-debt-2.png')
+    +appearingimg('resources/feature-vs-debt-3.png')
+    p.fragment Slide here: Solving debt upfront
+    aside.notes
+      p 1) Tempted to never fix code debt
+      p 2) Code debt distracts from work
+      p 3) Code debt tangles into work, too many changes
+      p 4) Code debt is a prerequisite for work.
+  section
+    +appearingimg('resources/feature-teams-1.png')
+    +appearingimg('resources/feature-teams-2.png')
+    +appearingimg('resources/feature-teams-3.png')
+    +appearingimg('resources/feature-teams-4.png')
+    +appearingimg('resources/feature-teams-5.png')
+    +appearingimg('resources/feature-teams-6.png')
+    +appearingimg('resources/feature-teams-7.png')
+    +appearingimg('resources/feature-teams-8.png')
+    +appearingimg('resources/feature-teams-9.png')
+    aside.notes
+      p Feature teams exist, but across features, can't
+      p easily pay down wide debts
+      p Devs end up solving them on their own
+      p Instead, guilds own work, but then work is poorly tracked
+      p We track work for Crash and answers, not for android
+      p Where do you document this work?
+  section
+    p Spin-off focused efforts
+  section
+    +defaultimg('resources/github-productivity-2.png')
+    +defaultimg('resources/github-productivity-1.png')
+  section
+    +defaultimg('resources/github-productivity-2.png')
+    p.fragment Wrong info
+    p.fragment Noisy info
+    aside.notes
+      strong team structure changes
+      p Teammates added
+      p Before they start the build, reason about anything hacky 
+      p Teammates enter: Dogfood your build
+      p They MUST update any errors
+      p They must give you feedback
+      p Avoid ephemeral artifacts that get out of date..
+      p Train them on norms of the build:
+      p Creating a new project
+      p Don't let them learn from your mistakes.
+  section
+    +defaultimg('resources/github-productivity-1.png')
+    aside.notes
+      p Teammates leave
+      p Intellij run configs commitable, CI matching way you build locally,
+      p minimize feature switches
+      p Walk through with them their domain knowledge of the build. What
+      p Weird scripts have they built locally we need to get into master?
+      p What isn't automated you thought was 
+  section
+    ul
+      li * Are we building the same way?
+      li * If you could improve the build, what would you do?
+      li * What issues do you have with the current build? What are you struggling with most?
+  section
+    p Products ship
+    aside.notes
+      p Product shipping provide a moment to reflect, but you have to be careful
+      p not to break the build immediately after shipping
+      p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
+  section
+    p.dimafter Products shipping as reflection
+    p.dimafter Products shipping as prioritization of ephemeral-teams
+  section
+    p Projects spin up
+    aside.notes
+      p Don't make massive changes to builds right before projects ship.
+      p Plan and understand code debt your team is taking on. 
+      p Are the engs on the team trained to solve their build problems?
+      p Does this new project have any unique impacts on the build?
+      p Is this team reusing builds from other teams?
+      p Now is NOT the time to copy all the existing build scripts
+      p Put them in shared places and start using those in *both* projects
+      p Anticipate the cost to spin up projects in terms of the debt to the system
+  section
+    p Architectures change
+    aside.notes
+      p Whenever a system architecture changes, it's an opportunity to improve the build
+  section
+    p TODO: build tool build tools.
+  section
+    p Conclusions
+    p.fragment Many reasons you get a big build
+    p.fragment Treat your builds with respect
