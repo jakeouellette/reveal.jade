@@ -1,6 +1,10 @@
+def revealjsCanonicalPath = new File(revealjspath).getCanonicalPath()
+def talkCanonicalPath = new File(talkpath).getCanonicalPath()
+
 task export(type: Exec) {
   inputs.dir 'src/main/jade'
   inputs.dir 'src/main/css'
-  commandLine './export.sh'
-  args new File(revealjspath).getCanonicalPath()
+  inputs.dir 'src/main/resources'
+  inputs.dir revealjsCanonicalPath
+  commandLine './export.sh', talkCanonicalPath, revealjsCanonicalPath
 }

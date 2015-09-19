@@ -3,7 +3,11 @@ extensions for reveal.js built for programming presentations
 
 To use:
 
-clone reveal.js. Edit the gradle.properties for this repository to point to its folder.
+clone reveal.js. Edit the gradle.properties, configure the two properties:
+
+  1) the path to reveal.js
+
+  2) the path you'd like your talk created in
 
 Use grunt serve to start reveal.js.
 
