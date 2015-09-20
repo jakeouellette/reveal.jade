@@ -24,9 +24,8 @@ block slides
     +appearingimg('resources/build-humans-2.png')
     aside.notes
       p this is a talk about your development environment
-      p Specifically, all the code you write in tools like maven, gradle, ant, rake, etc... 
-      p that power making your application
-      p But those development environments are created by you
+      p that power creating your application
+      p But the development environments are created by you
       p And how you set them up impacts your team
   section
     p About me
@@ -73,7 +72,11 @@ block slides
       p Over time, you add more and more people to your team
       p And all of these people work in your build
   section
+    p TODO: label axis
     +appearingimg('resources/time-complexity-2.png')
+  section
+    p TODO: fixing complexity is hard
+  section
     +appearingimg('resources/time-complexity-3.png')
     +appearingimg('resources/build-6.png')
     aside.notes
@@ -103,46 +106,74 @@ block slides
       p What causes a big build
       p Strategies to prevent it.
   section
-    p What causes a complicated build?
-    +defaultimg('resources/build-10.png')
+    p Tool nightmare
+    ul
+      li.fragment rake
+      li.fragment maven
+      li.fragment ant
+      li.fragment shell scripts
+      li.fragment gradle
+    aside.notes
+      p using tools
+      p We make an SDK for android developers
+      p Android developers use gradle, so we needed to make a gradle plugin
   section
-    strong Width of the project
+    ul
+      li.fragment Files built, then copied into other folders
+      li.fragment Files published to maven local
+      li.fragment Files linked using gradle / maven project linking
+  section
+    ul
+      li.fragment reduce number of tools you're using
+      li.fragment minimize "ways" artifacts link
+    aside.notes
+      p Google, for example, statically links everything
+  section
+    p Version nightmare
+    p TODO: fix example correctness
+    ul
+      li.fragment change util
+      li.fragment not change artifact that depended on it
+      li.fragment artifact broken
+      li.fragment artifact was poorly unit tested
+  section
+    p Meanwhile, at twitter proper
+    ul
+      li.fragment Tale of two repos
+      li.fragment Cross dependencies
+  section
+    p Meanwhile, at Google
+    ul
+      li.fragment monorepo
+      li.fragment everything on master
+      li.fragment trunk based development
+  section
+    p Downside of google approach
+    ul
+      li.fragment You change something, break other people's things
+      li.fragment Fear of using other's work
+    p.fragment Good tooling can help!
+  section
+    p Even if we had bumped the dependent artifact
+    p TODO: what do you mean?
+    ul
+      li.fragment If we ever need to update two things at once, we need to reason about them
+  section
+    ul
+      li.fragment reduce upstream breakages
+      li.fragment minimize version bumping complexity (if not monorepo, then automated)
+      li.fragment maximize test coverage
   section
     img.fragment.replaceafter.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
     img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
     img.fragment.replaceafter.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
-    img.fragment.replaceafter.noborder(src='resources/software-3.png', height='500', style='margin: 0 auto;')
-    aside.notes
-      strong what artifacts?
-      ol
-        li I have some projects where I might be building a thing
-        li But that's a small part of a bigger thing, in order to build that thing, I have to build the whole project
-        li and worse: some dependencies might be external in some way: not in my codebase, even if I am building it
   section
-    p Wasting time building everything
-    aside.notes
-      p You spend a bunch of time building things you don't care about
+    ul
+      li.fragment keep tooling quality high
   section
-    +appearingimg('resources/split-base.png')
-    +appearingimg('resources/split-1.png')
-    aside.notes
-      p Could break everything down into parts.
-  section
-    +appearingimg('resources/split-2-combine.png')
-    +appearingimg('resources/split-3-balance.png')
-    aside.notes
-      p But then you have to change two things at once.
-  section
-    +appearingimg('resources/split-5-versions.png')
-    +appearingimg('resources/split-6-versions.png')
-    aside.notes
-      p Might have to bump one of artifacts to seen by others.
-  section
-    +appearingimgnote('resources/split-4-incremental.png', 'Support incremental builds')
-    aside.notes
-      p Including tests.
-  section
-    strong Transitive Dependencies
+    p Not all of you artifacts are part of your local repo
+    p And some are, but you might not be a monobuild
+    p So transitives can be a problem
   section
     +appearingimg('resources/split-1.png')
     +appearingimg('resources/transitive-1.png')
@@ -152,20 +183,20 @@ block slides
     +appearingimg('resources/transitive-b-4.png')
     +appearingimg('resources/transitive-b-5.png')
     +appearingimg('resources/transitive-1.png')
-    p test2
     aside.notes
       p Might have an artifact with a dependency, represented through transitives
       p Using a dependency for a transitives
       p If it is removed:
       p have to find what broke your build
   section
-    +appearingimgnote('resources/dependencies-5.png', 'A is coupled to parent')
-  section
-    +appearingimgnote('resources/dependencies-5.png', 'B is external')
-  section
     p Definitely be explicit with external artifacts
   section
-    strong Spaghetti builds
+    p What's funny about this is we publish an SDK for crashlytics
+    ul
+      li.fragment It's crashlytics, then 3 transitives: Core, Answers, and Beta
+      li.fragment Users' don't depend on core, answers, and beta, they depend on crashlytics
+      li.fragment but they use code from the transitives.
+      li.fragment so maybe there's something about grouped projects WRT transitives?
   section
     pre.leftalign crashlytics/
     pre.leftalign    - sdk
@@ -185,10 +216,13 @@ block slides
       p Never fixed it
       p Permanently have to explain to new devs
   section
-    p Keep builds simple
     ul
-      li.fragment.dimafter Remove dead code immediately
-      li.fragment.dimafter TODO: More notes here.
+      li.fragment What is dead may never die
+      li.fragment cut ties to old code
+      li.fragment use tooling to find dead code
+    aside.notes
+      p Any time you find yourself explaining old code,
+      p Delete it.
   section
     strong Building multiple ways
   section
@@ -288,6 +322,7 @@ block slides
     +appearingimg('resources/feature-teams-8.png')
     +appearingimg('resources/feature-teams-9.png')
     aside.notes
+      p TODO: make this be about me
       p Feature teams exist, but across features, can't
       p easily pay down wide debts
       p Devs end up solving them on their own
@@ -296,6 +331,10 @@ block slides
       p Where do you document this work?
   section
     p Spin-off focused efforts
+  section
+    p Hire Engineering Effectiveness
+    aside.notes
+      p Only works if ways people build are similar enough between teams.
   section
     +defaultimg('resources/github-productivity-2.png')
     +defaultimg('resources/github-productivity-1.png')
@@ -353,8 +392,9 @@ block slides
     aside.notes
       p Whenever a system architecture changes, it's an opportunity to improve the build
   section
-    p TODO: build tool build tools.
-  section
     p Conclusions
-    p.fragment Many reasons you get a big build
-    p.fragment Treat your builds with respect
+    ul
+      li.fragment Simplify code linking
+      li.fragment Reduce number of paths to make artifacts
+      li.fragment Incorporate build improvements to your process
+    p.fragment Keep in mind the human impact of a build!
