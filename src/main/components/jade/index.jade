@@ -49,6 +49,7 @@ block slides
   section
     +appearingimg('resources/build-1.png')
     aside.notes
+      p TODO: add detail here of why
       p And this is solved by a developer tool.
       p I have had a lot of opportunities to look at people's build scripts
   section
@@ -72,12 +73,9 @@ block slides
       p Over time, you add more and more people to your team
       p And all of these people work in your build
   section
-    p TODO: label axis
-    +appearingimg('resources/time-complexity-2.png')
+    +appearingimg('resources/complexity-1x.png')
   section
-    p TODO: fixing complexity is hard
-  section
-    +appearingimg('resources/time-complexity-3.png')
+    +appearingimg('resources/complexity-2x.png')
     +appearingimg('resources/build-6.png')
     aside.notes
       p As more engineers join, they add more "stuff"
@@ -85,7 +83,7 @@ block slides
       p Maybe the second line shows the effort to fix it
       p So the build might not be that complex, but the effort increases exponentially
   section
-    +appearingimg('resources/time-complexity-1.png')
+    +appearingimg('resources/complexity-3x.png')
     +appearingimg('resources/build-8.png')
     aside.notes
       p A new engineer joins...
@@ -96,7 +94,7 @@ block slides
     aside.notes
       p And they go to compile, and suddenly have to wait
   section
-    +appearingimg('resources/time-complexity-4.png')
+    +appearingimg('resources/complexity-4x.png')
     aside.notes
       p And to them, it's seriously always been this way
       p And not their responsibility to fix it
@@ -118,10 +116,16 @@ block slides
       p We make an SDK for android developers
       p Android developers use gradle, so we needed to make a gradle plugin
   section
-    ul
-      li.fragment Files built, then copied into other folders
-      li.fragment Files published to maven local
-      li.fragment Files linked using gradle / maven project linking
+    +appearingimg('resources/folders-2.png')
+    +appearingimg('resources/folders-1.png')
+    +appearingimg('resources/folders-3.png')
+    aside.notes
+      p TODO: add something for the middle slides
+      p Describing degenerate m2 cache example
+      ul
+        li Files built, then copied into other folders
+        li Files published to maven local
+        li Files linked using gradle / maven project linking
   section
     ul
       li.fragment reduce number of tools you're using
@@ -130,39 +134,45 @@ block slides
       p Google, for example, statically links everything
   section
     p Version nightmare
-    p TODO: fix example correctness
-    ul
-      li.fragment change util
-      li.fragment not change artifact that depended on it
-      li.fragment artifact broken
-      li.fragment artifact was poorly unit tested
+    +appearingimg('resources/folders-4.png')
+    +appearingimg('resources/folders-5.png')
+    +appearingimg('resources/folders-6.png')
+    aside.notes
+      ul
+        p TODO: add diamond dependencies nightmare
+        p TODO: talk about how this worked locally
+        li change util
+        li not change artifact that depended on it
+        li artifact broken
+        li artifact was poorly unit tested
   section
-    p Meanwhile, at twitter proper
-    ul
-      li.fragment Tale of two repos
-      li.fragment Cross dependencies
+    p Meanwhile, at twitter proper, a tale of two repos
+    +appearingimg('resources/twitter-repo-1.png')
+    +appearingimg('resources/twitter-repo-2.png')
+    +appearingimg('resources/twitter-repo-3.png')
+    aside.notes
+      p TODO: add single line image
   section
     p Meanwhile, at Google
-    ul
-      li.fragment monorepo
-      li.fragment everything on master
-      li.fragment trunk based development
-  section
-    p Downside of google approach
-    ul
-      li.fragment You change something, break other people's things
-      li.fragment Fear of using other's work
-    p.fragment Good tooling can help!
-  section
-    p Even if we had bumped the dependent artifact
-    p TODO: what do you mean?
-    ul
-      li.fragment If we ever need to update two things at once, we need to reason about them
+    +appearingimg('resources/google-repo-1.png')
+    +appearingimg('resources/google-repo-2.png')
+    +appearingimg('resources/google-repo-3.png')
+    aside.notes
+      ul
+        li monorepo
+        li everything on master
+        li trunk based development
+      p Downside of google approach
+      ul
+        li You change something, break other people's things
+        li Fear of using other's work
   section
     ul
       li.fragment reduce upstream breakages
       li.fragment minimize version bumping complexity (if not monorepo, then automated)
       li.fragment maximize test coverage
+    aside.notes
+      p TODO: Note version bumping sucks
   section
     img.fragment.replaceafter.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
     img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
@@ -170,10 +180,12 @@ block slides
   section
     ul
       li.fragment keep tooling quality high
-  section
-    p Not all of you artifacts are part of your local repo
-    p And some are, but you might not be a monobuild
-    p So transitives can be a problem
+    aside.notes
+      p resources/split-4-incremental.png
+      p TODO: delete? Add note about incremental?
+      p Not all of you artifacts are part of your local repo
+      p And some are, but you might not be a monobuild
+      p So transitives can be a problem
   section
     +appearingimg('resources/split-1.png')
     +appearingimg('resources/transitive-1.png')
@@ -191,12 +203,16 @@ block slides
   section
     p Definitely be explicit with external artifacts
   section
-    p What's funny about this is we publish an SDK for crashlytics
-    ul
-      li.fragment It's crashlytics, then 3 transitives: Core, Answers, and Beta
-      li.fragment Users' don't depend on core, answers, and beta, they depend on crashlytics
-      li.fragment but they use code from the transitives.
-      li.fragment so maybe there's something about grouped projects WRT transitives?
+    p Crashlytics exception
+    +appearingimg('resources/crashlytics-sdk-2.png')
+    +appearingimg('resources/crashlytics-sdk-1.png')
+    aside.notes
+      p TODO: Change to fabric.with crashlytics
+      ul
+        li It's crashlytics, then 3 transitives: Core, Answers, and Beta
+        li Users' don't depend on core, answers, and beta, they depend on crashlytics
+        li but they use code from the transitives.
+        li so maybe there's something about grouped projects WRT transitives?
   section
     pre.leftalign crashlytics/
     pre.leftalign    - sdk
@@ -207,6 +223,8 @@ block slides
     pre.leftalign    - #[strike sdk]
     pre.leftalign    - util/devtools/buildSystems/maven
     +defaultimg('resources/structure-3.png')
+    aside.notes
+      p TODO: DELETE folders in image
   section
     pre.leftalign crashlytics/
     pre.leftalign    - maven
@@ -218,8 +236,8 @@ block slides
   section
     ul
       li.fragment What is dead may never die
-      li.fragment cut ties to old code
-      li.fragment use tooling to find dead code
+      li.fragment cut ties to old build scripts
+      li.fragment make things easy to update on CI
     aside.notes
       p Any time you find yourself explaining old code,
       p Delete it.
@@ -234,12 +252,11 @@ block slides
     +appearingimg('resources/behaviors-6.png')
     +appearingimg('resources/behaviors-7.png')
   section
-    +appearingimgnote('resources/split-4-incremental.png', 'maintain incremental compilation')
-  section
     p Maximize build-consistency
     ul
       li.fragment.dimafter Abandon IDE builders
-      li.fragment.dimafter Make incremental builds awesome
+      li.fragment.dimafter Make CI configuration minimal
+      li.fragment.dimafter Make incremental command line builds awesome
   section
     strong Organic buildscript reuse
   section
@@ -249,6 +266,7 @@ block slides
     +appearingimg('resources/self-similarity-4.png')
     +appearingimg('resources/self-similarity-5.png')
     aside.notes
+      p TODO: add image of someone copying file to other persons machine
       strong who uses the build scripts?
       ol
         li Let's say you have a buildscript
@@ -312,15 +330,15 @@ block slides
       p 3) Code debt tangles into work, too many changes
       p 4) Code debt is a prerequisite for work.
   section
-    +appearingimg('resources/feature-teams-1.png')
-    +appearingimg('resources/feature-teams-2.png')
-    +appearingimg('resources/feature-teams-3.png')
-    +appearingimg('resources/feature-teams-4.png')
-    +appearingimg('resources/feature-teams-5.png')
-    +appearingimg('resources/feature-teams-6.png')
-    +appearingimg('resources/feature-teams-7.png')
-    +appearingimg('resources/feature-teams-8.png')
-    +appearingimg('resources/feature-teams-9.png')
+    +appearingimg('resources/teams-1.png')
+    +appearingimg('resources/teams-2.png')
+    +appearingimg('resources/teams-3.png')
+    +appearingimg('resources/teams-4.png')
+    +appearingimg('resources/teams-5.png')
+    +appearingimg('resources/teams-6.png')
+    +appearingimg('resources/teams-7.png')
+    +appearingimg('resources/teams-8.png')
+    +appearingimg('resources/teams-9.png')
     aside.notes
       p TODO: make this be about me
       p Feature teams exist, but across features, can't
@@ -331,15 +349,17 @@ block slides
       p Where do you document this work?
   section
     p Spin-off focused efforts
+    +appearingimg('resources/teams-10.png')
+    +appearingimg('resources/teams-11.png')
   section
     p Hire Engineering Effectiveness
     aside.notes
       p Only works if ways people build are similar enough between teams.
   section
-    +defaultimg('resources/github-productivity-2.png')
-    +defaultimg('resources/github-productivity-1.png')
+    +appearingimg('resources/github-productivity-2.png')
+    +appearingimg('resources/github-productivity-1.png')
   section
-    +defaultimg('resources/github-productivity-2.png')
+    +defaultimg('resources/time-1x.png')
     p.fragment Wrong info
     p.fragment Noisy info
     aside.notes
@@ -354,7 +374,7 @@ block slides
       p Creating a new project
       p Don't let them learn from your mistakes.
   section
-    +defaultimg('resources/github-productivity-1.png')
+    +defaultimg('resources/time-5x.png')
     aside.notes
       p Teammates leave
       p Intellij run configs commitable, CI matching way you build locally,
@@ -369,26 +389,34 @@ block slides
       li * What issues do you have with the current build? What are you struggling with most?
   section
     p Products ship
+    +defaultimg('resources/time-4x.png')
     aside.notes
       p Product shipping provide a moment to reflect, but you have to be careful
       p not to break the build immediately after shipping
       p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
   section
-    p.dimafter Products shipping as reflection
-    p.dimafter Products shipping as prioritization of ephemeral-teams
+    ul
+      li.fragment.dimafter Reflection
+      li.fragment.dimafter Prioritization of ephemeral-teams
+  section
+    p Products about to ship
+    +defaultimg('resources/time-3x.png')
+    aside.notes
+      p TODO: differentiate from other image
+      p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
   section
     p Projects spin up
+    +defaultimg('resources/time-2x.png')
     aside.notes
-      p Don't make massive changes to builds right before projects ship.
-      p Plan and understand code debt your team is taking on. 
-      p Are the engs on the team trained to solve their build problems?
-      p Does this new project have any unique impacts on the build?
-      p Is this team reusing builds from other teams?
-      p Now is NOT the time to copy all the existing build scripts
-      p Put them in shared places and start using those in *both* projects
-      p Anticipate the cost to spin up projects in terms of the debt to the system
+      p Understand code debt taken on
+  section
+    ul
+      li.fragment Eng training good?
+      li.fragment New project unique build requirements?
+      li.fragment Shared builds with other projects?
   section
     p Architectures change
+    +defaultimg('resources/time-3x.png')
     aside.notes
       p Whenever a system architecture changes, it's an opportunity to improve the build
   section

@@ -27,4 +27,3 @@ task exportJade(type: Exec, dependsOn: setupTalkResources) {
 }
 
 task export(dependsOn: exportJade)
-export.dependsOn(setupTalkComponents)
