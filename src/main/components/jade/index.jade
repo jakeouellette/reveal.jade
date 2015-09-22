@@ -116,6 +116,14 @@ block slides
       p We make an SDK for android developers
       p Android developers use gradle, so we needed to make a gradle plugin
   section
+    ul
+      li.fragment reduce number of tools you're using
+      li.fragment Twitter: Pants
+      li.fragment Facebook: Buck
+      li.fragment Google: Bazel
+    aside.notes
+      p Google, for example, statically links everything
+  section
     +appearingimg('resources/folders-2.png')
     +appearingimg('resources/folders-1.png')
     +appearingimg('resources/folders-3.png')
@@ -127,32 +135,24 @@ block slides
         li Files published to maven local
         li Files linked using gradle / maven project linking
   section
-    ul
-      li.fragment reduce number of tools you're using
-      li.fragment minimize "ways" artifacts link
-    aside.notes
-      p Google, for example, statically links everything
-  section
     p Version nightmare
     +appearingimg('resources/folders-4.png')
     +appearingimg('resources/folders-5.png')
     +appearingimg('resources/folders-6.png')
     aside.notes
       ul
-        p TODO: add diamond dependencies nightmare
         p TODO: talk about how this worked locally
         li change util
         li not change artifact that depended on it
         li artifact broken
         li artifact was poorly unit tested
   section
-    p Meanwhile, at twitter proper, a tale of two repos
+    p Meanwhile, at non-Fabric Twitter
+    p a tale of two repos
     +appearingimg('resources/twitter-repo-1.png')
     +appearingimg('resources/twitter-repo-2.png')
     +appearingimg('resources/twitter-repo-4.png')
     +appearingimg('resources/twitter-repo-3.png')
-    aside.notes
-      p TODO: add single line image
   section
     p Meanwhile, at Google
     +appearingimg('resources/google-repo-1.png')
@@ -179,21 +179,17 @@ block slides
     img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
     img.fragment.replaceafter.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
   section
-    ul
-      li.fragment keep tooling quality high
-    aside.notes
-      p resources/split-4-incremental.png
-      p TODO: delete? Add note about incremental?
-      p Not all of you artifacts are part of your local repo
-      p And some are, but you might not be a monobuild
-      p So transitives can be a problem
-  section
     +appearingimg('resources/split-1.png')
+    +appearingimg('resources/split-4-incremental.png')
+    aside.notes
+      p Might be trying to reduce the number of things you build
+      p Also, make things more reusable
+      p But then you have to decide how things are wired up
+  section
     +appearingimg('resources/transitive-1.png')
     +appearingimg('resources/transitive-2.png')
     +appearingimg('resources/transitive-3.png')
     +appearingimg('resources/transitive-b-3.png')
-    +appearingimg('resources/transitive-b-4.png')
     +appearingimg('resources/transitive-b-5.png')
     +appearingimg('resources/transitive-1.png')
     aside.notes
@@ -201,20 +197,23 @@ block slides
       p Using a dependency for a transitives
       p If it is removed:
       p have to find what broke your build
-  section
-    p Definitely be explicit with external artifacts
+      p Be explicit with transitive dependencies
   section
     p Crashlytics exception
     +appearingimg('resources/fabric-with-1.png')
     +appearingimg('resources/fabric-with-2.png')
     +appearingimg('resources/fabric-with-3.png')
     aside.notes
-      p TODO: Change to fabric.with crashlytics
       ul
-        li It's crashlytics, then 3 transitives: Core, Answers, and Beta
-        li Users' don't depend on core, answers, and beta, they depend on crashlytics
-        li but they use code from the transitives.
-        li so maybe there's something about grouped projects WRT transitives?
+        li It's crashlytics, then transitives
+        li Transitives are used here, but
+        li is the fact that everything is grouped in a module more likely to reduce issues?
+  section
+    +appearingimg('resources/diamond-1.png')
+    +appearingimg('resources/diamond-2.png')
+  section
+    p Builds with History
+    +defaultimg('resources/boston-state-house.jpg')
   section
     pre.leftalign crashlytics/
     pre.leftalign    - sdk
@@ -261,6 +260,8 @@ block slides
       li.fragment.dimafter Abandon IDE builders
       li.fragment.dimafter Make CI configuration minimal
       li.fragment.dimafter Make incremental command line builds awesome
+    aside.notes
+      p Get more specific, what do you mean by IDE builder?
   section
     strong Organic buildscript reuse
   section
@@ -295,14 +296,20 @@ block slides
     +appearingimg('resources/sprawl-6a.png')
     +appearingimg('resources/sprawl-5a.png')
     +appearingimg('resources/sprawl-7a.png')
+    aside.notes
+      ul
+        li Keystore
+        li Style guide
+        li Initialization
+        li Extra brew steps
   section
     p Streamline environment
     ul
       li.fragment.dimafter Avoid for uncommitted build steps
       li.fragment.dimafter CI build tasks 99% same as local
-      li.fragment.dimafter Keep configuration steps uniform
     aside.notes
       p On last one: keep config steps like env variables uniform
+      p TODO: "Keep configuration steps uniform -- describe why not doing this is bad"
   section
     p OK!
     aside.notes
@@ -320,6 +327,8 @@ block slides
     +appearingimg('resources/work-balance-1.png')
     +appearingimg('resources/work-balance-2.png')
     +appearingimg('resources/work-balance-3.png')
+  section
+    p Build-debt is code-debt
   section
     +appearingimg('resources/feature-vs-debt-1.png')
     +appearingimg('resources/feature-vs-debt-2.png')
@@ -356,6 +365,13 @@ block slides
     p Hire Engineering Effectiveness
     aside.notes
       p Only works if ways people build are similar enough between teams.
+      p Treat other teams as stakeholders, building a product, prioritize for max value
+      p Embed onto teams when needed
+  section
+    p.fragment "How to be a 10x engineer: help ten other engineers be twice as good." - Peter Seibel
+    aside.notes
+      p Fund engineering time spent doing it.
+      p build into your process
   section
     +appearingimg('resources/github-productivity-2.png')
     +appearingimg('resources/github-productivity-1.png')
@@ -365,29 +381,16 @@ block slides
     p.fragment Noisy info
     aside.notes
       strong team structure changes
-      p Teammates added
-      p Before they start the build, reason about anything hacky 
-      p Teammates enter: Dogfood your build
-      p They MUST update any errors
-      p They must give you feedback
-      p Avoid ephemeral artifacts that get out of date..
-      p Train them on norms of the build:
-      p Creating a new project
-      p Don't let them learn from your mistakes.
+      p They dogfood the build
+      p They are responsible for updating it (first prs)
+      p You unblock them with correct info (first pairing)
   section
     +defaultimg('resources/time-5x.png')
     aside.notes
-      p Teammates leave
-      p Intellij run configs commitable, CI matching way you build locally,
-      p minimize feature switches
-      p Walk through with them their domain knowledge of the build. What
-      p Weird scripts have they built locally we need to get into master?
-      p What isn't automated you thought was 
-  section
-    ul
-      li * Are we building the same way?
-      li * If you could improve the build, what would you do?
-      li * What issues do you have with the current build? What are you struggling with most?
+      ul
+        li Reflect on their contributions to the build system.
+        li Check if they're building the same way.
+        li Learn their perception of opportunities for improvement
   section
     p Products ship
     +defaultimg('resources/time-4x.png')
@@ -403,7 +406,6 @@ block slides
     p Products about to ship
     +defaultimg('resources/time-3x.png')
     aside.notes
-      p TODO: differentiate from other image
       p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
   section
     p Projects spin up
@@ -412,18 +414,15 @@ block slides
       p Understand code debt taken on
   section
     ul
-      li.fragment Eng training good?
-      li.fragment New project unique build requirements?
-      li.fragment Shared builds with other projects?
-  section
-    p Architectures change
-    +defaultimg('resources/time-3x.png')
-    aside.notes
-      p Whenever a system architecture changes, it's an opportunity to improve the build
+      li.fragment Engineers understand build?
+      li.fragment New project unique build needs?
+      li.fragment Build shared with other teams?
   section
     p Conclusions
     ul
-      li.fragment Simplify code linking
-      li.fragment Reduce number of paths to make artifacts
-      li.fragment Incorporate build improvements to your process
-    p.fragment Keep in mind the human impact of a build!
+      li.fragment Simplify your build.
+      li.fragment Make your build consistent.
+      li.fragment Use your team's process.
+  section
+    p Jake Ouellette (@Jakeout)
+    img(src='resources/twitter_logo.png', height='75', class='noborder')
