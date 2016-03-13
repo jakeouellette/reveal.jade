@@ -3,7 +3,7 @@ def talkCanonicalPath = new File(talkpath).getCanonicalPath()
 
 task setupRevealJs(type: Copy) {
 	  from revealjsCanonicalPath
-    into talkCanonicalPath
+    into (talkCanonicalPath + '/out')
     outputs.upToDateWhen { true }
 }
 
