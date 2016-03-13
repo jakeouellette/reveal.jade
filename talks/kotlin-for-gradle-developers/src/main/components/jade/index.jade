@@ -1,0 +1,498 @@
+extends ./layout.jade
+
+mixin appearingimgnote(image, footer)
+  div.fragment.replaceafter
+    +defaultimg(image)
+    p=footer
+mixin appearingimg(image)
+  div.fragment.replaceafter
+    +defaultimg(image)
+mixin defaultimg(image)
+  img.noborder(src=image, height='500', style='margin: 0 auto;')
+
+block slides
+  section
+    h2 Kotlin for Gradle developers
+    div
+      p Presentation by Jake Ouellette (@Jakeout)
+      img(src='resources/twitter_logo.png', height='75', class='noborder')
+  section
+    p About me
+    aside.notes
+      p Engineer
+  section
+    div
+      p Build Tools at Fabric
+      img(src='resources/twitter_logo.png', height='75', class='noborder')
+  section
+    p scala
+    p kotlin
+    p gradle
+  section
+    p Motivation
+
+  section
+    p Anti-groovy motivation
+    p Groovy built as a scripting language version of java
+    p kotlin built for building complicated swing applications (heh)
+
+Kotlin's for building large software systems using the tightly-integrated IntelliJ plugin, both from Jetbrains. It was built with that use case firmly in mind, and even had contributions from James Strachan (Groovy's creator) and Alex Tkachman (creator of Groovy 2.0's, ummm..., inspiration Groovy++).
+Groovy's for gluing together Java and JVM apps, testing Java objects, scripting for Grails, 20-line Gradle build scripts, and what not, anything that doesn't scale.
+
+
+  section
+    p Why is kotlin the right alternative to groovy
+    p Different types of gradle communities
+    p Grails app developers
+    p Scala developers who hate SBT 
+    p Android developers who want Java 8 features
+    p Var is a pep by the way
+    aside.notes
+
+Some things to compare:
+
+Static vs dynamic typing
+String issues
+DSL cleverness
+
+Immutable vs "canonical" types, data classes
+var
+method missing, DSLs
+Groovy closures, how they work
+Mutation in code
+for each
+Plugin syntax
+
+Extension of functions vs monkeypatching: Ruby way vs clojure way
+
+  section
+    p What are some common groovy patterns
+    p Examples inside gradle
+
+How gradle plugins are instrumented / connected together
+
+How to set it up (what dependencies are needed)
+You might run into classpath issues
+- new plugin syntax?
+- fatjarring
+
+New gradle model
+
+  section
+    p What are some kotlin versions of those patterns
+  section
+    p Gradle plugins with kotlin
+  section
+    p Kotlin in your gradle app
+
+
+  section
+    p Builds
+    +appearingimg('resources/build-0.png')
+    +appearingimg('resources/build-1.png')
+    +appearingimg('resources/build-humans-1.png')
+    +appearingimg('resources/build-humans-2.png')
+    aside.notes
+      p this is a talk about your development environment
+      p that power creating your application
+      p But the development environments are created by you
+      p And how you set them up impacts your team
+  section
+    p About me
+    aside.notes
+      p I'm Jake Ouellette, I work @ Twitter on a team called fabric
+  section
+    p Fabric
+    img(src='resources/fabric_logo.png', height='300', class='noborder')
+    +notes
+      p What have I built?  I work at Twitter, on Twitter's Mobile platform, fabric. 
+      p Fabric is a suite of Mobile SDKs which developers use to enhance their application
+      p One example build tool is Crashlytics.
+  section
+    p crashlytics
+    img(src='resources/crashlytics_logo.png', height='300', class='noborder')
+    +notes.
+      Crashes as a service.
+  section
+    p crashes-as-a-service
+    img(src='resources/fabric_app.png', height='800', class='noborder')
+  section
+    +appearingimg('resources/build-1.png')
+    aside.notes
+      p TODO: add detail here of why
+      p And this is solved by a developer tool.
+      p I have had a lot of opportunities to look at people's build scripts
+  section
+    p.fragment.replaceafter big data...
+    p.fragment big "build"
+    aside.notes
+      p A lot of developers are concerned about big data
+      p But one thing they often aren't concerned is sprawling complexity of their build
+  section
+    +appearingimg('resources/build-7.png')
+    +appearingimg('resources/build-3.png')
+    aside.notes
+      p When you first start a project, you make the best build ever
+      p you understand it -- makes total sense to you
+  section
+    +appearingimg('resources/build-humans-1.png')
+    +appearingimg('resources/build-humans-2.png')
+    +appearingimg('resources/build-humans-3.png')
+    +appearingimg('resources/build-humans-4.png')
+    aside.notes
+      p Over time, you add more and more people to your team
+      p And all of these people work in your build
+  section
+    +appearingimg('resources/complexity-1x.png')
+  section
+    +appearingimg('resources/complexity-2x.png')
+    +appearingimg('resources/build-6.png')
+    aside.notes
+      p As more engineers join, they add more "stuff"
+      p slows down the build, from your perspective
+      p Maybe the second line shows the effort to fix it
+      p So the build might not be that complex, but the effort increases exponentially
+  section
+    +appearingimg('resources/complexity-3x.png')
+    +appearingimg('resources/build-8.png')
+    aside.notes
+      p A new engineer joins...
+      p code has always been that way.
+      p Build's health is down
+  section
+    +defaultimg('resources/token-xkcd.png')
+    aside.notes
+      p And they go to compile, and suddenly have to wait
+  section
+    +appearingimg('resources/complexity-4x.png')
+    aside.notes
+      p And to them, it's seriously always been this way
+      p And not their responsibility to fix it
+  section
+    p Overview
+    aside.notes
+      p What causes a big build
+      p Strategies to prevent it.
+  section
+    p Tool nightmare
+    ul
+      li.fragment rake
+      li.fragment maven
+      li.fragment ant
+      li.fragment shell scripts
+      li.fragment gradle
+    aside.notes
+      p using tools
+      p We make an SDK for android developers
+      p Android developers use gradle, so we needed to make a gradle plugin
+  section
+    ul
+      li.fragment reduce number of tools you're using
+      li.fragment Twitter: Pants
+      li.fragment Facebook: Buck
+      li.fragment Google: Bazel
+    aside.notes
+      p Google, for example, statically links everything
+  section
+    +appearingimg('resources/folders-2.png')
+    +appearingimg('resources/folders-1.png')
+    +appearingimg('resources/folders-3.png')
+    aside.notes
+      p TODO: add something for the middle slides
+      p Describing degenerate m2 cache example
+      ul
+        li Files built, then copied into other folders
+        li Files published to maven local
+        li Files linked using gradle / maven project linking
+  section
+    p Version nightmare
+    +appearingimg('resources/folders-4.png')
+    +appearingimg('resources/folders-5.png')
+    +appearingimg('resources/folders-6.png')
+    aside.notes
+      ul
+        p TODO: talk about how this worked locally
+        li change util
+        li not change artifact that depended on it
+        li artifact broken
+        li artifact was poorly unit tested
+  section
+    p Meanwhile, at non-Fabric Twitter
+    p a tale of two repos
+    +appearingimg('resources/twitter-repo-1.png')
+    +appearingimg('resources/twitter-repo-2.png')
+    +appearingimg('resources/twitter-repo-4.png')
+    +appearingimg('resources/twitter-repo-3.png')
+  section
+    p Meanwhile, at Google
+    +appearingimg('resources/google-repo-1.png')
+    +appearingimg('resources/google-repo-2.png')
+    +appearingimg('resources/google-repo-3.png')
+    aside.notes
+      ul
+        li monorepo
+        li everything on master
+        li trunk based development
+      p Downside of google approach
+      ul
+        li You change something, break other people's things
+        li Fear of using other's work
+  section
+    ul
+      li.fragment reduce upstream breakages
+      li.fragment minimize version bumping complexity (if not monorepo, then automated)
+      li.fragment maximize test coverage
+    aside.notes
+      p TODO: Note version bumping sucks
+  section
+    img.fragment.replaceafter.noborder(src='resources/software.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-2.png', height='500', style='margin: 0 auto;')
+    img.fragment.replaceafter.noborder(src='resources/software-4.png', height='500', style='margin: 0 auto;')
+  section
+    +appearingimg('resources/split-1.png')
+    +appearingimg('resources/split-4-incremental.png')
+    aside.notes
+      p Might be trying to reduce the number of things you build
+      p Also, make things more reusable
+      p But then you have to decide how things are wired up
+  section
+    +appearingimg('resources/transitive-1.png')
+    +appearingimg('resources/transitive-2.png')
+    +appearingimg('resources/transitive-3.png')
+    +appearingimg('resources/transitive-b-3.png')
+    +appearingimg('resources/transitive-b-5.png')
+    +appearingimg('resources/transitive-1.png')
+    aside.notes
+      p Might have an artifact with a dependency, represented through transitives
+      p Using a dependency for a transitives
+      p If it is removed:
+      p have to find what broke your build
+      p Be explicit with transitive dependencies
+  section
+    p Crashlytics exception
+    +appearingimg('resources/fabric-with-1.png')
+    +appearingimg('resources/fabric-with-2.png')
+    +appearingimg('resources/fabric-with-3.png')
+    aside.notes
+      ul
+        li It's crashlytics, then transitives
+        li Transitives are used here, but
+        li is the fact that everything is grouped in a module more likely to reduce issues?
+  section
+    +appearingimg('resources/diamond-1.png')
+    +appearingimg('resources/diamond-2.png')
+  section
+    p Builds with History
+    +defaultimg('resources/boston-state-house.jpg')
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - sdk
+    pre.leftalign    - util/devtools/buildSystems/maven
+    +defaultimg('resources/sdk-folders-6.png')
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - #[strike sdk]
+    pre.leftalign    - util/devtools/buildSystems/maven
+    +defaultimg('resources/sdk-folders-1.png')
+    aside.notes
+      p TODO: DELETE folders in image
+  section
+    pre.leftalign crashlytics/
+    pre.leftalign    - maven
+    +appearingimg('resources/sdk-folders-2.png')
+    +appearingimg('resources/sdk-folders-3.png')
+    +appearingimg('resources/sdk-folders-4.png')
+    aside.notes
+      p We have a folder that moved to a subfolder,
+      p Never fixed it
+      p Permanently have to explain to new devs
+  section
+    ul
+      li.fragment What is dead may never die
+      li.fragment cut ties to old build scripts
+      li.fragment make things easy to update on CI
+    aside.notes
+      p Any time you find yourself explaining old code,
+      p Delete it.
+  section
+    strong Building multiple ways
+  section
+    +appearingimg('resources/behaviors-1.png')
+    +appearingimg('resources/behaviors-2.png')
+    +appearingimg('resources/behaviors-3.png')
+    +appearingimg('resources/behaviors-4.png')
+    +appearingimg('resources/behaviors-5.png')
+    +appearingimg('resources/behaviors-6.png')
+    +appearingimg('resources/behaviors-7.png')
+  section
+    p Maximize build-consistency
+    ul
+      li.fragment.dimafter Abandon IDE builders
+      li.fragment.dimafter Make CI configuration minimal
+      li.fragment.dimafter Make incremental command line builds awesome
+    aside.notes
+      p Get more specific, what do you mean by IDE builder?
+  section
+    strong Organic buildscript reuse
+  section
+    +appearingimg('resources/self-similarity-1.png')
+    +appearingimg('resources/self-similarity-2.png')
+    +appearingimg('resources/self-similarity-3.png')
+    +appearingimg('resources/self-similarity-4.png')
+    +appearingimg('resources/self-similarity-5.png')
+    aside.notes
+      p TODO: add image of someone copying file to other persons machine
+      strong who uses the build scripts?
+      ol
+        li Let's say you have a buildscript
+        li If a coworker needs one for a new project, often they'll take yours
+        li Ant lacks idioms, and so maybe, there was only one ant script ever written?
+        li And what do you do if this happens across your organization? Everyone cutting and pasting from builds. There's a lot of repetition of knowledge
+  section
+    +appearingimg('resources/plugins-1.png')
+    +appearingimg('resources/plugins-2.png')
+    +appearingimg('resources/plugins-3.png')
+    aside.notes
+      ol
+        li So yeah, if you have a build that other scripts are reusing
+        li One way to think about complexity is how many non project-specific things can be shared
+  section
+    strong Untracked build steps
+  section
+    +appearingimg('resources/sprawl-4a.png')
+    +appearingimg('resources/sprawl-1a.png')
+    +appearingimg('resources/sprawl-2a.png')
+    +appearingimg('resources/sprawl-3a.png')
+    +appearingimg('resources/sprawl-6a.png')
+    +appearingimg('resources/sprawl-5a.png')
+    +appearingimg('resources/sprawl-7a.png')
+    aside.notes
+      ul
+        li Keystore
+        li Style guide
+        li Initialization
+        li Extra brew steps
+  section
+    p Streamline environment
+    ul
+      li.fragment.dimafter Avoid for uncommitted build steps
+      li.fragment.dimafter CI build tasks 99% same as local
+    aside.notes
+      p On last one: keep config steps like env variables uniform
+      p TODO: "Keep configuration steps uniform -- describe why not doing this is bad"
+  section
+    p OK!
+    aside.notes
+      p OK! that's why your build in complicated.
+  section
+    p But... when do I fix it?
+  section
+    +appearingimg('resources/time-1.png')
+    +appearingimg('resources/time-2.png')
+    aside.notes
+      ol
+        li immediately?
+        li eventually?
+  section
+    +appearingimg('resources/work-balance-1.png')
+    +appearingimg('resources/work-balance-2.png')
+    +appearingimg('resources/work-balance-3.png')
+  section
+    p Build-debt is code-debt
+  section
+    +appearingimg('resources/feature-vs-debt-1.png')
+    +appearingimg('resources/feature-vs-debt-2.png')
+    +appearingimg('resources/feature-vs-debt-4.png')
+    +appearingimg('resources/feature-vs-debt-5.png')
+    aside.notes
+      p 1) Tempted to never fix code debt
+      p 2) Code debt distracts from work
+      p 3) Code debt tangles into work, too many changes
+      p 4) Code debt is a prerequisite for work.
+  section
+    +appearingimg('resources/teams-1.png')
+    +appearingimg('resources/teams-2.png')
+    +appearingimg('resources/teams-3.png')
+    +appearingimg('resources/teams-4.png')
+    +appearingimg('resources/teams-5.png')
+    +appearingimg('resources/teams-6.png')
+    +appearingimg('resources/teams-7.png')
+    +appearingimg('resources/teams-8.png')
+    +appearingimg('resources/teams-9.png')
+    aside.notes
+      p TODO: make this be about me
+      p Feature teams exist, but across features, can't
+      p easily pay down wide debts
+      p Devs end up solving them on their own
+      p Instead, guilds own work, but then work is poorly tracked
+      p We track work for Crash and answers, not for android
+      p Where do you document this work?
+  section
+    p Spin-off focused efforts
+    +appearingimg('resources/teams-10.png')
+    +appearingimg('resources/teams-11.png')
+  section
+    p Hire Engineering Effectiveness
+    aside.notes
+      p Only works if ways people build are similar enough between teams.
+      p Treat other teams as stakeholders, building a product, prioritize for max value
+      p Embed onto teams when needed
+  section
+    p.fragment "How to be a 10x engineer: help ten other engineers be twice as good." - Peter Seibel
+    aside.notes
+      p Fund engineering time spent doing it.
+      p build into your process
+  section
+    +appearingimg('resources/github-productivity-2.png')
+    +appearingimg('resources/github-productivity-1.png')
+  section
+    +defaultimg('resources/time-1x.png')
+    p.fragment Wrong info
+    p.fragment Noisy info
+    aside.notes
+      strong team structure changes
+      p They dogfood the build
+      p They are responsible for updating it (first prs)
+      p You unblock them with correct info (first pairing)
+  section
+    +defaultimg('resources/time-5x.png')
+    aside.notes
+      ul
+        li Reflect on their contributions to the build system.
+        li Check if they're building the same way.
+        li Learn their perception of opportunities for improvement
+  section
+    p Products ship
+    +defaultimg('resources/time-4x.png')
+    aside.notes
+      p Product shipping provide a moment to reflect, but you have to be careful
+      p not to break the build immediately after shipping
+      p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
+  section
+    ul
+      li.fragment.dimafter Reflection
+      li.fragment.dimafter Prioritization of ephemeral-teams
+  section
+    p Products about to ship
+    +defaultimg('resources/time-3x.png')
+    aside.notes
+      p Avoid introducing risk close to a ship date by planning out how major releases are being deployed, early
+  section
+    p Projects spin up
+    +defaultimg('resources/time-2x.png')
+    aside.notes
+      p Understand code debt taken on
+  section
+    ul
+      li.fragment Engineers understand build?
+      li.fragment New project unique build needs?
+      li.fragment Build shared with other teams?
+  section
+    p Conclusions
+    ul
+      li.fragment Simplify your build.
+      li.fragment Make your build consistent.
+      li.fragment Use your team's process.
+  section
+    p Jake Ouellette (@Jakeout)
+    img(src='resources/twitter_logo.png', height='75', class='noborder')
