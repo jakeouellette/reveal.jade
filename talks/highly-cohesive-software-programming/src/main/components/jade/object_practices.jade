@@ -1,0 +1,206 @@
+include mixins.jade
+
+section
+  p Objects: Don't do things to my data, ask me to do things.
+  p.fragment.replaceafter Law of demeter
+  p.fragment Principle of Least Surprise
+section
+  p Law of demeter: 
+  p.fragment when one wants a dog to walk, 
+  p.fragment one does not command the dog's legs to walk directly; 
+  p.fragment instead one commands the dog which then commands its own legs.
+section
+  p A method may only call things in direct scope
+section
+  p So let's say this circle represents an object with a method
+  img(src='resources/lod_1.png', height='300', class='noborder')
+section
+  p It can call a method of it's own class
+  img(src='resources/lod_2.png', height='300', class='noborder')
+  +codeexample
+    | this.draw()
+section
+  p Or methods of objects injected in
+  img(src='resources/lod_4.png', height='300', class='noborder')
+  +codeexample
+    | graphics.draw()
+section
+  p Or methods of objects it made
+  img(src='resources/lod_5.png', height='300', class='noborder')
+  +codeexample
+    | local = new Gif()
+    | local.draw()
+section
+  p Or methods of objects in it's class
+  img(src='resources/lod_3.png', height='300', class='noborder')
+  +codeexample
+    | this.helper.draw()
+section
+  p If you can do it anyway, why am I doing it for you?
+section
+  p Law of demeter is about #[em behavior] of objects
+section
+  p A lot of data is hierarchical
+  +codeexample
+    | "person": [
+    |   "head": [ "hair": "brown", "eyes": "blue" ], 
+    |   "legs": 2]
+section
+  p Can be encoded as objects
+  +codeexample
+    | person = new Person(
+    |   new Head(new Hair("brown"), new Eyes("blue")), 
+    |   new Legs(2), ...)
+section
+  p Does this violate law of demeter?
+  +codeexample
+    | person.hair.color
+section
+  p Here, person is just data
+  p.fragment just an immutable data-structure
+section
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Person p)
+  +notes. 
+    One benefit of immutable abstractions is it makes
+    parameter lists simpler
+section
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
+  +notes.
+    Could be passing in each individual component.
+section
+  p Bad: Getting data from objects.
+  +codeexample
+    | public class View {
+    |   public void paint() {
+    |     if (personPainter
+    +codeblock
+      |       .getPerson().hair().equals("brown") {
+    |       // Vary paint style
+    |     }
+  +notes.
+    What happens when a higher level class reaches into
+    a bheavior object's inner state?
+section
+  p With Inheritance: Easy to add new classes 
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
+section
+  +codeexample
+    | public class DogPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
+section
+  p New classes for same behaviors through extends
+  div(style="background:#fff;")
+    img(src='resources/new_class.gif', height='150', class='noborder')
+section
+  p Let's say you want to add a behavior
+  +codeexample
+    | 
+    |   public void drawOutline(Graphics g) {
+    | 
+section
+  +codeexample
+    |  interface Drawable {
+    |    public void draw(Graphics g);
+    +codeblock
+      |    public void drawOutline(Graphics g);
+    |  }
+section
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
+    | 
+    +codeblock
+      | 
+      |   public void drawOutline(Graphics g) {
+      |      ...
+section
+  div(style="background:#fff;")
+    img(src='resources/new_function.gif', height='150', class='noborder')
+section
+  p Could pull "Painting" behavior into single class:
+  +codeexample
+    | public class Painter {
+    | 
+    |   public void draw(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    |     ...
+    |   }
+section
+  +codeexample
+    | public class Painter {
+    | 
+    |   public void draw(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    |   }
+    +codeblock
+      |   public void drawOutline(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    |     ...
+    |   }
+section
+  p But then, the only way to extend types is to add to every behavior
+  +codeexample
+    | public class Painter {
+    | 
+    |   public drawOutline(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    | 
+    |     if (o instanceof Dog) {
+    |       ...
+    |     }
+    +codeblock
+      |     if (o instanceof Cat) {
+      |       ...
+      |     }
+    |     ...
+section
+  div(style="background:#fff;")
+    img(src='resources/new_class.gif', height='300', class='noborder')
+section
+  p this is known as the `expression problem`
+section
+  p There are solutions
+  div.fragment(style="background:#fff;")
+    p Clojure Protocols
+    img(src='resources/protocols.gif', height='300', class='noborder')
+section
+  p Keep data safe: Don't conflate "Person" with "Painting a Person"
+  p One is data, the other is behavior
+section
+  p Person was just data, wouldn't ask person to paint itself
+section
+  p In Java, must make the tradeoff between:
+  ul
+    li.fragment easy type extension
+    li.fragment easy behavior extension 
+section
+  p AVOID mixing concepts:
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |     ...
+    |   }
+    |   
+    |   public Color getHair() {
+section
+  p So that's Object Orientation

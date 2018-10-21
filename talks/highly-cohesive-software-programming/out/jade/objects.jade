@@ -1,0 +1,206 @@
+include mixins.jade
+
+section
+  p.fragment William Cook's definition of "Object Oriented"
+  img.fragment.noborder(src='resources/william_cook.jpg', width='300')
+section
+  p Often misunderstood as "just using classes for stuff"
+  img.fragment.noborder(src='resources/droids_looking_for.jpg')
+  p.fragment Accidentally doing the opposite of object oriented
+section
+  Most schools start out with something like this
+  +codeexample
+    | class Point {
+    |   final int x, y
+    | 
+    |   public int getX() { return x }
+    |   ...
+section
+  p lisp
+  +codeexample
+    | 
+    | (lambda () x)
+    | 
+  +notes.
+    Not too different from a lambda function in a functional language
+section
+  +codeexample
+    | 
+    | (lambda (var) 
+    |   (cond (= var "x") 
+    |     x 
+    |     y))
+    | 
+  +notes.
+    Ok, maybe one that determines if it should return x or y
+section
+  p C
+  +codeexample
+    | 
+    | point-&gt;x
+    | 
+section
+  p Classes can have state, is that OO?
+  +codeexample
+    | class Point {
+    |   int x, y
+    | 
+    |   public void setX(int x) { this.x = x }
+    |   ...
+  +notes.
+    Easily represent as a struct in a lower order language
+    If no mutation
+section
+  p Classes are not necessary to `set` state
+  p point-&gt;x = 5
+section
+  p Nor is Mutation necessary to have classes
+  +codeexample
+    | class Point {
+    |   int x, y
+    | 
+    |   public Point setX(int newX) { 
+    |     new Point(newX, y) 
+    |   }
+    |   ...
+  +notes.
+    Value objects, transformed into themself
+section
+  +codeexample
+    | class IntPoint implements Point {
+    |   int x, y
+    | 
+    |   public int getX() { return x }
+    |   ...
+  +notes.
+    Ok, what about when you start representing abstractions?
+section
+  +codeexample
+    | class DoublePoint implements Point {
+    |   double x, y
+    |   
+    |   public int getX() { return (int)x }
+    |   ...
+  +notes.
+    Now you can use the same APIs with different underlying representation
+section
+  p Isn't this just data?
+  +notes.
+    is that really a good example though? In this case it's just
+    data that is varying, not behavior
+section
+  +codeexample
+    | class Image implements Drawable {
+    |   int currentFrame = ...
+    | 
+    |   public void draw(Graphics g) { ... }
+    |     ...
+  +notes.
+    Let's use a behavioral abstraction
+section
+  +codeexample
+    | class Gif implements Drawable {
+    |   int currentFrame = ...
+    | 
+    |   public void draw(Graphics g) { ... }
+    |     ...
+  +notes.
+    Now you can represent new abstractions
+section
+  An object is a first-class, dynamically dispatched behavior.
+  +notes.
+    http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
+    dynamic dispatch in C: http://www.cs.rit.edu/~ats/books/ooc.pdf
+    http://lwn.net/Articles/444910/
+section
+  p Dynamic dispatch is sometimes called 
+  ul 
+    li.fragment.dimafter "message passing"
+    li.fragment.dimafter "late binding"
+    li.fragment.dimafter "dynamic binding"
+    li.fragment.dimafter "polymorphism" 
+  +notes.
+    Polymorphism is what java devs are used to hearing
+section
+  p Optional, but #[strong not essential:]
+  ol
+    li.fragment mutable state
+    li.fragment inheritance
+    li.fragment classes
+    li.fragment.fragment identity
+section
+  p 1) Mutable state
+  +notes.
+    Compose a program of value objects, state changes
+    through creation of new objects
+section
+  +codeexample
+    | class Gif implements Drawable {
+    |   int currentFrame = ...
+    | 
+    +codeblock
+      |   public Pair&lt;Frame, Drawable&gt; draw() { 
+    |    return new Pair(
+    |      getFrame(), 
+    |      new Gif(currentFrame++));
+    |   }
+    | ...
+    +notes.
+      We can create the same Gif by returning
+      a frame of the image, no mutation required
+section
+  p 2) Inheritance
+  +notes.
+    composition can be isometric
+    Go: Dynamic dispatch
+    In java, inheritance is a means to achieve dispatch, so essential,
+    but extends is not:
+section
+  +codeexample
+    |  interface Drawable {
+    |    public void draw(Graphics g);
+    |  }
+section
+  Others might pass around that thing
+  +codeexample
+    |  public void setDrawable(Drawable d);
+  +notes.
+    Must be something that extends that type
+section
+  p Inherits interface, can be used as type:
+  +codeexample
+    |  public class Gif implements Drawable {
+    |    public void draw(Graphics g) {
+    | 
+section
+  p Does not inherit interface, can't be used
+  +codeexample
+    |  public class Artist {
+    |    public void draw(Graphics g);
+    | 
+  +notes.
+    Artist doesn't extend the interface, so can't be used.
+    You could wrap this artist, but there's a lot of downsides there
+section
+  p Go: Interfaces are protocols
+  +codeexample
+    |  type Drawable interface {
+    |    Draw() 
+    |  }
+  p
+    em anything with Draw can be used by anything needing a Drawable
+  +notes.
+    Languages like go can define new protocols / interfaces
+    Existing types didn't inherit them explicitly.
+section
+  p you don't need inheritance in all languages to do polymorphism
+section
+  p 3) `Identity`, e.g., ==
+  +notes.
+    Compare by reference
+section
+  p a.id.equals(b.id)
+  +notes.
+    If this is needed for objects, can be added to specific implementation
+    if things are using this explicitly, it is tightly coupling and preventing
+    dynamic dispatch on equals, so may cause issues.

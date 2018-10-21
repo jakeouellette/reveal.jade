@@ -1,0 +1,493 @@
+include mixins.jade
+
+section
+  p What leads to High Cohesion?
+section
+  p Using SOLID
+  p 
+    em Martin Fowler
+  p
+    img.noborder(src='resources/martin_fowler.jpg')
+  ul.fragment
+    li.fragment.dimafter Single Responsibility 
+    li.fragment.dimafter Open/Closed
+    li.fragment.dimafter Liskov Substitution
+    li.fragment.dimafter Interface Segregation
+    li.fragment Dependency Inversion
+  +notes.
+    Martin fowler, prominent OO proponent
+    the solid princples are
+section
+  p not the only advocate
+section
+  p tightly coupled code is unmockable
+  +notes.
+    you see, it's hard to write unit tests if your code is uncohesive
+section
+  p Google Testability Team Testable Software Principles
+  img.noborder(src='resources/misko.jpg')
+  p 
+    em Jonathan Wolter, Russ Ruffer, Miško Hevery
+  ul.fragment
+    li.fragment.dimafter Class does too much
+    li.fragment.dimafter Reaching into collaborators
+    li.fragment.dimafter Has Singletons
+    li.fragment Constructors do real work
+  +notes.
+section
+  h2 Holub on Patterns
+  p 
+    em Allen Holub
+  p
+    img.noborder(src='resources/allen_holub.jpg')
+  ul.fragment
+    li.fragment.dimafter Extends is evil
+    li.fragment.dimafter Getters and Setters are evil
+  +notes.
+    Allen holub promonent JavaWorld, Dr. Dobbs
+    Consultant
+section
+  h2 All just different angles on same ideas:
+  ol
+    li.fragment Understand the Difference between Data and Objects
+    li.fragment Objects should have a single responsibility
+    li.fragment Objects can't see what they don't need
+  +notes.
+    Can derive e.g., SOLID principles from these.
+section
+  +codeexample
+    p
+      | class R2D3 {
+      |   public visualize() {
+      |     ...
+      |   }
+      | }
+  +notes.
+    Let's talk about R2D3.
+    We said it visualizes resources using d3
+    a javascript framework
+section
+  +codeexample
+    p
+      | class R2D3 {
+      | 
+      +codeblock
+        |   public visualize(String projectRoot) {
+        |     List&lt;File&gt; resources = getResources(projectRoot)
+        |     // Visualizer code
+        |   }
+      | 
+      +codeblock
+        |   private List&lt;File&gt; getResources(String projectRoot) {
+      |     ...
+      |   }
+      | }
+  div.fragment 
+    p
+      em multiple-responsibility
+  +notes
+    p so this visualize task
+    p calls this getResources method
+section
+  p getResources is irreplacable, but irrelevant
+section
+  p Unmockable.
+section
+  p Testing requires knowledge of internals :(
+  +codeexample
+    | 
+    | PowerMock.createPartialMock(R2D3.class, 
+    |   "getResources").andReturn(files);
+    | 
+  +notes.
+    To change the behavior in unit test, you'd have to mock this get resources
+    method.
+section
+  p Powermock requires looking at internals
+  img(src='resources/c3po_naked.jpg', height='400', class='noborder')
+  +notes.
+      a hidden collaborator
+section
+  p Implies an iceberg
+  img(src='resources/iceberg.jpg', height='400', class='noborder')
+  +notes.
+    The need to powermock implies a tight coupling on internal behavior, not
+    a single responsibility
+    Not taking advantage of OO facilities to separate behaviors
+section
+  p API exists, why not make it explicit?
+section
+  p what if I extend the thing
+  +codeexample
+    +codeblock
+      | class R2D3 extends FileFinder {
+    | 
+    |   public visualize(String projectRoot) {
+    +codeblock
+      |     List&lt;File&gt; resources = getResources(projectRoot)
+    |     // Visualizer code
+    |   }
+    | }
+  div.fragment 
+    p
+      em multiple-responsibility through 
+    p 
+      em extends
+  +notes.
+    the problem is this method is tightly coupled
+    to this class's implementation of get resources
+section
+  +codeexample
+    | 
+    | PowerMock.createPartialMock(FileFinder.class, 
+    |   "getResources").andReturn(files);
+    | 
+  +notes.
+    Still need to mock out the behavior in test, and
+    if that internal class references something mock-worthy, but it, itself, isnt,
+    then you get into tree-hierarchy searches that are complicated
+section
+  p Hard to Swap
+  img(src='resources/swap_board.gif', height='500', class='noborder')
+  +notes.
+    hard to change behaviors, hard to swap out
+section
+  p ok i'll do it earlier
+  +codeexample
+    p
+      | class R2D3 {
+      |   List&lt;File&gt; files;
+      | 
+      +codeblock
+        |   R2d3(String projectRoot) {
+      |     ResourceService finder = 
+      |       new FileFinder(projectRoot)
+      |     files = finder.getResources()
+      |   }
+      | 
+      |   public visualize() {
+      |     ...
+      |   }
+      | }
+  div.fragment
+    p
+      em multiple-responsibility through 
+    p 
+      em constructor coupling
+  +notes
+    p OK, we can extract FileFinder out
+    p create it ahead of time in our constructor
+section
+  p Testing requires knowledge of internals :(
+  +codeexample
+    | 
+    | expectNew(FileFinder.class, "projectRoot")
+    |   .andReturn(files);
+    | 
+  +notes.
+    Now, in order to change the behavior you have to mock out internals.
+section
+  h2 avoid new in constructors
+  p.fragment dependency inversion
+  +notes.
+    // TODO: motivate
+section
+  p ok, no new in my constructor!!!1
+  +codeexample
+    p
+      | class R2D3 {
+      |   List&lt;File&gt; files;
+      | 
+      |   R2d3(String projectRoot) {
+      +codeblock
+        |     files = FileFinder.getResources(projectRoot)
+      |   }
+      | }
+  div.fragment 
+    p
+      em multiple-responsibility through 
+    p 
+      em Singleton / global coupling
+  +notes.
+    OK
+section
+  p Testing requires knowledge of internals :(
+  +codeexample
+    | 
+    |  PowerMock.mockStaticPartial(
+    |    FileFinder.class, "getResources");
+    |  EasyMock.expect(FileFinder.getResources(...))
+    |    .andReturn(files);
+    | 
+  +notes.
+    Still mocking internals
+section
+  p When do statics improve code?
+  p.fragment.dimafter no this
+  p.fragment.dimafter pure functions
+  p.fragment.dimafter Still is coupling
+  +notes.
+    Avoid bleeding local scope. Handy for pure functions, good no intent to override
+section
+  +codeexample
+    | class R2D4 extends R2D3 {
+    | 
+    |   @override
+    |   public List&lt;File&gt; getResources()
+  +notes.
+    One of the nice things about statics is they prevent inheritance
+    from being used to replace collaborator behaviors
+section
+  p perfect code
+  +codeexample
+    | class R2D3 {
+    |   final List&lt;File&gt; files;
+    | 
+    +codeblock
+      |   R2d3(List&lt;File&gt; visualizableFiles) {
+      |     this.files = visualizableFiles;
+      |   }
+    | 
+    +codeblock
+      |   public visualize() {
+      |     // visualization code
+      |   }
+    | }
+  +notes.
+    A good pattern is to separate
+    out the concerns and JUST pass in the files
+    you might also inject it into the
+    visualize method depending on how it works
+section
+  p static factories are better than nothing
+  +codeexample
+    p
+      | class R2D3 {
+      |   List&lt;File&gt; files;
+      | 
+      +codeblock
+        |   public static R2D3 create(String projectRoot) {
+        |     ResourceService finder = 
+        |       new FileFinder(projectRoot)
+        |     files = finder.getResources()
+        |     return new R2D3(files)
+        |   }
+      | 
+      +codeblock
+        |   R2d3(List&lt;File&gt; visualizableFiles) {
+        |     this.files = visualizableFiles;
+        |   }
+      |   ...
+      | }
+  +notes.
+    You can make incremental refactorings that
+    get you closer to ideal. Better than passing
+    factories everywhere
+section
+  p Static factory can be pulled out into a provider later.
+  +codeexample
+    p
+      | class R2D3Provider implements Provider&lt;R2D3&gt; {
+      |   @Inject String projectRoot
+      | 
+      +codeblock
+        |   public static R2D3 provide() {
+        |     ResourceService finder = 
+        |       new FileFinder(projectRoot)
+        |     files = finder.getResources()
+        |     return new R2D3(files)
+      |   }
+section
+  p so that's 'single responsibility'
+section
+  p Ci3po: the translator
+  +codeexample
+    | class Ci3po {
+    |   ...
+    |   public translate() {
+    |     ...
+    |   }
+    | }
+section
+  +codeexample
+    | class Ci3po {
+    |   ...
+    |   public translate(TaskContainer t) {
+    +codeblock
+      |     List&lt;File&gt; files = t
+      |       .getByPath(:app:fileFinder")
+      |       .fileFinder
+      |       .getResources();
+    |     ...
+    |   }
+    | }
+  div.fragment 
+    p
+      em tightly coupled inputs
+  +notes.
+    This is tightly coupled, to mock it:
+section
+  p Annoying to mock.
+section
+  +codeexample
+    |     Ci3po.translate(new TaskContainer() {
+    +codeblock
+      |       public getByPath(String s) {
+    |         return resourceService
+    |       }
+    +codeblock
+      |       ... (40 more lines of code)
+    |     })
+  +notes.
+    If we want to mock just the internal service, we have to
+    mock the full api, including the 40-some odd methods that are unused
+section
+  p Easier: Just pass the right thing in!
+section
+  +codeexample
+    |     Ci3po.translate(resourceService.getResources())
+section
+  p Single responsibility: Smaller interfaces
+  // TODO: better image
+  img(src='resources/confused_1.gif', height='500', class='noborder')
+  +notes.
+    The cognitive load to understand mirrors the actual API usage
+section
+  +codeexample
+    | interface ResourceService
+    |   public List&lt;File&gt; getResources()
+  p vs
+  div.fragment
+    +codeexample
+      | interface ResourceService
+      |   public List&lt;File&gt; getResources()
+      |   public void delete()
+      |   public File find(String path)
+  +notes.
+    if a class doesn't need elements of an interface
+      let's not make it more complex because of them
+section
+  p Inevitably:
+  +codeexample
+    | class YourResourceService extends ResourceService
+    |   public delete() {
+    |     throw new UnsupportedOperationException("nooo!")
+    |   }
+    |   ...
+  div.fragment
+    p
+      em tight coupled inputs through
+    p
+      em extreme liskov substitution
+section
+  p High cohesion: Avoid unneeded scope.
+section
+  +codeexample
+    | interface ResourceService
+    |   public List&lt;File&gt; getResources()
+  div.fragment
+    +codeexample
+      | class FileFinder
+      |   public List&lt;File&gt; getResources() {
+      |   ...
+      +codeblock
+        |   public void deleteFiles() {
+      |   ...
+  +notes
+    p Let's assume you've got a interface, resource service
+    p and a class that implements it
+    p maybe that class has a lot of other methods
+    p that are weird
+section
+  +codeexample
+    | class Ci3po {
+    |   ...
+    +codeblock
+      |   public translate(FileFinder f) {
+    |     List&lt;File&gt; = f.getResources()
+    |     ...
+    |   }
+    | }
+  div.fragment 
+    p
+      em tightly coupled inputs through
+    p
+      em overly specific implementation
+  +notes.
+    Now I'm locked into creating a FileFinder,
+    if it has a lot of extra scope, I don't
+    want to have to build that state.
+    Let me pass in what you'll use!
+section
+  p I would have to extend a real implementation.
+  +codeexample
+    | ci3po.translate(new FileFinder() {...});
+section
+  +codeexample
+    | class Ci3po {
+    |   ...
+    |   public translate(ResourceService f) {
+    +codeblock
+      |     if (f instanceof FileFinder) {
+    |       List&lt;File&gt; files = (FileFinder) f.getResources()
+    |       ...
+    |     }
+    |   }
+    | }
+  div.fragment 
+    p
+      em tightly coupled inputs through
+    p
+      em closed for extension code
+  +notes.
+    I'm STILL locked into creating a FileFinder,
+    because you are using instanceof
+section
+  h2 instanceof only on datatypes
+  p.fragment further reading: scala case classes
+  // TODO: add matcher here
+  // TODO: fully grep this
+  +notes.
+    because: if its not immutable data, can ask it to solve problem
+    for you.
+section
+  p Ci3po: Translations as a service
+  +codeexample
+    | class Ci3po {
+    | 
+    +codeblock
+      |   Uploader uploader;
+    | 
+    |   public translate(ResourceService f) {
+    |     ...
+    |   }
+    | }
+  +notes.
+    Ok, now let's say Ci3po has an uploader it uses
+section
+  +codeexample
+    | class Ci3po {
+    | 
+    |   Uploader uploader;
+    | 
+    |   public translate(ResourceService f) {
+    +codeblock
+      |     uploader.setEndpoint('http://ci/translations')
+      |     uploader.sendGet(
+      |        new HttpGet('hasTranslations', 
+      |        params(f.getFiles()))
+    |     ...
+    |   }
+    | }
+  div.fragment 
+    p
+      em tightly coupled inputs through
+    p
+      em reaching into state
+  +notes.
+    Translator calls into an uploader, instead of asking it
+    if it has translations, it makes a request, coupling to httpclient
+section
+  p better
+  +codeexample
+    |  uploader.hasTranslations(files)

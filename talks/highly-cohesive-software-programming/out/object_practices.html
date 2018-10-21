@@ -1,0 +1,61 @@
+<section><p>Objects: Don't do things to my data, ask me to do things.</p><p class="fragment replaceafter">Law of demeter</p><p class="fragment">Principle of Least Surprise</p></section><section><p>Law of demeter: </p><p class="fragment">when one wants a dog to walk, </p><p class="fragment">one does not command the dog's legs to walk directly; </p><p class="fragment">instead one commands the dog which then commands its own legs.</p></section><section><p>A method may only call things in direct scope</p></section><section><p>So let's say this circle represents an object with a method</p><img src="resources/lod_1.png" height="300" class="noborder"/></section><section><p>It can call a method of it's own class</p><img src="resources/lod_2.png" height="300" class="noborder"/><pre class="fragment dimcode">this.draw()</pre></section><section><p>Or methods of objects injected in</p><img src="resources/lod_4.png" height="300" class="noborder"/><pre class="fragment dimcode">graphics.draw()</pre></section><section><p>Or methods of objects it made</p><img src="resources/lod_5.png" height="300" class="noborder"/><pre class="fragment dimcode">local = new Gif()
+local.draw()</pre></section><section><p>Or methods of objects in it's class</p><img src="resources/lod_3.png" height="300" class="noborder"/><pre class="fragment dimcode">this.helper.draw()</pre></section><section><p>If you can do it anyway, why am I doing it for you?</p></section><section><p>Law of demeter is about <em>behavior</em> of objects</p></section><section><p>A lot of data is hierarchical</p><pre class="fragment dimcode">"person": [
+  "head": [ "hair": "brown", "eyes": "blue" ], 
+  "legs": 2]</pre></section><section><p>Can be encoded as objects</p><pre class="fragment dimcode">person = new Person(
+  new Head(new Hair("brown"), new Eyes("blue")), 
+  new Legs(2), ...)</pre></section><section><p>Does this violate law of demeter?</p><pre class="fragment dimcode">person.hair.color</pre></section><section><p>Here, person is just data</p><p class="fragment">just an immutable data-structure</p></section><section><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+  public PersonPainter(Person p)</pre><aside class="notes">One benefit of immutable abstractions is it makes
+parameter lists simpler</aside></section><section><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+  public PersonPainter(Hair h, Legs l, ...)</pre><aside class="notes">Could be passing in each individual component.</aside></section><section><p>Bad: Getting data from objects.</p><pre class="fragment dimcode">public class View {
+  public void paint() {
+    if (personPainter<span class="fragment dimcode"><br/>      .getPerson().hair().equals("brown") {<br/></span>      // Vary paint style
+    }</pre><aside class="notes">What happens when a higher level class reaches into
+a bheavior object's inner state?</aside></section><section><p>With Inheritance: Easy to add new classes </p><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+  public void draw(Graphics g) {
+     ...
+  }</pre></section><section><pre class="fragment dimcode">public class DogPainter implements Drawable {
+  public void draw(Graphics g) {
+     ...
+  }</pre></section><section><p>New classes for same behaviors through extends</p><div style="background:#fff;"><img src="resources/new_class.gif" height="150" class="noborder"/></div></section><section><p>Let's say you want to add a behavior</p><pre class="fragment dimcode"> 
+  public void drawOutline(Graphics g) {
+ </pre></section><section><pre class="fragment dimcode"> interface Drawable {
+   public void draw(Graphics g);<span class="fragment dimcode"><br/>   public void drawOutline(Graphics g);<br/></span> }</pre></section><section><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+  public void draw(Graphics g) {
+     ...
+  }
+ <span class="fragment dimcode"><br/> 
+  public void drawOutline(Graphics g) {
+     ...<br/></span></pre></section><section><div style="background:#fff;"><img src="resources/new_function.gif" height="150" class="noborder"/></div></section><section><p>Could pull "Painting" behavior into single class:</p><pre class="fragment dimcode">public class Painter {
+ 
+  public void draw(Object o) {
+    if (o instanceof Person) {
+      ...
+    }
+    ...
+  }</pre></section><section><pre class="fragment dimcode">public class Painter {
+ 
+  public void draw(Object o) {
+    if (o instanceof Person) {
+      ...
+    }
+  }<span class="fragment dimcode"><br/>  public void drawOutline(Object o) {<br/></span>    if (o instanceof Person) {
+      ...
+    }
+    ...
+  }</pre></section><section><p>But then, the only way to extend types is to add to every behavior</p><pre class="fragment dimcode">public class Painter {
+ 
+  public drawOutline(Object o) {
+    if (o instanceof Person) {
+      ...
+    }
+ 
+    if (o instanceof Dog) {
+      ...
+    }<span class="fragment dimcode"><br/>    if (o instanceof Cat) {
+      ...
+    }<br/></span>    ...</pre></section><section><div style="background:#fff;"><img src="resources/new_class.gif" height="300" class="noborder"/></div></section><section><p>this is known as the `expression problem`</p></section><section><p>There are solutions</p><div style="background:#fff;" class="fragment"><p>Clojure Protocols</p><img src="resources/protocols.gif" height="300" class="noborder"/></div></section><section><p>Keep data safe: Don't conflate "Person" with "Painting a Person"</p><p>One is data, the other is behavior</p></section><section><p>Person was just data, wouldn't ask person to paint itself</p></section><section><p>In Java, must make the tradeoff between:</p><ul><li class="fragment">easy type extension</li><li class="fragment">easy behavior extension </li></ul></section><section><p>AVOID mixing concepts:</p><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+  public void draw(Graphics g) {
+    ...
+  }
+  
+  public Color getHair() {</pre></section><section><p>So that's Object Orientation</p></section>

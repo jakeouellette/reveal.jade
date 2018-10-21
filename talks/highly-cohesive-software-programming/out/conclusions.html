@@ -1,0 +1,12 @@
+<section><h2>Jake's 3 Core Principles of Highly Cohesive Software Programming</h2><ol><li class="fragment">Understand the Difference between Data and Objects</li><li class="fragment">Objects should have a single responsibility</li><li class="fragment">Objects can't see what they don't need</li></ol></section><section><p>Real world applications</p></section><section><p>per-ide onboarding instructions</p><div style="background:#777;"><img src="resources/refactoring_1_needs.png" class="noborder"/></div><aside class="notes">We used to build the IDE onboarding instructions per IDE.
+Every time a new dev needed to add onboarding instructions, they had
+to change intellij and eclipse
+The problem was, there was a difference between the data "what needed to be onboarded",
+and the process of onboarding</aside></section><section><p>Refactored</p><div style="background:#777;"> <img src="resources/refactoring_1.png" class="noborder"/></div><aside class="notes">We pulled the IDE onboarding instructions out, they were just data
+now each IDE responds to data independently</aside></section><section><p>view-owning-controller</p><div style="background:#777;"><img src="resources/refactoring_2.png" class="noborder"/></div><aside class="notes">Another example: our view owned our controller, any time we wanted
+to change navigation, we were manipulating classes that were constructing jlabels
+When we need the ability for people to jump into a context for migration,
+the code for this got really gross, so we made each view dumb.
+Views only respond to and generate events and show sub-views. They don't transition
+to new states. This is heirarchical, so subviews are dumb, but the higher level view
+might have some controller logic</aside></section><section><p>dumb-views</p><div style="background:#777;"><img src="resources/refactoring_2_needs.png" class="noborder"/></div></section><section><p>Conclusions</p><ul><li class="fragment">"object oriented"</li><li class="fragment">cohesion -- best practices</li></ul></section><section><p>thank you</p><img src="resources/c3po_r2d2_2.gif" height="400" class="noborder"/></section>
