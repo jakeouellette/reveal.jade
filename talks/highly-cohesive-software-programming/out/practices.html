@@ -1,6 +1,6 @@
-<section><p>What leads to High Cohesion?</p></section><section><p>Using SOLID</p><p> <em>Martin Fowler</em></p><p><img src="resources/martin_fowler.jpg" class="noborder"/></p><ul class="fragment"><li class="fragment dimafter">Single Responsibility </li><li class="fragment dimafter">Open/Closed</li><li class="fragment dimafter">Liskov Substitution</li><li class="fragment dimafter">Interface Segregation</li><li class="fragment">Dependency Inversion</li></ul><aside class="notes">Martin fowler, prominent OO proponent
-the solid princples are</aside></section><section><p>not the only advocate</p></section><section><p>tightly coupled code is unmockable</p><aside class="notes">you see, it's hard to write unit tests if your code is uncohesive</aside></section><section><p>Google Testability Team Testable Software Principles</p><img src="resources/misko.jpg" class="noborder"/><p> <em>Jonathan Wolter, Russ Ruffer, Miško Hevery</em></p><ul class="fragment"><li class="fragment dimafter">Class does too much</li><li class="fragment dimafter">Reaching into collaborators</li><li class="fragment dimafter">Has Singletons</li><li class="fragment">Constructors do real work</li></ul><aside class="notes"></aside></section><section><h2>Holub on Patterns</h2><p> <em>Allen Holub</em></p><p><img src="resources/allen_holub.jpg" class="noborder"/></p><ul class="fragment"><li class="fragment dimafter">Extends is evil</li><li class="fragment dimafter">Getters and Setters are evil</li></ul><aside class="notes">Allen holub promonent JavaWorld, Dr. Dobbs
-Consultant</aside></section><section><h2>All just different angles on same ideas:</h2><ol><li class="fragment">Understand the Difference between Data and Objects</li><li class="fragment">Objects should have a single responsibility</li><li class="fragment">Objects can't see what they don't need</li></ol><aside class="notes">Can derive e.g., SOLID principles from these.</aside></section><section><pre class="fragment dimcode"><p>class R2D3 {
+<section><div class="fragment"><p>What leads to High Cohesion?</p></div></section><section><div class="fragment"><p>Using SOLID</p><p> <em>Martin Fowler</em></p><p><img src="resources/martin_fowler.jpg" class="noborder"/></p><ul><li class="fragment dimafter">Single Responsibility </li><li class="fragment dimafter">Open/Closed</li><li class="fragment dimafter">Liskov Substitution</li><li class="fragment dimafter">Interface Segregation</li><li class="fragment">Dependency Inversion</li></ul><aside class="notes">Martin fowler, prominent OO proponent
+the solid princples are</aside></div></section><section><div class="fragment"><p>not the only advocate</p></div></section><section><div class="fragment"><p>tightly coupled code is unmockable</p><aside class="notes">you see, it's hard to write unit tests if your code is uncohesive</aside></div></section><section><div class="fragment"><p>Google Testability Team Testable Software Principles</p><img src="resources/misko.jpg" class="noborder"/><p> <em>Jonathan Wolter, Russ Ruffer, Miško Hevery</em></p><ul><li class="fragment dimafter">Class does too much</li><li class="fragment dimafter">Reaching into collaborators</li><li class="fragment dimafter">Has Singletons</li><li class="fragment">Constructors do real work</li></ul><aside class="notes"></aside></div></section><section><div class="fragment"><h2>Holub on Patterns</h2><p> <em>Allen Holub</em></p><p><img src="resources/allen_holub.jpg" class="noborder"/></p><ul><li class="fragment dimafter">Extends is evil</li><li class="fragment dimafter">Getters and Setters are evil</li></ul><aside class="notes">Allen holub promonent JavaWorld, Dr. Dobbs
+Consultant</aside></div></section><section><div class="fragment"><h2>All just different angles on same ideas:</h2><ol><li class="fragment">Understand the Difference between Data and Objects</li><li class="fragment">Objects should have a single responsibility</li><li class="fragment">Objects can't see what they don't need</li></ol><aside class="notes">Can derive e.g., SOLID principles from these.</aside></div></section><section><pre class="fragment dimcode"><p>class R2D3 {
   public visualize() {
     ...
   }
@@ -12,13 +12,13 @@ a javascript framework</aside></section><section><pre class="fragment dimcode"><
     // Visualizer code
   }<br/></span> <span class="fragment dimcode"><br/>  private List&lt;File&gt; getResources(String projectRoot) {<br/></span>    ...
   }
-}</p></pre><div class="fragment"> <p><em>multiple-responsibility</em></p></div><aside class="notes"><p>so this visualize task</p><p>calls this getResources method</p></aside></section><section><p>getResources is irreplacable, but irrelevant</p></section><section><p>Unmockable.</p></section><section><p>Testing requires knowledge of internals :(</p><pre class="fragment dimcode"> 
+}</p></pre><div class="fragment"> <p><em>multiple-responsibility</em></p></div><aside class="notes"><p>so this visualize task</p><p>calls this getResources method</p></aside></section><section><div class="fragment"><p>getResources is irreplacable, but irrelevant</p></div></section><section><div class="fragment"><p>Unmockable.</p></div></section><section><p>Testing requires knowledge of internals :(</p><pre class="fragment dimcode"> 
 PowerMock.createPartialMock(R2D3.class, 
   "getResources").andReturn(files);
  </pre><aside class="notes">To change the behavior in unit test, you'd have to mock this get resources
-method.</aside></section><section><p>Powermock requires looking at internals</p><img src="resources/c3po_naked.jpg" height="400" class="noborder"/><aside class="notes">a hidden collaborator</aside></section><section><p>Implies an iceberg</p><img src="resources/iceberg.jpg" height="400" class="noborder"/><aside class="notes">The need to powermock implies a tight coupling on internal behavior, not
+method.</aside></section><section><div class="fragment"><p>Powermock requires looking at internals</p><img src="resources/c3po_naked.jpg" height="400" class="noborder"/><aside class="notes">a hidden collaborator</aside></div></section><section><div class="fragment"><p>Implies an iceberg</p><img src="resources/iceberg.jpg" height="400" class="noborder"/><aside class="notes">The need to powermock implies a tight coupling on internal behavior, not
 a single responsibility
-Not taking advantage of OO facilities to separate behaviors</aside></section><section><p>API exists, why not make it explicit?</p></section><section><p>what if I extend the thing</p><pre class="fragment dimcode"><span class="fragment dimcode"><br/>class R2D3 extends FileFinder {<br/></span> 
+Not taking advantage of OO facilities to separate behaviors</aside></div></section><section><div class="fragment"><p>API exists, why not make it explicit?</p></div></section><section><p>what if I extend the thing</p><pre class="fragment dimcode"><span class="fragment dimcode"><br/>class R2D3 extends FileFinder {<br/></span> 
   public visualize(String projectRoot) {<span class="fragment dimcode"><br/>    List&lt;File&gt; resources = getResources(projectRoot)<br/></span>    // Visualizer code
   }
 }</pre><div class="fragment"> <p><em>multiple-responsibility through </em></p><p> <em>extends</em></p></div><aside class="notes">the problem is this method is tightly coupled
@@ -27,7 +27,7 @@ PowerMock.createPartialMock(FileFinder.class,
   "getResources").andReturn(files);
  </pre><aside class="notes">Still need to mock out the behavior in test, and
 if that internal class references something mock-worthy, but it, itself, isnt,
-then you get into tree-hierarchy searches that are complicated</aside></section><section><p>Hard to Swap</p><img src="resources/swap_board.gif" height="500" class="noborder"/><aside class="notes">hard to change behaviors, hard to swap out</aside></section><section><p>ok i'll do it earlier</p><pre class="fragment dimcode"><p>class R2D3 {
+then you get into tree-hierarchy searches that are complicated</aside></section><section><div class="fragment"><p>Hard to Swap</p><img src="resources/swap_board.gif" height="500" class="noborder"/><aside class="notes">hard to change behaviors, hard to swap out</aside></div></section><section><p>ok i'll do it earlier</p><pre class="fragment dimcode"><p>class R2D3 {
   List&lt;File&gt; files;
  <span class="fragment dimcode"><br/>  R2d3(String projectRoot) {<br/></span>    ResourceService finder = 
       new FileFinder(projectRoot)
@@ -40,7 +40,7 @@ then you get into tree-hierarchy searches that are complicated</aside></section>
 }</p></pre><div class="fragment"><p><em>multiple-responsibility through </em></p><p> <em>constructor coupling</em></p></div><aside class="notes"><p>OK, we can extract FileFinder out</p><p>create it ahead of time in our constructor</p></aside></section><section><p>Testing requires knowledge of internals :(</p><pre class="fragment dimcode"> 
 expectNew(FileFinder.class, "projectRoot")
   .andReturn(files);
- </pre><aside class="notes">Now, in order to change the behavior you have to mock out internals.</aside></section><section><h2>avoid new in constructors</h2><p class="fragment">dependency inversion</p><aside class="notes">// TODO: motivate</aside></section><section><p>ok, no new in my constructor!!!1</p><pre class="fragment dimcode"><p>class R2D3 {
+ </pre><aside class="notes">Now, in order to change the behavior you have to mock out internals.</aside></section><section><div class="fragment"><h2>avoid new in constructors</h2><p class="fragment">dependency inversion</p><aside class="notes">// TODO: motivate</aside></div></section><section><p>ok, no new in my constructor!!!1</p><pre class="fragment dimcode"><p>class R2D3 {
   List&lt;File&gt; files;
  
   R2d3(String projectRoot) {<span class="fragment dimcode"><br/>    files = FileFinder.getResources(projectRoot)<br/></span>  }
@@ -49,7 +49,7 @@ expectNew(FileFinder.class, "projectRoot")
    FileFinder.class, "getResources");
  EasyMock.expect(FileFinder.getResources(...))
    .andReturn(files);
- </pre><aside class="notes">Still mocking internals</aside></section><section><p>When do statics improve code?</p><p class="fragment dimafter">no this</p><p class="fragment dimafter">pure functions</p><p class="fragment dimafter">Still is coupling</p><aside class="notes">Avoid bleeding local scope. Handy for pure functions, good no intent to override</aside></section><section><pre class="fragment dimcode">class R2D4 extends R2D3 {
+ </pre><aside class="notes">Still mocking internals</aside></section><section><div class="fragment"><p>When do statics improve code?</p><p class="fragment dimafter">no this</p><p class="fragment dimafter">pure functions</p><p class="fragment dimafter">Still is coupling</p><aside class="notes">Avoid bleeding local scope. Handy for pure functions, good no intent to override</aside></div></section><section><pre class="fragment dimcode">class R2D4 extends R2D3 {
  
   @override
   public List&lt;File&gt; getResources()</pre><aside class="notes">One of the nice things about statics is they prevent inheritance
@@ -80,7 +80,7 @@ factories everywhere</aside></section><section><p>Static factory can be pulled o
     ResourceService finder = 
       new FileFinder(projectRoot)
     files = finder.getResources()
-    return new R2D3(files)<br/></span>  }</p></pre></section><section><p>so that's 'single responsibility'</p></section><section><p>Ci3po: the translator</p><pre class="fragment dimcode">class Ci3po {
+    return new R2D3(files)<br/></span>  }</p></pre></section><section><div class="fragment"><p>so that's 'single responsibility'</p></div></section><section><p>Ci3po: the translator</p><pre class="fragment dimcode">class Ci3po {
   ...
   public translate() {
     ...
@@ -92,9 +92,9 @@ factories everywhere</aside></section><section><p>Static factory can be pulled o
       .fileFinder
       .getResources();<br/></span>    ...
   }
-}</pre><div class="fragment"> <p><em>tightly coupled inputs</em></p></div><aside class="notes">This is tightly coupled, to mock it:</aside></section><section><p>Annoying to mock.</p></section><section><pre class="fragment dimcode">    Ci3po.translate(new TaskContainer() {<span class="fragment dimcode"><br/>      public getByPath(String s) {<br/></span>        return resourceService
+}</pre><div class="fragment"> <p><em>tightly coupled inputs</em></p></div><aside class="notes">This is tightly coupled, to mock it:</aside></section><section><div class="fragment"><p>Annoying to mock.</p></div></section><section><pre class="fragment dimcode">    Ci3po.translate(new TaskContainer() {<span class="fragment dimcode"><br/>      public getByPath(String s) {<br/></span>        return resourceService
       }<span class="fragment dimcode"><br/>      ... (40 more lines of code)<br/></span>    })</pre><aside class="notes">If we want to mock just the internal service, we have to
-mock the full api, including the 40-some odd methods that are unused</aside></section><section><p>Easier: Just pass the right thing in!</p></section><section><pre class="fragment dimcode">    Ci3po.translate(resourceService.getResources())</pre></section><section><p>Single responsibility: Smaller interfaces</p><!-- TODO: better image--><img src="resources/confused_1.gif" height="500" class="noborder"/><aside class="notes">The cognitive load to understand mirrors the actual API usage</aside></section><section><pre class="fragment dimcode">interface ResourceService
+mock the full api, including the 40-some odd methods that are unused</aside></section><section><div class="fragment"><p>Easier: Just pass the right thing in!</p></div></section><section><pre class="fragment dimcode">    Ci3po.translate(resourceService.getResources())</pre></section><section><div class="fragment"><p>Single responsibility: Smaller interfaces</p><!-- TODO: better image--><img src="resources/confused_1.gif" height="500" class="noborder"/><aside class="notes">The cognitive load to understand mirrors the actual API usage</aside></div></section><section><pre class="fragment dimcode">interface ResourceService
   public List&lt;File&gt; getResources()</pre><p>vs</p><div class="fragment"><pre class="fragment dimcode">interface ResourceService
   public List&lt;File&gt; getResources()
   public void delete()
@@ -103,7 +103,7 @@ mock the full api, including the 40-some odd methods that are unused</aside></se
   public delete() {
     throw new UnsupportedOperationException("nooo!")
   }
-  ...</pre><div class="fragment"><p><em>tight coupled inputs through</em></p><p><em>extreme liskov substitution</em></p></div></section><section><p>High cohesion: Avoid unneeded scope.</p></section><section><pre class="fragment dimcode">interface ResourceService
+  ...</pre><div class="fragment"><p><em>tight coupled inputs through</em></p><p><em>extreme liskov substitution</em></p></div></section><section><div class="fragment"><p>High cohesion: Avoid unneeded scope.</p></div></section><section><pre class="fragment dimcode">interface ResourceService
   public List&lt;File&gt; getResources()</pre><div class="fragment"><pre class="fragment dimcode">class FileFinder
   public List&lt;File&gt; getResources() {
   ...<span class="fragment dimcode"><br/>  public void deleteFiles() {<br/></span>  ...</pre></div><aside class="notes"><p>Let's assume you've got a interface, resource service</p><p>and a class that implements it</p><p>maybe that class has a lot of other methods</p><p>that are weird</p></aside></section><section><pre class="fragment dimcode">class Ci3po {
@@ -120,8 +120,8 @@ Let me pass in what you'll use!</aside></section><section><p>I would have to ext
     }
   }
 }</pre><div class="fragment"> <p><em>tightly coupled inputs through</em></p><p><em>closed for extension code</em></p></div><aside class="notes">I'm STILL locked into creating a FileFinder,
-because you are using instanceof</aside></section><section><h2>instanceof only on datatypes</h2><p class="fragment">further reading: scala case classes</p><!-- TODO: add matcher here--><!-- TODO: fully grep this--><aside class="notes">because: if its not immutable data, can ask it to solve problem
-for you.</aside></section><section><p>Ci3po: Translations as a service</p><pre class="fragment dimcode">class Ci3po {
+because you are using instanceof</aside></section><section><div class="fragment"><h2>instanceof only on datatypes</h2><p class="fragment">further reading: scala case classes</p><!-- TODO: add matcher here--><!-- TODO: fully grep this--><aside class="notes">because: if its not immutable data, can ask it to solve problem
+for you.</aside></div></section><section><p>Ci3po: Translations as a service</p><pre class="fragment dimcode">class Ci3po {
  <span class="fragment dimcode"><br/>  Uploader uploader;<br/></span> 
   public translate(ResourceService f) {
     ...

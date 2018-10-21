@@ -1,77 +1,78 @@
 include mixins.jade
 
-section
-  p Objects: Don't do things to my data, ask me to do things.
++readyslide
+  +hiddenheader
+    p Objects:
+    p Don't do things to my data, ask me to do things.
   p.fragment.replaceafter Law of demeter
   p.fragment Principle of Least Surprise
-section
-  p Law of demeter: 
-  p.fragment when one wants a dog to walk, 
-  p.fragment one does not command the dog's legs to walk directly; 
-  p.fragment instead one commands the dog which then commands its own legs.
-section
++readyslide
+  +hiddenheader
+    p Law of demeter: 
+  p.fragment Tell a dog to walk:
+  p.fragment Don't tell the dog's legs to walk.
+  p.fragment Tell the dog.
++slide
   p A method may only call things in direct scope
-section
++slide
   p So let's say this circle represents an object with a method
   img(src='resources/lod_1.png', height='300', class='noborder')
-section
++readyslide
   p It can call a method of it's own class
   img(src='resources/lod_2.png', height='300', class='noborder')
   +codeexample
     | this.draw()
-section
++readyslide
   p Or methods of objects injected in
   img(src='resources/lod_4.png', height='300', class='noborder')
   +codeexample
     | graphics.draw()
-section
++readyslide
   p Or methods of objects it made
   img(src='resources/lod_5.png', height='300', class='noborder')
   +codeexample
     | local = new Gif()
     | local.draw()
-section
++readyslide
   p Or methods of objects in it's class
   img(src='resources/lod_3.png', height='300', class='noborder')
   +codeexample
     | this.helper.draw()
-section
++slide
   p If you can do it anyway, why am I doing it for you?
-section
++slide
   p Law of demeter is about #[em behavior] of objects
-section
-  p A lot of data is hierarchical
-  +codeexample
++readyslide
+  +hiddenheader A lot of data is hierarchical
+  +revealedcodeexample
     | "person": [
     |   "head": [ "hair": "brown", "eyes": "blue" ], 
     |   "legs": 2]
-section
-  p Can be encoded as objects
-  +codeexample
++readyslide
+  +hiddenheader Can be encoded as objects
+  +revealedcodeexample
     | person = new Person(
     |   new Head(new Hair("brown"), new Eyes("blue")), 
     |   new Legs(2), ...)
-section
-  p Does this violate law of demeter?
-  +codeexample
++readyslide
+  +hiddenheader Does this violate law of demeter?
+  +revealedcodeexample
     | person.hair.color
-section
++slide
   p Here, person is just data
   p.fragment just an immutable data-structure
-section
-  +codeexample
++readyslide
+  +hiddenheader Higher level data makes simpler parameter lists
+  +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public PersonPainter(Person p)
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
   +notes. 
     One benefit of immutable abstractions is it makes
     parameter lists simpler
-section
-  +codeexample
-    | public class PersonPainter implements Drawable {
-    |   public PersonPainter(Hair h, Legs l, ...)
-  +notes.
-    Could be passing in each individual component.
-section
++readyslide
   p Bad: Getting data from objects.
   +codeexample
     | public class View {
@@ -84,37 +85,31 @@ section
   +notes.
     What happens when a higher level class reaches into
     a bheavior object's inner state?
-section
-  p With Inheritance: Easy to add new classes 
-  +codeexample
++readyslide
+  +hiddenheader With Inheritance: Easy to add new classes 
+  +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
     |      ...
     |   }
-section
-  +codeexample
+  +revealedcodeexample
     | public class DogPainter implements Drawable {
     |   public void draw(Graphics g) {
     |      ...
     |   }
-section
++slide
   p New classes for same behaviors through extends
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='150', class='noborder')
-section
-  p Let's say you want to add a behavior
-  +codeexample
-    | 
-    |   public void drawOutline(Graphics g) {
-    | 
-section
-  +codeexample
++readyslide
+  +hiddenheader Let's say you want to add a behavior
+  +revealedcodeexample
     |  interface Drawable {
     |    public void draw(Graphics g);
-    +codeblock
+    +revealedcodeblock
       |    public void drawOutline(Graphics g);
     |  }
-section
++readyslide
   +codeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
@@ -125,10 +120,10 @@ section
       | 
       |   public void drawOutline(Graphics g) {
       |      ...
-section
++slide
   div(style="background:#fff;")
     img(src='resources/new_function.gif', height='150', class='noborder')
-section
++readyslide
   p Could pull "Painting" behavior into single class:
   +codeexample
     | public class Painter {
@@ -139,7 +134,7 @@ section
     |     }
     |     ...
     |   }
-section
++readyslide
   +codeexample
     | public class Painter {
     | 
@@ -155,7 +150,7 @@ section
     |     }
     |     ...
     |   }
-section
++readyslide
   p But then, the only way to extend types is to add to every behavior
   +codeexample
     | public class Painter {
@@ -173,27 +168,27 @@ section
       |       ...
       |     }
     |     ...
-section
++slide
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='300', class='noborder')
-section
++slide
   p this is known as the `expression problem`
-section
++slide
   p There are solutions
   div.fragment(style="background:#fff;")
     p Clojure Protocols
     img(src='resources/protocols.gif', height='300', class='noborder')
-section
++slide
   p Keep data safe: Don't conflate "Person" with "Painting a Person"
   p One is data, the other is behavior
-section
++slide
   p Person was just data, wouldn't ask person to paint itself
-section
++slide
   p In Java, must make the tradeoff between:
   ul
     li.fragment easy type extension
     li.fragment easy behavior extension 
-section
++readyslide
   p AVOID mixing concepts:
   +codeexample
     | public class PersonPainter implements Drawable {
@@ -202,5 +197,5 @@ section
     |   }
     |   
     |   public Color getHair() {
-section
++slide
   p So that's Object Orientation

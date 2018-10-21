@@ -1,4 +1,4 @@
-<section><p class="fragment">William Cook's definition of "Object Oriented"</p><img src="resources/william_cook.jpg" width="300" class="fragment noborder"/></section><section><p>OO: Often misunderstood as "just using classes for stuff"</p><img src="resources/droids_looking_for.jpg" class="fragment noborder"/><p class="fragment">Accidentally doing the opposite of object oriented</p></section><section><Most>schools start out with something like this</Most><pre class="fragment dimcode">class Point {
+<section><div class="fragment"><p>William Cook's definition of "Object Oriented"</p><img src="resources/william_cook.jpg" width="300" class="noborder"/></div></section><section><div class="fragment"><p>OO: Often misunderstood as "just using classes for stuff"</p><img src="resources/droids_looking_for.jpg" class="fragment noborder"/><p class="fragment">Accidentally doing the opposite of object oriented</p></div></section><section><Most>schools start out with something like this</Most><pre class="fragment dimcode">class Point {
   final int x, y
  
   public int getX() { return x }
@@ -16,7 +16,7 @@ point-&gt;x
  
   public void setX(int x) { this.x = x }
   ...</pre><aside class="notes">Easily represent as a struct in a lower order language
-If no mutation</aside></section><section><p>Classes are not necessary to `set` state</p><p>point-&gt;x = 5</p></section><section><p>Nor is Mutation necessary to have classes</p><pre class="fragment dimcode">class Point {
+If no mutation</aside></section><section><div class="fragment"><p>Classes are not necessary to `set` state</p><p>point-&gt;x = 5</p></div></section><section><p>Nor is Mutation necessary to have classes</p><pre class="fragment dimcode">class Point {
   int x, y
  
   public Point setX(int newX) { 
@@ -30,8 +30,8 @@ If no mutation</aside></section><section><p>Classes are not necessary to `set` s
   double x, y
   
   public int getX() { return (int)x }
-  ...</pre><aside class="notes">Now you can use the same APIs with different underlying representation</aside></section><section><p>Isn't this just data?</p><aside class="notes">is that really a good example though? In this case it's just
-data that is varying, not behavior</aside></section><section><pre class="fragment dimcode">class Image implements Drawable {
+  ...</pre><aside class="notes">Now you can use the same APIs with different underlying representation</aside></section><section><div class="fragment"><p>Isn't this just data?</p><aside class="notes">is that really a good example though? In this case it's just
+data that is varying, not behavior</aside></div></section><section><pre class="fragment dimcode">class Image implements Drawable {
   int currentFrame = ...
  
   public void draw(Graphics g) { ... }
@@ -39,29 +39,25 @@ data that is varying, not behavior</aside></section><section><pre class="fragmen
   int currentFrame = ...
  
   public void draw(Graphics g) { ... }
-    ...</pre><aside class="notes">Now you can represent new abstractions</aside></section><section><An>object is a first-class, dynamically dispatched behavior.</An><aside class="notes">http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
+    ...</pre><aside class="notes">Now you can represent new abstractions</aside></section><section><div class="fragment"><p>An object is a first-class, dynamically dispatched behavior.</p><aside class="notes">http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
 dynamic dispatch in C: http://www.cs.rit.edu/~ats/books/ooc.pdf
-http://lwn.net/Articles/444910/</aside></section><section><p>Dynamic dispatch is sometimes called </p><ul> <li class="fragment dimafter">"message passing"</li><li class="fragment dimafter">"late binding"</li><li class="fragment dimafter">"dynamic binding"</li><li class="fragment dimafter">"polymorphism" </li></ul><aside class="notes">Polymorphism is what java devs are used to hearing</aside></section><section><p>Optional, but <strong>not essential:</strong></p><ol><li class="fragment">mutable state</li><li class="fragment">inheritance</li><li class="fragment">classes</li><li class="fragment fragment">identity</li></ol></section><section><p>1) Mutable state</p><aside class="notes">Compose a program of value objects, state changes
-through creation of new objects</aside></section><section><pre class="fragment dimcode">class Gif implements Drawable {
+http://lwn.net/Articles/444910/</aside></div></section><section><div class="fragment"><p>Dynamic dispatch is sometimes called </p><ul> <li class="fragment dimafter">"message passing"</li><li class="fragment dimafter">"late binding"</li><li class="fragment dimafter">"dynamic binding"</li><li class="fragment dimafter">"polymorphism" </li></ul><aside class="notes">Polymorphism is what java devs are used to hearing</aside></div></section><section><div class="fragment"><p>Optional, but <strong>not essential:</strong></p><ol><li class="fragment">mutable state</li><li class="fragment">inheritance</li><li class="fragment">identity</li><li class="fragment">classes</li></ol></div></section><section><div class="fragment dimafter visiblestart"><p>Object Orientedness doesn't require:</p><p>1) mutable state</p></div><pre class="fragment hiddencode dimcode">class Gif implements Drawable {
   int currentFrame = ...
  <span class="fragment dimcode"><br/>  public Pair&lt;Frame, Drawable&gt; draw() { <br/></span>   return new Pair(
      getFrame(), 
      new Gif(currentFrame++));
   }
-...<aside class="notes">We can create the same Gif by returning
-a frame of the image, no mutation required</aside></pre></section><section><p>2) Inheritance</p><aside class="notes">composition can be isometric
+...</pre><aside class="notes">Compose a program of value objects, state changes
+through creation of new objects
+We can create the same Gif by returning
+a frame of the image, no mutation required</aside></section><section><div class="fragment dimafter visiblestart"><p>Object Orientedness doesn't require:</p><p>2) inheritance</p></div><p class="fragment">Go: Interfaces are protocols</p><pre class="fragment hiddencode dimcode"> type Drawable interface {
+   Draw() 
+ }</pre><p class="fragment"><em>Any object with "Draw()" is works</em></p><aside class="notes">composition can be isometric
 Go: Dynamic dispatch
 In java, inheritance is a means to achieve dispatch, so essential,
-but extends is not:</aside></section><section><pre class="fragment dimcode"> interface Drawable {
-   public void draw(Graphics g);
- }</pre></section><section><Others>might pass around that thing</Others><pre class="fragment dimcode"> public void setDrawable(Drawable d);</pre><aside class="notes">Must be something that extends that type</aside></section><section><p>Inherits interface, can be used as type:</p><pre class="fragment dimcode"> public class Gif implements Drawable {
-   public void draw(Graphics g) {
- </pre></section><section><p>Does not inherit interface, can't be used</p><pre class="fragment dimcode"> public class Artist {
-   public void draw(Graphics g);
- </pre><aside class="notes">Artist doesn't extend the interface, so can't be used.
-You could wrap this artist, but there's a lot of downsides there</aside></section><section><p>Go: Interfaces are protocols</p><pre class="fragment dimcode"> type Drawable interface {
-   Draw() 
- }</pre><p><em>anything with Draw can be used by anything needing a Drawable</em></p><aside class="notes">Languages like go can define new protocols / interfaces
-Existing types didn't inherit them explicitly.</aside></section><section><p>you don't need inheritance in all languages to do polymorphism</p></section><section><p>3) `Identity`, e.g., ==</p><aside class="notes">Compare by reference</aside></section><section><p>a.id.equals(b.id)</p><aside class="notes">If this is needed for objects, can be added to specific implementation
+but extends is not:
+Languages like go can define new protocols / interfaces
+Existing types didn't inherit them explicitly.</aside></section><section><div class="fragment dimafter visiblestart"><p>Object Orientedness doesn't require:</p><p>3) `Identity`, e.g., ==</p></div><pre class="fragment hiddencode dimcode"><p>a.id.equals(b.id)</p></pre><aside class="notes">Compare by reference
+If this is needed for objects, can be added to specific implementation
 if things are using this explicitly, it is tightly coupling and preventing
 dynamic dispatch on equals, so may cause issues.</aside></section>

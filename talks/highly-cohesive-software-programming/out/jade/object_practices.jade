@@ -1,14 +1,17 @@
 include mixins.jade
 
 section
-  p Objects: Don't do things to my data, ask me to do things.
+  +hiddenheader
+    p Objects:
+    p Don't do things to my data, ask me to do things.
   p.fragment.replaceafter Law of demeter
   p.fragment Principle of Least Surprise
 section
-  p Law of demeter: 
-  p.fragment when one wants a dog to walk, 
-  p.fragment one does not command the dog's legs to walk directly; 
-  p.fragment instead one commands the dog which then commands its own legs.
+  div.fragment.dimafter
+    p Law of demeter: 
+  p.fragment Tell a dog to walk:
+  p.fragment Don't tell the dog's legs to walk.
+  p.fragment Tell the dog.
 section
   p A method may only call things in direct scope
 section
@@ -40,37 +43,35 @@ section
 section
   p Law of demeter is about #[em behavior] of objects
 section
-  p A lot of data is hierarchical
-  +codeexample
+  +hiddenheader A lot of data is hierarchical
+  +revealedcodeexample
     | "person": [
     |   "head": [ "hair": "brown", "eyes": "blue" ], 
     |   "legs": 2]
 section
-  p Can be encoded as objects
-  +codeexample
+  +hiddenheader Can be encoded as objects
+  +revealedcodeexample
     | person = new Person(
     |   new Head(new Hair("brown"), new Eyes("blue")), 
     |   new Legs(2), ...)
 section
-  p Does this violate law of demeter?
-  +codeexample
+  +hiddenheader Does this violate law of demeter?
+  +revealedcodeexample
     | person.hair.color
 section
   p Here, person is just data
   p.fragment just an immutable data-structure
 section
-  +codeexample
+  +hiddenheader Higher level data makes simpler parameter lists
+  +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public PersonPainter(Person p)
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
   +notes. 
     One benefit of immutable abstractions is it makes
     parameter lists simpler
-section
-  +codeexample
-    | public class PersonPainter implements Drawable {
-    |   public PersonPainter(Hair h, Legs l, ...)
-  +notes.
-    Could be passing in each individual component.
 section
   p Bad: Getting data from objects.
   +codeexample
@@ -85,14 +86,13 @@ section
     What happens when a higher level class reaches into
     a bheavior object's inner state?
 section
-  p With Inheritance: Easy to add new classes 
-  +codeexample
+  +hiddenheader With Inheritance: Easy to add new classes 
+  +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
     |      ...
     |   }
-section
-  +codeexample
+  +revealedcodeexample
     | public class DogPainter implements Drawable {
     |   public void draw(Graphics g) {
     |      ...
@@ -102,16 +102,11 @@ section
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='150', class='noborder')
 section
-  p Let's say you want to add a behavior
-  +codeexample
-    | 
-    |   public void drawOutline(Graphics g) {
-    | 
-section
-  +codeexample
+  +hiddenheader Let's say you want to add a behavior
+  +revealedcodeexample
     |  interface Drawable {
     |    public void draw(Graphics g);
-    +codeblock
+    +revealedcodeblock
       |    public void drawOutline(Graphics g);
     |  }
 section

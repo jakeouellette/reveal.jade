@@ -25,6 +25,11 @@
   visibility: visible; 
 }
 
+.reveal .slides section .visiblestart.fragment:not(.visible) {
+  opacity: 1;
+  visibility: visible;
+}
+
 .reveal .slides section .fragment.visible:not(.current-fragment).dimafter {
   color: inherit;
   opacity: 0.1;
@@ -46,7 +51,19 @@ pre {
   background-color: #111;
 }
 
-.reveal .slides section pre.fragment:not(.visible):not(.current-fragment).dimcode {
+
+.reveal .slides section pre.fragment:not(.visible):not(.current-fragment).dimcode.hiddencode {
+  color: rgba(255,255, 255, 1);
+  text-shadow: inherit;
+  opacity: 1;
+  visibility: hidden; 
+  transition-property: all;
+  transition-duration: 0s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+}
+
+.reveal .slides section pre.fragment:not(.visible):not(.current-fragment):not(.hiddencode).dimcode {
   color: rgba(255,255, 255, 1);
   text-shadow: inherit;
   opacity: 1;
@@ -57,7 +74,19 @@ pre {
   transition-delay: initial;
 }
 
-.reveal .slides section span.fragment:not(.visible):not(.current-fragment).dimcode {
+
+.reveal .slides section span.fragment:not(.visible):not(.current-fragment).hiddencode.dimcode {
+  color: inherit;
+  text-shadow: inherit;
+  opacity: inherit;
+  visibility: hidden; 
+  transition-property: all;
+  transition-duration: 0s;
+  transition-timing-function: ease;
+  transition-delay: initial;
+}
+
+.reveal .slides section span.fragment:not(.visible):not(.current-fragment):not(.hiddencode).dimcode {
   color: inherit;
   text-shadow: inherit;
   opacity: inherit;

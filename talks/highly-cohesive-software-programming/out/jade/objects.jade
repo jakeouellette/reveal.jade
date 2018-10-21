@@ -1,10 +1,10 @@
 include mixins.jade
 
 section
-  p.fragment William Cook's definition of "Object Oriented"
-  img.fragment.noborder(src='resources/william_cook.jpg', width='300')
+  p William Cook's definition of "Object Oriented"
+  img.noborder(src='resources/william_cook.jpg', width='300')
 section
-  p Often misunderstood as "just using classes for stuff"
+  p OO: Often misunderstood as "just using classes for stuff"
   img.fragment.noborder(src='resources/droids_looking_for.jpg')
   p.fragment Accidentally doing the opposite of object oriented
 section
@@ -107,7 +107,7 @@ section
   +notes.
     Now you can represent new abstractions
 section
-  An object is a first-class, dynamically dispatched behavior.
+  p An object is a first-class, dynamically dispatched behavior.
   +notes.
     http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
     dynamic dispatch in C: http://www.cs.rit.edu/~ats/books/ooc.pdf
@@ -126,15 +126,13 @@ section
   ol
     li.fragment mutable state
     li.fragment inheritance
+    li.fragment identity
     li.fragment classes
-    li.fragment.fragment identity
 section
-  p 1) Mutable state
-  +notes.
-    Compose a program of value objects, state changes
-    through creation of new objects
-section
-  +codeexample
+  +hiddenheader
+    p Object Orientedness doesn't require:
+    p 1) mutable state
+  +revealedcodeexample
     | class Gif implements Drawable {
     |   int currentFrame = ...
     | 
@@ -145,62 +143,57 @@ section
     |      new Gif(currentFrame++));
     |   }
     | ...
-    +notes.
-      We can create the same Gif by returning
-      a frame of the image, no mutation required
+  +notes.
+    Compose a program of value objects, state changes
+    through creation of new objects
+    We can create the same Gif by returning
+    a frame of the image, no mutation required
 section
-  p 2) Inheritance
+  +hiddenheader
+    p Object Orientedness doesn't require:
+    p 2) inheritance
+  p.fragment Go: Interfaces are protocols
+  +revealedcodeexample
+    |  type Drawable interface {
+    |    Draw() 
+    |  }
+  p.fragment
+    em Any object with "Draw()" is works
   +notes.
     composition can be isometric
     Go: Dynamic dispatch
     In java, inheritance is a means to achieve dispatch, so essential,
     but extends is not:
-section
-  +codeexample
-    |  interface Drawable {
-    |    public void draw(Graphics g);
-    |  }
-section
-  Others might pass around that thing
-  +codeexample
-    |  public void setDrawable(Drawable d);
-  +notes.
-    Must be something that extends that type
-section
-  p Inherits interface, can be used as type:
-  +codeexample
-    |  public class Gif implements Drawable {
-    |    public void draw(Graphics g) {
-    | 
-section
-  p Does not inherit interface, can't be used
-  +codeexample
-    |  public class Artist {
-    |    public void draw(Graphics g);
-    | 
-  +notes.
-    Artist doesn't extend the interface, so can't be used.
-    You could wrap this artist, but there's a lot of downsides there
-section
-  p Go: Interfaces are protocols
-  +codeexample
-    |  type Drawable interface {
-    |    Draw() 
-    |  }
-  p
-    em anything with Draw can be used by anything needing a Drawable
-  +notes.
     Languages like go can define new protocols / interfaces
     Existing types didn't inherit them explicitly.
+//- section
+//-   +codeexample
+//-     |  interface Drawable {
+//-     |    public void draw(Graphics g);
+//-     |  }
+//- section
+//-   p Inherits interface, can be used as type:
+//-   +codeexample
+//-     |  public class Gif implements Drawable {
+//-     |    public void draw(Graphics g) {
+//-     | 
+//- section
+//-   p Does not inherit interface, can't be used
+//-   +codeexample
+//-     |  public class Artist {
+//-     |    public void draw(Graphics g);
+//-     | 
+//-   +notes.
+//-     Artist doesn't extend the interface, so can't be used.
+//-     You could wrap this artist, but there's a lot of downsides there
 section
-  p you don't need inheritance in all languages to do polymorphism
-section
-  p 3) `Identity`, e.g., ==
+  +hiddenheader
+    p Object Orientedness doesn't require:
+    p 3) `Identity`, e.g., ==
+  +revealedcodeexample
+    p a.id.equals(b.id)
   +notes.
     Compare by reference
-section
-  p a.id.equals(b.id)
-  +notes.
     If this is needed for objects, can be added to specific implementation
     if things are using this explicitly, it is tightly coupling and preventing
     dynamic dispatch on equals, so may cause issues.

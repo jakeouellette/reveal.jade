@@ -2,6 +2,10 @@ mixin notes
   aside(class='notes')
     block
 
+mixin revealedcodeexample
+  pre.fragment.hiddencode.dimcode
+    block
+
 mixin codeexample
   pre.fragment.dimcode
     block
@@ -11,3 +15,14 @@ mixin codeblock
     br
     block
     br
+  
+
+mixin revealedcodeblock
+  span.fragment.dimcode.hiddencode
+    br
+    block
+    br
+
+mixin hiddenheader
+  div.fragment.dimafter.visiblestart
+    block
