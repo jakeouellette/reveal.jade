@@ -10,7 +10,7 @@ parameter lists simpler</aside></section><section><p>Bad: Getting data from obje
   public void paint() {
     if (personPainter<span class="fragment dimcode"><br/>      .getPerson().hair().equals("brown") {<br/></span>      // Vary paint style
     }</pre><aside class="notes">What happens when a higher level class reaches into
-a bheavior object's inner state?</aside></section><section><div class="fragment dimafter visiblestart">With Inheritance: Easy to add new classes </div><pre class="fragment hiddencode dimcode">public class PersonPainter implements Drawable {
+a bheavior object's inner state?</aside></section><section><div class="fragment"><p>"Object Oriented" programming </p><p>in contrast with "functional" programming</p></div></section><section><div class="fragment dimafter visiblestart">Let's say you've got a couple of classes</div><pre class="fragment hiddencode dimcode">public class PersonPainter implements Drawable {
   public void draw(Graphics g) {
      ...
   }</pre><pre class="fragment hiddencode dimcode">public class DogPainter implements Drawable {
@@ -23,35 +23,26 @@ a bheavior object's inner state?</aside></section><section><div class="fragment 
   }
  <span class="fragment dimcode"><br/> 
   public void drawOutline(Graphics g) {
-     ...<br/></span></pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_function.gif" height="150" class="noborder"/></div></div></section><section><p>Could pull "Painting" behavior into single class:</p><pre class="fragment dimcode">public class Painter {
+     ...<br/></span></pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_function.gif" height="150" class="noborder"/></div></div></section><section><div class="fragment"><p>Could pull "Painting" behavior into single class:</p><pre class="fragment hiddencode dimcode">public class Painter {
  
   public void draw(Object o) {
     if (o instanceof Person) {
       ...
     }
-    ...
-  }</pre></section><section><pre class="fragment dimcode">public class Painter {
- 
-  public void draw(Object o) {
+  }<span class="fragment dimcode hiddencode"><br/>  public void drawOutline(Object o) {
     if (o instanceof Person) {
       ...
-    }
-  }<span class="fragment dimcode"><br/>  public void drawOutline(Object o) {<br/></span>    if (o instanceof Person) {
-      ...
-    }
-    ...
-  }</pre></section><section><p>But then, the only way to extend types is to add to every behavior</p><pre class="fragment dimcode">public class Painter {
+    }<br/></span>    ...
+  }</pre></div></section><section><p>But then, the only way to extend types is to add to every behavior</p><pre class="fragment dimcode">public class Painter {
  
   public drawOutline(Object o) {
     if (o instanceof Person) {
       ...
-    }
- 
-    if (o instanceof Dog) {
+    }<span class="fragment dimcode hiddencode"><br/>    if (o instanceof Dog) {
       ...
-    }<span class="fragment dimcode"><br/>    if (o instanceof Cat) {
+    }<br/></span><span class="fragment dimcode hiddencode"><br/>    if (o instanceof Cat) {
       ...
-    }<br/></span>    ...</pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_class.gif" height="300" class="noborder"/></div></div></section><section><div class="fragment"><p>this is known as the `expression problem`</p></div></section><section><div class="fragment"><p>There are solutions</p><div style="background:#fff;" class="fragment"><p>Clojure Protocols</p><img src="resources/protocols.gif" height="300" class="noborder"/></div></div></section><section><div class="fragment"><p>Keep data safe: Don't conflate "Person" with "Painting a Person"</p><p>One is data, the other is behavior</p></div></section><section><div class="fragment"><p>Person was just data, wouldn't ask person to paint itself</p></div></section><section><div class="fragment"><p>In Java, must make the tradeoff between:</p><ul><li class="fragment">easy type extension</li><li class="fragment">easy behavior extension </li></ul></div></section><section><p>AVOID mixing concepts:</p><pre class="fragment dimcode">public class PersonPainter implements Drawable {
+    }<br/></span>    ...</pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_class.gif" height="300" class="noborder"/></div></div></section><section><div class="fragment"><p>There are solutions</p><div style="background:#fff;" class="fragment"><p>Clojure Protocols</p><img src="resources/protocols.gif" height="300" class="noborder"/></div></div></section><section><div class="fragment"><p>PersonPainter, who paints the person: Object</p><p>Person, who is painted by a painter: data</p></div></section><section><p>AVOID mixing concepts:</p><pre class="fragment dimcode">public class PersonPainter implements Drawable {
   public void draw(Graphics g) {
     ...
   }

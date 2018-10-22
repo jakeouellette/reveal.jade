@@ -1,13 +1,15 @@
 include mixins.jade
-
-section
++slide
+  p Part 1) Understand the Difference between Data and Objects
+  p.fragment "What is an object anyway?"
++slide
   p William Cook's definition of "Object Oriented"
   img.noborder(src='resources/william_cook.jpg', width='300')
-section
++slide
   p OO: Often misunderstood as "just using classes for stuff"
   img.fragment.noborder(src='resources/droids_looking_for.jpg')
   p.fragment Accidentally doing the opposite of object oriented
-section
++readyslide
   Most schools start out with something like this
   +codeexample
     | class Point {
@@ -15,7 +17,7 @@ section
     | 
     |   public int getX() { return x }
     |   ...
-section
++readyslide
   p lisp
   +codeexample
     | 
@@ -23,7 +25,7 @@ section
     | 
   +notes.
     Not too different from a lambda function in a functional language
-section
++readyslide
   +codeexample
     | 
     | (lambda (var) 
@@ -33,13 +35,13 @@ section
     | 
   +notes.
     Ok, maybe one that determines if it should return x or y
-section
++readyslide
   p C
   +codeexample
     | 
     | point-&gt;x
     | 
-section
++readyslide
   p Classes can have state, is that OO?
   +codeexample
     | class Point {
@@ -50,10 +52,10 @@ section
   +notes.
     Easily represent as a struct in a lower order language
     If no mutation
-section
++slide
   p Classes are not necessary to `set` state
   p point-&gt;x = 5
-section
++readyslide
   p Nor is Mutation necessary to have classes
   +codeexample
     | class Point {
@@ -65,7 +67,7 @@ section
     |   ...
   +notes.
     Value objects, transformed into themself
-section
++readyslide
   +codeexample
     | class IntPoint implements Point {
     |   int x, y
@@ -74,7 +76,7 @@ section
     |   ...
   +notes.
     Ok, what about when you start representing abstractions?
-section
++readyslide
   +codeexample
     | class DoublePoint implements Point {
     |   double x, y
@@ -83,12 +85,12 @@ section
     |   ...
   +notes.
     Now you can use the same APIs with different underlying representation
-section
++slide
   p Isn't this just data?
   +notes.
     is that really a good example though? In this case it's just
     data that is varying, not behavior
-section
++readyslide
   +codeexample
     | class Image implements Drawable {
     |   int currentFrame = ...
@@ -97,7 +99,7 @@ section
     |     ...
   +notes.
     Let's use a behavioral abstraction
-section
++readyslide
   +codeexample
     | class Gif implements Drawable {
     |   int currentFrame = ...
@@ -106,13 +108,13 @@ section
     |     ...
   +notes.
     Now you can represent new abstractions
-section
++slide
   p An object is a first-class, dynamically dispatched behavior.
   +notes.
     http://wcook.blogspot.com/2012/07/proposal-for-simplified-modern.html?m=1
     dynamic dispatch in C: http://www.cs.rit.edu/~ats/books/ooc.pdf
     http://lwn.net/Articles/444910/
-section
++slide
   p Dynamic dispatch is sometimes called 
   ul 
     li.fragment.dimafter "message passing"
@@ -121,14 +123,14 @@ section
     li.fragment.dimafter "polymorphism" 
   +notes.
     Polymorphism is what java devs are used to hearing
-section
++slide
   p Optional, but #[strong not essential:]
   ol
     li.fragment mutable state
     li.fragment inheritance
     li.fragment identity
     li.fragment classes
-section
++readyslide
   +hiddenheader
     p Object Orientedness doesn't require:
     p 1) mutable state
@@ -148,7 +150,7 @@ section
     through creation of new objects
     We can create the same Gif by returning
     a frame of the image, no mutation required
-section
++readyslide
   +hiddenheader
     p Object Orientedness doesn't require:
     p 2) inheritance
@@ -166,18 +168,18 @@ section
     but extends is not:
     Languages like go can define new protocols / interfaces
     Existing types didn't inherit them explicitly.
-//- section
+//- +slide
 //-   +codeexample
 //-     |  interface Drawable {
 //-     |    public void draw(Graphics g);
 //-     |  }
-//- section
+//- +slide
 //-   p Inherits interface, can be used as type:
 //-   +codeexample
 //-     |  public class Gif implements Drawable {
 //-     |    public void draw(Graphics g) {
 //-     | 
-//- section
+//- +slide
 //-   p Does not inherit interface, can't be used
 //-   +codeexample
 //-     |  public class Artist {
@@ -186,7 +188,7 @@ section
 //-   +notes.
 //-     Artist doesn't extend the interface, so can't be used.
 //-     You could wrap this artist, but there's a lot of downsides there
-section
++readyslide
   +hiddenheader
     p Object Orientedness doesn't require:
     p 3) `Identity`, e.g., ==

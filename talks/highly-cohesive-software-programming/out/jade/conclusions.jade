@@ -1,13 +1,14 @@
 include mixins.jade
-section
-  h2 Jake's 3 Core Principles of Highly Cohesive Software Programming
+
++slide
+  h2 Cohesive Software Principles
   ol
     li.fragment Understand the Difference between Data and Objects
     li.fragment Objects should have a single responsibility
     li.fragment Objects can't see what they don't need
-section
++slide
   p Real world applications
-section
++slide
   p per-ide onboarding instructions
   div(style="background:#777;")
     img(src='resources/refactoring_1_needs.png', class='noborder')
@@ -17,14 +18,14 @@ section
     to change intellij and eclipse
     The problem was, there was a difference between the data "what needed to be onboarded",
     and the process of onboarding
-section
++slide
   p Refactored
   div(style="background:#777;")  
     img(src='resources/refactoring_1.png', class='noborder')
   +notes.
     We pulled the IDE onboarding instructions out, they were just data
     now each IDE responds to data independently
-section
++slide
   p view-owning-controller
   div(style="background:#777;")
     img(src='resources/refactoring_2.png', class='noborder')
@@ -36,15 +37,15 @@ section
     Views only respond to and generate events and show sub-views. They don't transition
     to new states. This is heirarchical, so subviews are dumb, but the higher level view
     might have some controller logic
-section
++slide
   p dumb-views
   div(style="background:#777;")
     img(src='resources/refactoring_2_needs.png', class='noborder')
-section
++slide
   p Conclusions
   ul
     li.fragment "object oriented"
     li.fragment cohesion -- best practices
-section
++slide
   p thank you
   img(src='resources/c3po_r2d2_2.gif', height='400', class='noborder')

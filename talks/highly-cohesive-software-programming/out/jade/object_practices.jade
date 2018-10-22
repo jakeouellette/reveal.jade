@@ -1,67 +1,67 @@
 include mixins.jade
 
-section
++readyslide
   +hiddenheader
     p Objects:
     p Don't do things to my data, ask me to do things.
   p.fragment.replaceafter Law of demeter
   p.fragment Principle of Least Surprise
-section
-  div.fragment.dimafter
++readyslide
+  +hiddenheader
     p Law of demeter: 
   p.fragment Tell a dog to walk:
   p.fragment Don't tell the dog's legs to walk.
   p.fragment Tell the dog.
-section
++slide
   p A method may only call things in direct scope
-section
++slide
   p So let's say this circle represents an object with a method
   img(src='resources/lod_1.png', height='300', class='noborder')
-section
++readyslide
   p It can call a method of it's own class
   img(src='resources/lod_2.png', height='300', class='noborder')
   +codeexample
     | this.draw()
-section
++readyslide
   p Or methods of objects injected in
   img(src='resources/lod_4.png', height='300', class='noborder')
   +codeexample
     | graphics.draw()
-section
++readyslide
   p Or methods of objects it made
   img(src='resources/lod_5.png', height='300', class='noborder')
   +codeexample
     | local = new Gif()
     | local.draw()
-section
++readyslide
   p Or methods of objects in it's class
   img(src='resources/lod_3.png', height='300', class='noborder')
   +codeexample
     | this.helper.draw()
-section
++slide
   p If you can do it anyway, why am I doing it for you?
-section
++slide
   p Law of demeter is about #[em behavior] of objects
-section
++readyslide
   +hiddenheader A lot of data is hierarchical
   +revealedcodeexample
     | "person": [
     |   "head": [ "hair": "brown", "eyes": "blue" ], 
     |   "legs": 2]
-section
++readyslide
   +hiddenheader Can be encoded as objects
   +revealedcodeexample
     | person = new Person(
     |   new Head(new Hair("brown"), new Eyes("blue")), 
     |   new Legs(2), ...)
-section
++readyslide
   +hiddenheader Does this violate law of demeter?
   +revealedcodeexample
     | person.hair.color
-section
++slide
   p Here, person is just data
   p.fragment just an immutable data-structure
-section
++readyslide
   +hiddenheader Higher level data makes simpler parameter lists
   +revealedcodeexample
     | public class PersonPainter implements Drawable {
@@ -72,7 +72,7 @@ section
   +notes. 
     One benefit of immutable abstractions is it makes
     parameter lists simpler
-section
++readyslide
   p Bad: Getting data from objects.
   +codeexample
     | public class View {
@@ -85,8 +85,11 @@ section
   +notes.
     What happens when a higher level class reaches into
     a bheavior object's inner state?
-section
-  +hiddenheader With Inheritance: Easy to add new classes 
++slide
+  p "Object Oriented" programming 
+  p in contrast with "functional" programming
++readyslide
+  +hiddenheader Let's say you've got a couple of classes
   +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
@@ -97,11 +100,11 @@ section
     |   public void draw(Graphics g) {
     |      ...
     |   }
-section
++slide
   p New classes for same behaviors through extends
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='150', class='noborder')
-section
++readyslide
   +hiddenheader Let's say you want to add a behavior
   +revealedcodeexample
     |  interface Drawable {
@@ -109,7 +112,7 @@ section
     +revealedcodeblock
       |    public void drawOutline(Graphics g);
     |  }
-section
++readyslide
   +codeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
@@ -120,22 +123,12 @@ section
       | 
       |   public void drawOutline(Graphics g) {
       |      ...
-section
++slide
   div(style="background:#fff;")
     img(src='resources/new_function.gif', height='150', class='noborder')
-section
++slide
   p Could pull "Painting" behavior into single class:
-  +codeexample
-    | public class Painter {
-    | 
-    |   public void draw(Object o) {
-    |     if (o instanceof Person) {
-    |       ...
-    |     }
-    |     ...
-    |   }
-section
-  +codeexample
+  +revealedcodeexample
     | public class Painter {
     | 
     |   public void draw(Object o) {
@@ -143,14 +136,14 @@ section
     |       ...
     |     }
     |   }
-    +codeblock
+    +revealedcodeblock
       |   public void drawOutline(Object o) {
-    |     if (o instanceof Person) {
-    |       ...
-    |     }
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
     |     ...
     |   }
-section
++readyslide
   p But then, the only way to extend types is to add to every behavior
   +codeexample
     | public class Painter {
@@ -159,36 +152,27 @@ section
     |     if (o instanceof Person) {
     |       ...
     |     }
-    | 
-    |     if (o instanceof Dog) {
-    |       ...
-    |     }
-    +codeblock
+    +revealedcodeblock
+      |     if (o instanceof Dog) {
+      |       ...
+      |     }
+    +revealedcodeblock
       |     if (o instanceof Cat) {
       |       ...
       |     }
     |     ...
-section
++slide
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='300', class='noborder')
-section
-  p this is known as the `expression problem`
-section
++slide
   p There are solutions
   div.fragment(style="background:#fff;")
     p Clojure Protocols
     img(src='resources/protocols.gif', height='300', class='noborder')
-section
-  p Keep data safe: Don't conflate "Person" with "Painting a Person"
-  p One is data, the other is behavior
-section
-  p Person was just data, wouldn't ask person to paint itself
-section
-  p In Java, must make the tradeoff between:
-  ul
-    li.fragment easy type extension
-    li.fragment easy behavior extension 
-section
++slide
+  p PersonPainter, who paints the person: Object
+  p Person, who is painted by a painter: data
++readyslide
   p AVOID mixing concepts:
   +codeexample
     | public class PersonPainter implements Drawable {
@@ -197,5 +181,5 @@ section
     |   }
     |   
     |   public Color getHair() {
-section
++slide
   p So that's Object Orientation

@@ -2,7 +2,28 @@
   color: transparent;
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
   opacity: 1;
-  visibility: visible; }
+  visibility: visible; 
+}
+
+.reveal .slides {
+  font: 'Helvetica Neue Condensed Bold';
+}
+
+.reveal .slides section {
+  width: auto;
+}
+
+.reveal .slides pre {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.reveal .slides .row{
+    display: flex;
+}
+.reveal .slides .column {
+    flex: 50%;
+}
 
 .reveal .slides section .fragment.blur-non-current.current-fragment {
   color: inherit;

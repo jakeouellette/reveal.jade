@@ -85,8 +85,11 @@ include mixins.jade
   +notes.
     What happens when a higher level class reaches into
     a bheavior object's inner state?
++slide
+  p "Object Oriented" programming 
+  p in contrast with "functional" programming
 +readyslide
-  +hiddenheader With Inheritance: Easy to add new classes 
+  +hiddenheader Let's say you've got a couple of classes
   +revealedcodeexample
     | public class PersonPainter implements Drawable {
     |   public void draw(Graphics g) {
@@ -123,19 +126,9 @@ include mixins.jade
 +slide
   div(style="background:#fff;")
     img(src='resources/new_function.gif', height='150', class='noborder')
-+readyslide
++slide
   p Could pull "Painting" behavior into single class:
-  +codeexample
-    | public class Painter {
-    | 
-    |   public void draw(Object o) {
-    |     if (o instanceof Person) {
-    |       ...
-    |     }
-    |     ...
-    |   }
-+readyslide
-  +codeexample
+  +revealedcodeexample
     | public class Painter {
     | 
     |   public void draw(Object o) {
@@ -143,11 +136,11 @@ include mixins.jade
     |       ...
     |     }
     |   }
-    +codeblock
+    +revealedcodeblock
       |   public void drawOutline(Object o) {
-    |     if (o instanceof Person) {
-    |       ...
-    |     }
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
     |     ...
     |   }
 +readyslide
@@ -159,11 +152,11 @@ include mixins.jade
     |     if (o instanceof Person) {
     |       ...
     |     }
-    | 
-    |     if (o instanceof Dog) {
-    |       ...
-    |     }
-    +codeblock
+    +revealedcodeblock
+      |     if (o instanceof Dog) {
+      |       ...
+      |     }
+    +revealedcodeblock
       |     if (o instanceof Cat) {
       |       ...
       |     }
@@ -172,22 +165,13 @@ include mixins.jade
   div(style="background:#fff;")
     img(src='resources/new_class.gif', height='300', class='noborder')
 +slide
-  p this is known as the `expression problem`
-+slide
   p There are solutions
   div.fragment(style="background:#fff;")
     p Clojure Protocols
     img(src='resources/protocols.gif', height='300', class='noborder')
 +slide
-  p Keep data safe: Don't conflate "Person" with "Painting a Person"
-  p One is data, the other is behavior
-+slide
-  p Person was just data, wouldn't ask person to paint itself
-+slide
-  p In Java, must make the tradeoff between:
-  ul
-    li.fragment easy type extension
-    li.fragment easy behavior extension 
+  p PersonPainter, who paints the person: Object
+  p Person, who is painted by a painter: data
 +readyslide
   p AVOID mixing concepts:
   +codeexample

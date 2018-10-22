@@ -2,27 +2,42 @@ mixin notes
   aside(class='notes')
     block
 
-mixin revealedcodeexample
-  pre.fragment.hiddencode.dimcode
+
+mixin slide
+  section
+    div.fragment
+      block
+
+//- A slide that starts out on first fragment
+mixin readyslide
+  section
     block
 
+//- An example code that is dimmed to show inside codeblocks
 mixin codeexample
   pre.fragment.dimcode
     block
 
+//- A block of code that starts completely invisible
+mixin revealedcodeexample
+  pre.fragment.hiddencode.dimcode
+    block
+
+//- A codeblock that is dimmed after shown
 mixin codeblock
   span.fragment.dimcode
     br
     block
     br
-  
 
+//- A code block that appears from being missing
 mixin revealedcodeblock
   span.fragment.dimcode.hiddencode
     br
     block
     br
 
+//- A header that is dimmed after view
 mixin hiddenheader
   div.fragment.dimafter.visiblestart
     block

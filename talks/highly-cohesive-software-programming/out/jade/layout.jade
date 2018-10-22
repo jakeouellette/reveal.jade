@@ -56,3 +56,6 @@ head
       { src: 'plugin/notes/notes.js', async: true }
       ]
       });
+      Reveal.addEventListener('slidechanged', function( event ) {
+          Reveal.nextFragment();
+      });

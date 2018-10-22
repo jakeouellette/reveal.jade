@@ -1,59 +1,8 @@
 include mixins.jade
-
 +slide
-  p What leads to High Cohesion?
-+slide
-  p Using SOLID
-  p 
-    em Martin Fowler
-  p
-    img.noborder(src='resources/martin_fowler.jpg')
-  ul
-    li.fragment.dimafter Single Responsibility 
-    li.fragment.dimafter Open/Closed
-    li.fragment.dimafter Liskov Substitution
-    li.fragment.dimafter Interface Segregation
-    li.fragment Dependency Inversion
-  +notes.
-    Martin fowler, prominent OO proponent
-    the solid princples are
-+slide
-  p not the only advocate
-+slide
-  p tightly coupled code is unmockable
-  +notes.
-    you see, it's hard to write unit tests if your code is uncohesive
-+slide
-  p Google Testability Team Testable Software Principles
-  img.noborder(src='resources/misko.jpg')
-  p 
-    em Jonathan Wolter, Russ Ruffer, Miško Hevery
-  ul
-    li.fragment.dimafter Class does too much
-    li.fragment.dimafter Reaching into collaborators
-    li.fragment.dimafter Has Singletons
-    li.fragment Constructors do real work
-  +notes.
-+slide
-  h2 Holub on Patterns
-  p 
-    em Allen Holub
-  p
-    img.noborder(src='resources/allen_holub.jpg')
-  ul
-    li.fragment.dimafter Extends is evil
-    li.fragment.dimafter Getters and Setters are evil
-  +notes.
-    Allen holub promonent JavaWorld, Dr. Dobbs
-    Consultant
-+slide
-  h2 All just different angles on same ideas:
-  ol
-    li.fragment Understand the Difference between Data and Objects
-    li.fragment Objects should have a single responsibility
-    li.fragment Objects can't see what they don't need
-  +notes.
-    Can derive e.g., SOLID principles from these.
+  p Part 2) Cohesion:
+  p Objects should have a single responsibility
+  p Objects can't see what they don't need
 +readyslide
   +codeexample
     p
@@ -71,33 +20,39 @@ include mixins.jade
     p
       | class R2D3 {
       | 
-      +codeblock
+      +revealedcodeblock
         |   public visualize(String projectRoot) {
         |     List&lt;File&gt; resources = getResources(projectRoot)
         |     // Visualizer code
         |   }
       | 
-      +codeblock
+      +revealedcodeblock
         |   private List&lt;File&gt; getResources(String projectRoot) {
-      |     ...
-      |   }
+        |     ...
+        |   }
       | }
   div.fragment 
     p
-      em multiple-responsibility
+      em Multiple-responsibility
+    ol
+      li.fragment visualizer
+      li.fragment resource-getter
   +notes
     p so this visualize task
     p calls this getResources method
 +slide
-  p getResources is irreplacable, but irrelevant
-+slide
-  p Unmockable.
+  p getResources(...): Tightly coupled to visualize(...)
+  p.fragment getResources(...): Difficult to mock
 +readyslide
   p Testing requires knowledge of internals :(
   +codeexample
     | 
-    | PowerMock.createPartialMock(R2D3.class, 
-    |   "getResources").andReturn(files);
+    | PowerMock
+    +revealedcodeblock
+      |   .createPartialMock(
+      |     R2D3.class, 
+      |     "getResources")
+      |   .andReturn(files);
     | 
   +notes.
     To change the behavior in unit test, you'd have to mock this get resources
@@ -114,10 +69,8 @@ include mixins.jade
     The need to powermock implies a tight coupling on internal behavior, not
     a single responsibility
     Not taking advantage of OO facilities to separate behaviors
-+slide
-  p API exists, why not make it explicit?
 +readyslide
-  p what if I extend the thing
+  p `Extends`: The same, but more hidden
   +codeexample
     +codeblock
       | class R2D3 extends FileFinder {
@@ -129,18 +82,23 @@ include mixins.jade
     |   }
     | }
   div.fragment 
-    p
-      em multiple-responsibility through 
-    p 
-      em extends
+    ul
+      li.fragment extends is evil (Holub)
+      li.fragment single responsibility (Fowler)
+      li.fragment open/closed (Fowler)
+      li.fragment Class does too much (Google Testability)
   +notes.
     the problem is this method is tightly coupled
     to this class's implementation of get resources
 +readyslide
   +codeexample
     | 
-    | PowerMock.createPartialMock(FileFinder.class, 
-    |   "getResources").andReturn(files);
+    | PowerMock
+    +revealedcodeblock
+      |    .createPartialMock(
+      |      FileFinder.class, 
+      |      "getResources")
+      |    .andReturn(files);
     | 
   +notes.
     Still need to mock out the behavior in test, and
@@ -152,28 +110,28 @@ include mixins.jade
   +notes.
     hard to change behaviors, hard to swap out
 +readyslide
-  p ok i'll do it earlier
-  +codeexample
-    p
-      | class R2D3 {
-      |   List&lt;File&gt; files;
-      | 
-      +codeblock
-        |   R2d3(String projectRoot) {
-      |     ResourceService finder = 
-      |       new FileFinder(projectRoot)
-      |     files = finder.getResources()
-      |   }
-      | 
-      |   public visualize() {
-      |     ...
-      |   }
-      | }
-  div.fragment
-    p
-      em multiple-responsibility through 
-    p 
-      em constructor coupling
+  div.row
+    div.column
+      +codeexample
+        | class R2D3 {
+        |   List&lt;File&gt; files;
+        | 
+        +codeblock
+          |   R2d3(String projectRoot) {
+        |     ResourceService finder = 
+        |       new FileFinder(projectRoot)
+        |     files = finder.getResources()
+        |   }
+        | 
+        |   public visualize() {
+        |     ...
+        |   }
+        | }
+    div.column
+      ul
+        li.fragment open/closed (Fowler)
+        li.fragment Constructors do real work (Google Testability)
+        li.fragment single responsibility? (Fowler)
   +notes
     p OK, we can extract FileFinder out
     p create it ahead of time in our constructor
@@ -194,30 +152,32 @@ include mixins.jade
 +readyslide
   p ok, no new in my constructor!!!1
   +codeexample
-    p
-      | class R2D3 {
-      |   List&lt;File&gt; files;
-      | 
-      |   R2d3(String projectRoot) {
-      +codeblock
-        |     files = FileFinder.getResources(projectRoot)
-      |   }
-      | }
-  div.fragment 
-    p
-      em multiple-responsibility through 
-    p 
-      em Singleton / global coupling
+    | class R2D3 {
+    |   List&lt;File&gt; files;
+    | 
+    |   R2d3(String projectRoot) {
+    +codeblock
+      |     files = FileFinder.getResources(projectRoot)
+    |   }
+    | }
+  ul
+    li.fragment open/closed (Fowler)
+    li.fragment Has Singletons(Google Testability)
+    li.fragment single responsibility? (Fowler)
   +notes.
     OK
 +readyslide
   p Testing requires knowledge of internals :(
   +codeexample
     | 
-    |  PowerMock.mockStaticPartial(
-    |    FileFinder.class, "getResources");
-    |  EasyMock.expect(FileFinder.getResources(...))
-    |    .andReturn(files);
+    |  PowerMock
+    +revealedcodeblock
+      |    .mockStaticPartial(
+      |      FileFinder.class, 
+      |      "getResources");
+      |  EasyMock.expect(
+      |    FileFinder.getResources(...))
+      |  .andReturn(files);
     | 
   +notes.
     Still mocking internals
@@ -265,7 +225,7 @@ include mixins.jade
       | class R2D3 {
       |   List&lt;File&gt; files;
       | 
-      +codeblock
+      +revealedcodeblock
         |   public static R2D3 create(String projectRoot) {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
@@ -290,15 +250,13 @@ include mixins.jade
       | class R2D3Provider implements Provider&lt;R2D3&gt; {
       |   @Inject String projectRoot
       | 
-      +codeblock
+      +revealedcodeblock
         |   public static R2D3 provide() {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
         |     files = finder.getResources()
         |     return new R2D3(files)
       |   }
-+slide
-  p so that's 'single responsibility'
 +readyslide
   p Ci3po: the translator
   +codeexample
@@ -321,9 +279,10 @@ include mixins.jade
     |     ...
     |   }
     | }
-  div.fragment 
-    p
-      em tightly coupled inputs
+  ul
+    li.fragment.dimafter Reaching into collaborators (Google Testability)
+    li.fragment.dimafter Interface Segregation (Fowler)
+    li.fragment single responsibility? (Fowler)
   +notes.
     This is tightly coupled, to mock it:
 +slide

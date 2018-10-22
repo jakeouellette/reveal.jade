@@ -5,7 +5,7 @@ include mixins.jade
 +slide
   strong Highly Cohesive Software Programming
 +slide
-  p let's pretend you're a software engineer
+  p Let's pretend you're a software engineer
   p.fragment Senior Jawa Developer
   // TODO: jawa picture
   +notes.
@@ -65,8 +65,56 @@ include mixins.jade
     p compared to primer, with very few characters, is nearly incomprehensible
     p a movie, about time travel
 +slide
-  h2 Jake's 3 Core Principles of Highly Cohesive Software Programming
+  p What leads to High Cohesion?
++slide
+  p Using SOLID
+  p 
+    em Martin Fowler
+  p
+    img.noborder(src='resources/martin_fowler.jpg', width='100')
+  ul
+    li.fragment.dimafter Single Responsibility 
+    li.fragment.dimafter Open/Closed
+    li.fragment.dimafter Liskov Substitution
+    li.fragment.dimafter Interface Segregation
+    li.fragment Dependency Inversion
+  +notes.
+    Martin fowler, prominent OO proponent
+    the solid princples are
++slide
+  p not the only advocate
++slide
+  p tightly coupled code is unmockable
+  +notes.
+    you see, it's hard to write unit tests if your code is uncohesive
++slide
+  p Google Testability Team Testable Software Principles
+  img.noborder(src='resources/misko.jpg', width='100')
+  p 
+    em Jonathan Wolter, Russ Ruffer, Miško Hevery
+  ul
+    li.fragment.dimafter Class does too much
+    li.fragment.dimafter Reaching into collaborators
+    li.fragment.dimafter Has Singletons
+    li.fragment Constructors do real work
+  +notes.
++slide
+  h2 Holub on Patterns
+  p 
+    em Allen Holub
+  p
+    img.noborder(src='resources/allen_holub.jpg')
+  ul
+    li.fragment.dimafter Extends is evil
+    li.fragment.dimafter Getters and Setters are evil
+  +notes.
+    Allen holub promonent JavaWorld, Dr. Dobbs
+    Consultant
++slide
+  h2 All just different angles on same ideas:
   ol
     li.fragment Understand the Difference between Data and Objects
     li.fragment Objects should have a single responsibility
     li.fragment Objects can't see what they don't need
+  +notes.
+    Can derive e.g., SOLID principles from these.
