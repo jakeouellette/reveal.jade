@@ -5,14 +5,6 @@
   visibility: visible; 
 }
 
-.reveal .slides {
-  font: 'Helvetica Neue Condensed Bold';
-}
-
-.reveal .slides section {
-  width: auto;
-}
-
 .reveal .slides pre {
   width: 100%;
   padding-top: 10px;
@@ -35,6 +27,7 @@
 .reveal section img.noborder {
   background:none;
   border:none;
+  box-shadow: 0 0 0px;
  }
 
 .leftalign {

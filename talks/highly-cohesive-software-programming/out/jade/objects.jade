@@ -1,16 +1,16 @@
 include mixins.jade
 +slide
-  p Part 1) Understand the Difference between Data and Objects
-  p.fragment "What is an object anyway?"
+  p Part 1) "What is an object anyway?"
 +slide
   p William Cook's definition of "Object Oriented"
   img.noborder(src='resources/william_cook.jpg', width='300')
 +slide
-  p OO: Often misunderstood as "just using classes for stuff"
+  p Object Oriented Programming:
+  p Often misunderstood as "just using classes for stuff"
   img.fragment.noborder(src='resources/droids_looking_for.jpg')
-  p.fragment Accidentally doing the opposite of object oriented
+  p.fragment Not Object Oriented.
 +readyslide
-  Most schools start out with something like this
+  p Many schools start out with something like this
   +codeexample
     | class Point {
     |   final int x, y
@@ -18,29 +18,23 @@ include mixins.jade
     |   public int getX() { return x }
     |   ...
 +readyslide
-  p lisp
+  p Lisp
   +codeexample
     | 
     | (lambda () x)
     | 
+  div.fragment
+    p Java 8
+    +codeexample
+      | (() -&gt; x)
+  div.fragment
+    p C
+    +codeexample
+      | 
+      | point-&gt;x
+      | 
   +notes.
     Not too different from a lambda function in a functional language
-+readyslide
-  +codeexample
-    | 
-    | (lambda (var) 
-    |   (cond (= var "x") 
-    |     x 
-    |     y))
-    | 
-  +notes.
-    Ok, maybe one that determines if it should return x or y
-+readyslide
-  p C
-  +codeexample
-    | 
-    | point-&gt;x
-    | 
 +readyslide
   p Classes can have state, is that OO?
   +codeexample
@@ -52,21 +46,22 @@ include mixins.jade
   +notes.
     Easily represent as a struct in a lower order language
     If no mutation
-+slide
-  p Classes are not necessary to `set` state
-  p point-&gt;x = 5
 +readyslide
-  p Nor is Mutation necessary to have classes
+  p Classes are not necessary to `set` state
+  p
+  p (C Language)
   +codeexample
-    | class Point {
-    |   int x, y
-    | 
-    |   public Point setX(int newX) { 
-    |     new Point(newX, y) 
-    |   }
-    |   ...
-  +notes.
-    Value objects, transformed into themself
+    | point-&gt;x = 5
+  div.fragment
+    p Nor is Mutation necessary to have classes
+    +codeexample
+      | class Point {
+      |   int x, y
+      | 
+      |   public Point setX(int newX) { 
+      |     new Point(newX, y) 
+      |   }
+      |   ...
 +readyslide
   +codeexample
     | class IntPoint implements Point {
@@ -193,7 +188,7 @@ include mixins.jade
     p Object Orientedness doesn't require:
     p 3) `Identity`, e.g., ==
   +revealedcodeexample
-    p a.id.equals(b.id)
+    | a.id.equals(b.id)
   +notes.
     Compare by reference
     If this is needed for objects, can be added to specific implementation

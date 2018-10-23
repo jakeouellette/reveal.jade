@@ -1,8 +1,8 @@
 include mixins.jade
 +slide
   p Part 2) Cohesion:
-  p Objects should have a single responsibility
-  p Objects can't see what they don't need
+  p How to limit objects' scope
+  p How to limit objects' responsibilities
 +readyslide
   +codeexample
     p
@@ -129,9 +129,9 @@ include mixins.jade
         | }
     div.column
       ul
-        li.fragment single responsibility (Fowler)
         li.fragment open/closed (Fowler)
         li.fragment Constructors do real work (Google Testability)
+        li.fragment single responsibility? (Fowler)
   +notes
     p OK, we can extract FileFinder out
     p create it ahead of time in our constructor
@@ -152,30 +152,32 @@ include mixins.jade
 +readyslide
   p ok, no new in my constructor!!!1
   +codeexample
-    p
-      | class R2D3 {
-      |   List&lt;File&gt; files;
-      | 
-      |   R2d3(String projectRoot) {
-      +codeblock
-        |     files = FileFinder.getResources(projectRoot)
-      |   }
-      | }
-  div.fragment 
-    p
-      em multiple-responsibility through 
-    p 
-      em Singleton / global coupling
+    | class R2D3 {
+    |   List&lt;File&gt; files;
+    | 
+    |   R2d3(String projectRoot) {
+    +codeblock
+      |     files = FileFinder.getResources(projectRoot)
+    |   }
+    | }
+  ul
+    li.fragment open/closed (Fowler)
+    li.fragment Has Singletons(Google Testability)
+    li.fragment single responsibility? (Fowler)
   +notes.
     OK
 +readyslide
   p Testing requires knowledge of internals :(
   +codeexample
     | 
-    |  PowerMock.mockStaticPartial(
-    |    FileFinder.class, "getResources");
-    |  EasyMock.expect(FileFinder.getResources(...))
-    |    .andReturn(files);
+    |  PowerMock
+    +revealedcodeblock
+      |    .mockStaticPartial(
+      |      FileFinder.class, 
+      |      "getResources");
+      |  EasyMock.expect(
+      |    FileFinder.getResources(...))
+      |  .andReturn(files);
     | 
   +notes.
     Still mocking internals
@@ -223,7 +225,7 @@ include mixins.jade
       | class R2D3 {
       |   List&lt;File&gt; files;
       | 
-      +codeblock
+      +revealedcodeblock
         |   public static R2D3 create(String projectRoot) {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
@@ -248,15 +250,13 @@ include mixins.jade
       | class R2D3Provider implements Provider&lt;R2D3&gt; {
       |   @Inject String projectRoot
       | 
-      +codeblock
+      +revealedcodeblock
         |   public static R2D3 provide() {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
         |     files = finder.getResources()
         |     return new R2D3(files)
       |   }
-+slide
-  p so that's 'single responsibility'
 +readyslide
   p Ci3po: the translator
   +codeexample
@@ -279,9 +279,10 @@ include mixins.jade
     |     ...
     |   }
     | }
-  div.fragment 
-    p
-      em tightly coupled inputs
+  ul
+    li.fragment.dimafter Reaching into collaborators (Google Testability)
+    li.fragment.dimafter Interface Segregation (Fowler)
+    li.fragment single responsibility? (Fowler)
   +notes.
     This is tightly coupled, to mock it:
 +slide
@@ -304,12 +305,90 @@ include mixins.jade
 +readyslide
   +codeexample
     |     Ci3po.translate(resourceService.getResources())
+  +hiddenheader
+    p If we're both objects:
+    p Don't do things to my data.
+    p Ask me to do things.
+  p.fragment.replaceafter Law of demeter
++readyslide
+  +hiddenheader
+    p Law of demeter: 
+  p.fragment Tell a dog to walk:
+  p.fragment Don't tell the dog's legs to walk.
+  p.fragment Tell the dog.
 +slide
-  p Single responsibility: Smaller interfaces
-  // TODO: better image
-  img(src='resources/confused_1.gif', height='500', class='noborder')
+  p A method may only call things in direct scope
++readyslide
+  p It can call a method of it's own class
+  +codeexample
+    | this.draw()
++readyslide
+  p Or methods of objects injected in
+  +codeexample
+    | graphics.draw()
++readyslide
+  p Or methods of objects it made
+  +codeexample
+    | local = new Gif()
+    | local.draw()
++readyslide
+  p Or methods of objects in it's class
+  +codeexample
+    | this.helper.draw()
++slide
+  p But it should avoid reaching into other classes
+  +codeexample
+    | this.helper.getPainter.draw()
++slide
+  p This creates couplings:
+  p Now it depends on both the helper and the painter's code not changing.
++slide
+  p If you can do it anyway, why am I doing it for you?
++slide
+  p Law of demeter is about #[em behavior] of objects
++readyslide
+  +hiddenheader A lot of data is hierarchical
+  +revealedcodeexample
+    | "person": [
+    |   "head": [ "hair": "brown", "eyes": "blue" ], 
+    |   "legs": 2]
++readyslide
+  +hiddenheader Can be encoded as objects
+  +revealedcodeexample
+    | person = new Person(
+    |   new Head(new Hair("brown"), new Eyes("blue")), 
+    |   new Legs(2), ...)
++readyslide
+  +hiddenheader Does this violate law of demeter?
+  +revealedcodeexample
+    | person.getHair().getColor()
++slide
+  p Here, person is just data
+  p.fragment just an immutable data-structure
++readyslide
+  +hiddenheader Higher level data makes simpler parameter lists
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Person p)
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
+  +notes. 
+    One benefit of immutable abstractions is it makes
+    parameter lists simpler
++readyslide
+  p Bad: Getting data from objects.
+  +codeexample
+    | public class View {
+    |   public void paint() {
+    |     if (personPainter
+    +codeblock
+      |       .getPerson().hair().equals("brown") {
+    |       // Vary paint style
+    |     }
   +notes.
-    The cognitive load to understand mirrors the actual API usage
+    What happens when a higher level class reaches into
+    a bheavior object's inner state?
 +readyslide
   +codeexample
     | interface ResourceService

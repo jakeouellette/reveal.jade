@@ -7,7 +7,7 @@ include mixins.jade
 +slide
   p Let's pretend you're a software engineer
   p.fragment Senior Jawa Developer
-  // TODO: jawa picture
+  img.fragment.noborder(src='resources/jawa.png', width=300)
   +notes.
     Let's pretend you're a software engineer
     Let's say I have a mythical language called Jawa,
@@ -113,8 +113,19 @@ include mixins.jade
 +slide
   h2 All just different angles on same ideas:
   ol
-    li.fragment Understand the Difference between Data and Objects
-    li.fragment Objects should have a single responsibility
-    li.fragment Objects can't see what they don't need
+    li.fragment Minimize objects' scope
+    li.fragment Minimize objects' responsibilities
   +notes.
     Can derive e.g., SOLID principles from these.
++slide
+  p Going to explain:
+  ul
+    li.fragment.dimafter objects
+    li.fragment.dimafter how to limit their scope
+    li.fragment.dimafter how to limit their responsibilities
++slide
+  p You will
+  ul
+    li.fragment.dimafter build better abstractions
+    li.fragment.dimafter reduce work writing tests
+    li.fragment.dimafter have more fun programming

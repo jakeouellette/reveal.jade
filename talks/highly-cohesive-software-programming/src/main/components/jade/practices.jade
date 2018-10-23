@@ -1,8 +1,8 @@
 include mixins.jade
 +slide
   p Part 2) Cohesion:
-  p Objects should have a single responsibility
-  p Objects can't see what they don't need
+  p How to limit objects' scope
+  p How to limit objects' responsibilities
 +readyslide
   +codeexample
     p
@@ -43,8 +43,13 @@ include mixins.jade
 +slide
   p getResources(...): Tightly coupled to visualize(...)
   p.fragment getResources(...): Difficult to mock
++slide
+  p Testing requires looking at internals
+  img(src='resources/c3po_naked.jpg', height='400', class='noborder')
+  +notes.
+      a hidden collaborator
 +readyslide
-  p Testing requires knowledge of internals :(
+  p E.g., can use "Powermock"
   +codeexample
     | 
     | PowerMock
@@ -57,11 +62,6 @@ include mixins.jade
   +notes.
     To change the behavior in unit test, you'd have to mock this get resources
     method.
-+slide
-  p Powermock requires looking at internals
-  img(src='resources/c3po_naked.jpg', height='400', class='noborder')
-  +notes.
-      a hidden collaborator
 +slide
   p Implies an iceberg
   img(src='resources/iceberg.jpg', height='400', class='noborder')
@@ -305,12 +305,90 @@ include mixins.jade
 +readyslide
   +codeexample
     |     Ci3po.translate(resourceService.getResources())
+  +hiddenheader
+    p If we're both objects:
+    p Don't do things to my data.
+    p Ask me to do things.
+  p.fragment.replaceafter Law of demeter
++readyslide
+  +hiddenheader
+    p Law of demeter: 
+  p.fragment Tell a dog to walk:
+  p.fragment Don't tell the dog's legs to walk.
+  p.fragment Tell the dog.
 +slide
-  p Single responsibility: Smaller interfaces
-  // TODO: better image
-  img(src='resources/confused_1.gif', height='500', class='noborder')
+  p A method may only call things in direct scope
++readyslide
+  p It can call a method of it's own class
+  +codeexample
+    | this.draw()
++readyslide
+  p Or methods of objects injected in
+  +codeexample
+    | graphics.draw()
++readyslide
+  p Or methods of objects it made
+  +codeexample
+    | local = new Gif()
+    | local.draw()
++readyslide
+  p Or methods of objects in it's class
+  +codeexample
+    | this.helper.draw()
++slide
+  p But it should avoid reaching into other classes
+  +codeexample
+    | this.helper.getPainter.draw()
++slide
+  p This creates couplings:
+  p Now it depends on both the helper and the painter's code not changing.
++slide
+  p If you can do it anyway, why am I doing it for you?
++slide
+  p Law of demeter is about #[em behavior] of objects
++readyslide
+  +hiddenheader A lot of data is hierarchical
+  +revealedcodeexample
+    | "person": [
+    |   "head": [ "hair": "brown", "eyes": "blue" ], 
+    |   "legs": 2]
++readyslide
+  +hiddenheader Can be encoded as objects
+  +revealedcodeexample
+    | person = new Person(
+    |   new Head(new Hair("brown"), new Eyes("blue")), 
+    |   new Legs(2), ...)
++readyslide
+  +hiddenheader Does this violate law of demeter?
+  +revealedcodeexample
+    | person.getHair().getColor()
++slide
+  p Here, person is just data
+  p.fragment just an immutable data-structure
++readyslide
+  +hiddenheader Higher level data makes simpler parameter lists
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Person p)
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
+  +notes. 
+    One benefit of immutable abstractions is it makes
+    parameter lists simpler
++readyslide
+  p Bad: Getting data from objects.
+  +codeexample
+    | public class View {
+    |   public void paint() {
+    |     if (personPainter
+    +codeblock
+      |       .getPerson().hair().equals("brown") {
+    |       // Vary paint style
+    |     }
   +notes.
-    The cognitive load to understand mirrors the actual API usage
+    What happens when a higher level class reaches into
+    a bheavior object's inner state?
 +readyslide
   +codeexample
     | interface ResourceService

@@ -1,28 +1,23 @@
-<section><div class="fragment"><p>Part 1) Understand the Difference between Data and Objects</p><p class="fragment">"What is an object anyway?"</p></div></section><section><div class="fragment"><p>William Cook's definition of "Object Oriented"</p><img src="resources/william_cook.jpg" width="300" class="noborder"/></div></section><section><div class="fragment"><p>OO: Often misunderstood as "just using classes for stuff"</p><img src="resources/droids_looking_for.jpg" class="fragment noborder"/><p class="fragment">Accidentally doing the opposite of object oriented</p></div></section><section><Most>schools start out with something like this</Most><pre class="fragment dimcode">class Point {
+<section><div class="fragment"><p>Part 1) "What is an object anyway?"</p></div></section><section><div class="fragment"><p>William Cook's definition of "Object Oriented"</p><img src="resources/william_cook.jpg" width="300" class="noborder"/></div></section><section><div class="fragment"><p>Object Oriented Programming:</p><p>Often misunderstood as "just using classes for stuff"</p><img src="resources/droids_looking_for.jpg" class="fragment noborder"/><p class="fragment">Not Object Oriented.</p></div></section><section><p>Many schools start out with something like this</p><pre class="fragment dimcode">class Point {
   final int x, y
  
   public int getX() { return x }
-  ...</pre></section><section><p>lisp</p><pre class="fragment dimcode"> 
+  ...</pre></section><section><p>Lisp</p><pre class="fragment dimcode"> 
 (lambda () x)
- </pre><aside class="notes">Not too different from a lambda function in a functional language</aside></section><section><pre class="fragment dimcode"> 
-(lambda (var) 
-  (cond (= var "x") 
-    x 
-    y))
- </pre><aside class="notes">Ok, maybe one that determines if it should return x or y</aside></section><section><p>C</p><pre class="fragment dimcode"> 
+ </pre><div class="fragment"><p>Java 8</p><pre class="fragment dimcode">(() -&gt; x)</pre></div><div class="fragment"><p>C</p><pre class="fragment dimcode"> 
 point-&gt;x
- </pre></section><section><p>Classes can have state, is that OO?</p><pre class="fragment dimcode">class Point {
+ </pre></div><aside class="notes">Not too different from a lambda function in a functional language</aside></section><section><p>Classes can have state, is that OO?</p><pre class="fragment dimcode">class Point {
   int x, y
  
   public void setX(int x) { this.x = x }
   ...</pre><aside class="notes">Easily represent as a struct in a lower order language
-If no mutation</aside></section><section><div class="fragment"><p>Classes are not necessary to `set` state</p><p>point-&gt;x = 5</p></div></section><section><p>Nor is Mutation necessary to have classes</p><pre class="fragment dimcode">class Point {
+If no mutation</aside></section><section><p>Classes are not necessary to `set` state</p><p></p><p>(C Language)</p><pre class="fragment dimcode">point-&gt;x = 5</pre><div class="fragment"><p>Nor is Mutation necessary to have classes</p><pre class="fragment dimcode">class Point {
   int x, y
  
   public Point setX(int newX) { 
     new Point(newX, y) 
   }
-  ...</pre><aside class="notes">Value objects, transformed into themself</aside></section><section><pre class="fragment dimcode">class IntPoint implements Point {
+  ...</pre></div></section><section><pre class="fragment dimcode">class IntPoint implements Point {
   int x, y
  
   public int getX() { return x }
@@ -57,7 +52,7 @@ Go: Dynamic dispatch
 In java, inheritance is a means to achieve dispatch, so essential,
 but extends is not:
 Languages like go can define new protocols / interfaces
-Existing types didn't inherit them explicitly.</aside></section><section><div class="fragment dimafter visiblestart"><p>Object Orientedness doesn't require:</p><p>3) `Identity`, e.g., ==</p></div><pre class="fragment hiddencode dimcode"><p>a.id.equals(b.id)</p></pre><aside class="notes">Compare by reference
+Existing types didn't inherit them explicitly.</aside></section><section><div class="fragment dimafter visiblestart"><p>Object Orientedness doesn't require:</p><p>3) `Identity`, e.g., ==</p></div><pre class="fragment hiddencode dimcode">a.id.equals(b.id)</pre><aside class="notes">Compare by reference
 If this is needed for objects, can be added to specific implementation
 if things are using this explicitly, it is tightly coupling and preventing
 dynamic dispatch on equals, so may cause issues.</aside></section>
