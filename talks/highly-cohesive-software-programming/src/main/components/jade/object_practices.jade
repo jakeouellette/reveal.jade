@@ -77,19 +77,16 @@ include mixins.jade
       |       ...
       |     }
     |     ...
+//- +slide
+//-   p There are solutions
+//-   div.fragment(style="background:#fff;")
+//-     p Clojure Protocols
+//-     img(src='resources/protocols.gif', height='300', class='noborder')
 +slide
-  div(style="background:#fff;")
-    img(src='resources/new_class.gif', height='300', class='noborder')
-+slide
-  p There are solutions
-  div.fragment(style="background:#fff;")
-    p Clojure Protocols
-    img(src='resources/protocols.gif', height='300', class='noborder')
-+slide
-  p PersonPainter, who paints the person: Object
-  p Person, who is painted by a painter: data
+  p Object: Painter, PersonPainter
+  p Data: Person
 +readyslide
-  p AVOID mixing concepts:
+  p Watch out for mixing concepts:
   +codeexample
     | public class PersonPainter implements Drawable {
     +codeblock
@@ -99,6 +96,3 @@ include mixins.jade
     |   
     +codeblock
       |   public Color getHair() {
-+slide
-  p Painter is responsible for paiting!
-  p.fragment Get person's hair elsewhere!
