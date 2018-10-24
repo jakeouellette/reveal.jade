@@ -3,9 +3,9 @@ link.rel = 'stylesheet';
 link.type = 'text/css';
 link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 document.getElementsByTagName( 'head' )[0].appendChild( link );</script><!--if lt IE 9script(src='lib/js/html5shiv.js')
---></head><body><div class="reveal"><!-- Any section element inside of this container is displayed as a slide--><div class="slides"><!----><!-- Intro / Story--><!-- --><section><div class="fragment"><strong>Highly Cohesive Software Programming</strong></div></section><section><div class="fragment"><p>Let's pretend you're a software engineer</p><p class="fragment">Senior Jawa Developer</p><img src="resources/jawa.png" width="300" class="fragment noborder"><aside class="notes">Let's pretend you're a software engineer
-Let's say I have a mythical language called Jawa,</aside></div></section><section><div class="fragment"><p class="fragment dimafter">new feature</p></div></section><section><div class="fragment"><p class="fragment dimafter">a service to upload translations to ci</p><p class="fragment">ci-3po</p></div></section><section><div class="fragment"><p class="fragment dimafter">awesome. </p><p class="fragment dimafter">Your teammate just finished a tool to convert resources into d3 visualizations in jawa</p><p class="fragment">r2d3</p><aside class="notes">and they push it up</aside></div></section><section><div class="fragment"><p>let's make them work together</p><img src="resources/c3po_r2d2_1.gif" class="fragment noborder"><p class="fragment">oh dear</p><aside class="notes">It turns out, r-2-d3 and ci-3po were both mutating the same file resources
-you see, r2d3 was built unextensibly</aside></div></section><section><div class="fragment"><p>They're tangled together</p><div class="fragment"><img src="resources/r2po.png" class="noborder"></div><aside class="notes">you have to hack them apart</aside></div></section><section><div class="fragment"><p>Tear them apart to start over</p><img src="resources/c3po_chewie.jpg" height="300" class="noborder"></div></section><section><div class="fragment"><p>They were `Tightly Coupled`: Unrelated, but inseparable</p></div></section><section><div class="fragment"><p>What you wanted was `Cohesion`</p><p>Related things nearby.</p><img src="resources/vader_son.jpg" class="fragment noborder"></div></section><section><div class="fragment"><p>Benefits of High Cohesion</p><p class="fragment replaceafter">Enables reuse (e.g., MVC)</p><p class="fragment replaceafter">Minimizes refactorings</p><p class="fragment replaceafter">Makes things easier to test</p><p class="fragment">Enables Separation of Concerns</p></div></section><section><div class="fragment"><p>High Cohesion: Make things easy to understand<p class="fragment replaceafter"><img src="resources/xkcd_star_wars.png" width="900" class="noborder"><em>source: http://xkcd.com/657/</em></p><p class="fragment"><img src="resources/xkcd_primer.png" width="900" class="noborder"><em>source: http://xkcd.com/657/</em></p></p><aside class="notes"><p>star wars may seem complicated,</p><p>but really, it has many characters that</p><p>come together occasionally, and then have their own story</p><p>compared to primer, with very few characters, is nearly incomprehensible</p><p>a movie, about time travel</p></aside></div></section><section><div class="fragment"><p>What leads to High Cohesion?</p></div></section><section><div class="fragment"><p>Using SOLID</p><p> <em>Martin Fowler</em></p><p><img src="resources/martin_fowler.jpg" width="100" class="noborder"></p><ul><li class="fragment dimafter">Single Responsibility </li><li class="fragment dimafter">Open/Closed</li><li class="fragment dimafter">Liskov Substitution</li><li class="fragment dimafter">Interface Segregation</li><li class="fragment">Dependency Inversion</li></ul><aside class="notes">Martin fowler, prominent OO proponent
+--></head><body><div class="reveal"><!-- Any section element inside of this container is displayed as a slide--><div class="slides"><!----><!-- Intro / Story--><!-- --><section><div class="fragment"><strong>Highly Cohesive Software Programming</strong><p>jakeout@</p></div></section><section><div class="fragment"><p>Let's pretend you're a software engineer</p><p class="fragment">Senior Jawa Developer</p><img src="resources/jawa.png" width="300" class="fragment noborder"><aside class="notes">Let's pretend you're a software engineer
+Let's say I have a mythical language called Jawa,</aside></div></section><section><div class="fragment"><p class="fragment dimafter">new feature</p></div></section><section><div class="fragment"><p class="fragment dimafter">a service to upload translations to ci</p><p class="fragment">ci-3proto</p></div></section><section><div class="fragment"><p class="fragment dimafter">awesome. </p><p class="fragment dimafter">Your teammate just finished a tool to convert resources into d3 visualizations in jawa</p><p class="fragment">r2d3</p><aside class="notes">and they push it up</aside></div></section><section><div class="fragment"><p>let's make them work together</p><img src="resources/c3po_r2d2_1.gif" class="fragment noborder"><p class="fragment">oh dear</p><aside class="notes">It turns out, r2d3 and ci3proto were both mutating the same resources in memory.
+you see, r2d3 was built unextensibly</aside></div></section><section><div class="fragment"><p>They're tangled together</p><div class="fragment"><img src="resources/r2po.png" class="noborder"></div><aside class="notes">you have to hack them apart</aside></div></section><section><div class="fragment"><p>Tear them apart to start over</p><img src="resources/c3po_chewie.jpg" height="300" class="noborder"></div></section><section><div class="fragment"><p>They were `Tightly Coupled`: Unrelated, but inseparable</p></div></section><section><div class="fragment"><p>What you wanted was `Cohesion`</p><p>Related things nearby.</p><img src="resources/vader_son.jpg" class="fragment noborder"></div></section><section><div class="fragment"><p>Benefits of High Cohesion</p><p class="fragment replaceafter">Enables reuse (e.g., MVC)</p><p class="fragment replaceafter">Reduces size of refactorings</p><p class="fragment replaceafter">Makes things easier to test</p><p class="fragment">Enables Separation of Concerns</p></div></section><section><div class="fragment"><p>High Cohesion: Make things easy to understand<p class="fragment replaceafter"><img src="resources/xkcd_star_wars.png" width="900" class="noborder"><em>source: http://xkcd.com/657/</em></p><p class="fragment"><img src="resources/xkcd_primer.png" width="900" class="noborder"><em>source: http://xkcd.com/657/</em></p></p><aside class="notes"><p>star wars may seem complicated,</p><p>but really, it has many characters that</p><p>come together occasionally, and then have their own story</p><p>compared to primer, with very few characters, is nearly incomprehensible</p><p>a movie, about time travel</p></aside></div></section><section><div class="fragment"><p>What leads to High Cohesion?</p></div></section><section><div class="fragment"><p>Using SOLID</p><p> <em>Martin Fowler</em></p><p><img src="resources/martin_fowler.jpg" width="100" class="noborder"></p><ul><li class="fragment dimafter">Single Responsibility </li><li class="fragment dimafter">Open/Closed</li><li class="fragment dimafter">Liskov Substitution</li><li class="fragment dimafter">Interface Segregation</li><li class="fragment">Dependency Inversion</li></ul><aside class="notes">Martin fowler, prominent OO proponent
 the solid princples are</aside></div></section><section><div class="fragment"><p>not the only advocate</p></div></section><section><div class="fragment"><p>tightly coupled code is unmockable</p><aside class="notes">you see, it's hard to write unit tests if your code is uncohesive</aside></div></section><section><div class="fragment"><p>Google Testability Team Testable Software Principles</p><img src="resources/misko.jpg" width="100" class="noborder"><p> <em>Jonathan Wolter, Russ Ruffer, Miško Hevery</em></p><ul><li class="fragment dimafter">Class does too much</li><li class="fragment dimafter">Reaching into collaborators</li><li class="fragment dimafter">Has Singletons</li><li class="fragment">Constructors do real work</li></ul><aside class="notes"></aside></div></section><section><div class="fragment"><h2>Holub on Patterns</h2><p> <em>Allen Holub</em></p><p><img src="resources/allen_holub.jpg" class="noborder"></p><ul><li class="fragment dimafter">Extends is evil</li><li class="fragment dimafter">Getters and Setters are evil</li></ul><aside class="notes">Allen holub promonent JavaWorld, Dr. Dobbs
 Consultant</aside></div></section><section><div class="fragment"><h2>All just different angles on same ideas:</h2><ol><li class="fragment">Minimize objects' scope</li><li class="fragment">Minimize objects' responsibilities</li></ol><aside class="notes">Can derive e.g., SOLID principles from these.</aside></div></section><section><div class="fragment"><p>Going to explain:</p><ul><li class="fragment dimafter">objects</li><li class="fragment dimafter">how to limit their scope</li><li class="fragment dimafter">how to limit their responsibilities</li></ul></div></section><section><div class="fragment"><p>You will</p><ul><li class="fragment dimafter">build better abstractions</li><li class="fragment dimafter">reduce work writing tests</li><li class="fragment dimafter">have more fun programming</li></ul></div></section><section><div class="fragment"><p>Part 1) "What is an object anyway?"</p></div></section><section><div class="fragment"><p>William Cook's definition of "Object Oriented"</p><img src="resources/william_cook.jpg" width="300" class="noborder"></div></section><section><div class="fragment"><p>Object Oriented Programming:</p><p>Often misunderstood as "just using classes for stuff"</p><img src="resources/droids_looking_for.jpg" class="fragment noborder"><p class="fragment">Not Object Oriented.</p></div></section><section><p>Many schools start out with something like this</p><pre class="fragment dimcode">class Point {
   final int x, y
@@ -99,79 +99,99 @@ dynamic dispatch on equals, so may cause issues.</aside></section><section></sec
     }<br></span>    ...</pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_class.gif" height="300" class="noborder"></div></div></section><section><div class="fragment"><p>There are solutions</p><div style="background:#fff;" class="fragment"><p>Clojure Protocols</p><img src="resources/protocols.gif" height="300" class="noborder"></div></div></section><section><div class="fragment"><p>PersonPainter, who paints the person: Object</p><p>Person, who is painted by a painter: data</p></div></section><section><p>AVOID mixing concepts:</p><pre class="fragment dimcode">public class PersonPainter implements Drawable {<span class="fragment dimcode"><br>  public void draw(Graphics g) {
     ...
   }<br></span>  <span class="fragment dimcode"><br>  public Color getHair() {<br></span></pre></section><section><div class="fragment"><p>Painter is responsible for paiting!</p><p class="fragment">Get person's hair elsewhere!</p></div></section><section><div class="fragment"><p>Part 2) Cohesion:</p><p>How to limit objects' scope</p><p>How to limit objects' responsibilities</p></div></section><section><pre class="fragment dimcode"><p>class R2D3 {
-  public visualize() {
+  public visualize(Surface surface) {
     ...
   }
 }</p></pre><aside class="notes">Let's talk about R2D3.
 We said it visualizes resources using d3
 a javascript framework</aside></section><section><pre class="fragment dimcode"><p>class R2D3 {
  <span class="fragment dimcode hiddencode"><br>  public visualize(String projectRoot) {
-    List&lt;File&gt; resources = getResources(projectRoot)
+    Resources resources = getResources(projectRoot)
     // Visualizer code
-  }<br></span> <span class="fragment dimcode hiddencode"><br>  private List&lt;File&gt; getResources(String projectRoot) {
+  }<br></span> <span class="fragment dimcode hiddencode"><br>  private Resources getResources(String projectRoot) {
     ...
-  }<br></span>}</p></pre><div class="fragment"> <p><em>Multiple-responsibility</em></p><ol><li class="fragment">visualizer</li><li class="fragment">resource-getter</li></ol></div><aside class="notes"><p>so this visualize task</p><p>calls this getResources method</p></aside></section><section><div class="fragment"><p>getResources(...): Tightly coupled to visualize(...)</p><p class="fragment">getResources(...): Difficult to mock</p></div></section><section><div class="fragment"><p>Testing requires looking at internals</p><img src="resources/c3po_naked.jpg" height="400" class="noborder"><aside class="notes">a hidden collaborator</aside></div></section><section><p>E.g., can use "Powermock"</p><pre class="fragment dimcode"> 
+  }<br></span>}</p></pre><div class="fragment"> <p><em>Multiple-responsibility</em></p><ol><li class="fragment">visualizer</li><li class="fragment">resource-getter</li></ol></div><aside class="notes"><p>so this visualize task</p><p>calls this getResources method</p></aside></section><section><p class="fragment dimafter">Because visualize is tightly coupled to getResources...</p><p class="fragment dimafter">...if getResources must be mocked...</p><p class="fragment dimafter">visualize is difficult to test.</p></section><section><div class="fragment"><p>Testing requires looking at internals</p><img src="resources/c3po_naked.jpg" height="400" class="noborder"><aside class="notes">a hidden collaborator</aside></div></section><section><p>E.g., can use "Powermock"</p><pre class="fragment dimcode"> 
 PowerMock<span class="fragment dimcode hiddencode"><br>  .createPartialMock(
     R2D3.class, 
     "getResources")
-  .andReturn(files);<br></span> </pre><aside class="notes">To change the behavior in unit test, you'd have to mock this get resources
-method.</aside></section><section><div class="fragment"><p>Implies an iceberg</p><img src="resources/iceberg.jpg" height="400" class="noborder"><aside class="notes">The need to powermock implies a tight coupling on internal behavior, not
+  .andReturn(resources);<br></span> </pre><aside class="notes">To change the behavior in unit test, you'd have to mock this get resources
+method.</aside></section><section><div class="fragment"><img src="resources/no_moon.png" height="400" class="noborder"><p class="fragment">You don't know what's inside that moon.</p><aside class="notes">The need to powermock implies a tight coupling on internal behavior, not
 a single responsibility
 Not taking advantage of OO facilities to separate behaviors</aside></div></section><section><p>`Extends`: The same, but more hidden</p><pre class="fragment dimcode"><span class="fragment dimcode"><br>class R2D3 extends FileFinder {<br></span> 
-  public visualize(String projectRoot) {<span class="fragment dimcode"><br>    List&lt;File&gt; resources = getResources(projectRoot)<br></span>    // Visualizer code
+  public visualize(String projectRoot) {<span class="fragment dimcode"><br>    Resources resources = getResources(projectRoot)<br></span>    // Visualizer code
   }
 }</pre><div class="fragment"> <ul><li class="fragment">extends is evil (Holub)</li><li class="fragment">single responsibility (Fowler)</li><li class="fragment">open/closed (Fowler)</li><li class="fragment">Class does too much (Google Testability)</li></ul></div><aside class="notes">the problem is this method is tightly coupled
 to this class's implementation of get resources</aside></section><section><pre class="fragment dimcode"> 
 PowerMock<span class="fragment dimcode hiddencode"><br>   .createPartialMock(
      FileFinder.class, 
      "getResources")
-   .andReturn(files);<br></span> </pre><aside class="notes">Still need to mock out the behavior in test, and
+   .andReturn(resources);<br></span> </pre><aside class="notes">Still need to mock out the behavior in test, and
 if that internal class references something mock-worthy, but it, itself, isnt,
-then you get into tree-hierarchy searches that are complicated</aside></section><section><div class="fragment"><p>Hard to Swap</p><img src="resources/swap_board.gif" height="500" class="noborder"><aside class="notes">hard to change behaviors, hard to swap out</aside></div></section><section><div class="row"><div class="column"><pre class="fragment dimcode">class R2D3 {
-  List&lt;File&gt; files;
+then you get into tree-hierarchy searches that are complicated</aside></section><section><div class="fragment"><p>Hard to Swap</p><img src="resources/swap_head.gif" height="500" class="noborder"><aside class="notes">hard to change behaviors, hard to swap out</aside></div></section><section><p>What about setting it up in the constructor?</p><div class="row"><div class="column"><pre class="fragment dimcode">class R2D3 {
+  Resources resources;
  <span class="fragment dimcode"><br>  R2d3(String projectRoot) {<br></span>    ResourceService finder = 
       new FileFinder(projectRoot)
-    files = finder.getResources()
+    resources = finder.getResources()
   }
  
-  public visualize() {
+  public visualize(Surface surface) {
     ...
   }
 }</pre></div><div class="column"><ul><li class="fragment">open/closed (Fowler)</li><li class="fragment">Constructors do real work (Google Testability)</li><li class="fragment">single responsibility? (Fowler)</li></ul></div></div><aside class="notes"><p>OK, we can extract FileFinder out</p><p>create it ahead of time in our constructor</p></aside></section><section><p>Testing requires knowledge of internals :(</p><pre class="fragment dimcode"> 
 expectNew(FileFinder.class, "projectRoot")
-  .andReturn(files);
+  .andReturn(resources);
  </pre><aside class="notes">Now, in order to change the behavior you have to mock out internals.</aside></section><section><div class="fragment"><h2>avoid new in constructors</h2><p class="fragment">dependency inversion</p><aside class="notes">// TODO: motivate</aside></div></section><section><p>ok, no new in my constructor!!!1</p><pre class="fragment dimcode">class R2D3 {
-  List&lt;File&gt; files;
+  Resources resources;
  
-  R2d3(String projectRoot) {<span class="fragment dimcode"><br>    files = FileFinder.getResources(projectRoot)<br></span>  }
+  R2d3(String projectRoot) {<span class="fragment dimcode"><br>    resources = FileFinder.getResources(projectRoot)<br></span>  }
 }</pre><ul><li class="fragment">open/closed (Fowler)</li><li class="fragment">Has Singletons(Google Testability)</li><li class="fragment">single responsibility? (Fowler)</li></ul><aside class="notes">OK</aside></section><section><p>Testing requires knowledge of internals :(</p><pre class="fragment dimcode"> 
  PowerMock<span class="fragment dimcode hiddencode"><br>   .mockStaticPartial(
      FileFinder.class, 
      "getResources");
  EasyMock.expect(
    FileFinder.getResources(...))
- .andReturn(files);<br></span> </pre><aside class="notes">Still mocking internals</aside></section><section><div class="fragment"><p>When do statics improve code?</p><p class="fragment dimafter">no this</p><p class="fragment dimafter">pure functions</p><p class="fragment dimafter">Still is coupling</p><aside class="notes">Avoid bleeding local scope. Handy for pure functions, good no intent to override</aside></div></section><section><pre class="fragment dimcode">class R2D4 extends R2D3 {
- 
-  @override
-  public List&lt;File&gt; getResources()</pre><aside class="notes">One of the nice things about statics is they prevent inheritance
-from being used to replace collaborator behaviors</aside></section><section><p>perfect code</p><pre class="fragment dimcode">class R2D3 {
-  final List&lt;File&gt; files;
- <span class="fragment dimcode"><br>  R2d3(List&lt;File&gt; visualizableFiles) {
-    this.files = visualizableFiles;
-  }<br></span> <span class="fragment dimcode"><br>  public visualize() {
+ .andReturn(resources);<br></span> </pre><aside class="notes">Still mocking internals</aside></section><section><p>`Testable code`</p><pre class="fragment dimcode">class R2D3 {
+  final Resources resources;
+ <span class="fragment dimcode"><br>  R2d3(Resources resources) {
+    this.resources = resources;
+  }<br></span> <span class="fragment dimcode"><br>  public visualize(Surface surface) {
     // visualization code
   }<br></span>}</pre><aside class="notes">A good pattern is to separate
 out the concerns and JUST pass in the files
 you might also inject it into the
-visualize method depending on how it works</aside></section><section><p>static factories are better than nothing</p><pre class="fragment dimcode"><p>class R2D3 {
-  List&lt;File&gt; files;
+visualize method depending on how it works</aside></section><section><p>Testing with a mock-in-the-middle</p><pre class="fragment dimcode"> class R2d3Test {
+   R2d3 r2d3;
+ 
+   @Before
+   public void setupDroid() {
+     Resources resources = mock(Resources.class);
+     ResourceService mockResourceService = mock(mockResourceService);
+     when(mockResourceService.getResources).thenReturn(mockResources);
+     r2d3 = new R2d3(mockResourceService);
+   }
+ 
+   @Test
+   public void r2d3Visualizes() {
+     // test r2d3</pre></section><section><p>Testing becomes easy.</p><pre class="fragment dimcode"> class R2d3Test {
+   R2d3 r2d3;
+ 
+   @Before
+   public void setupDroid() {
+     Resources mockResources = mock(resources.class);
+     r2d3 = new R2d3(mockResources)
+   }
+ 
+   @Test
+   public void r2d3Visualizes() {
+     // test r2d3</pre><ul><li class="fragment">dependency injection (fowler, in a good way)</li></ul></section><section><p>static factories are better than nothing</p><pre class="fragment dimcode"><p>class R2D3 {
+  Resources resources;
  <span class="fragment dimcode hiddencode"><br>  public static R2D3 create(String projectRoot) {
     ResourceService finder = 
       new FileFinder(projectRoot)
-    files = finder.getResources()
-    return new R2D3(files)
-  }<br></span> <span class="fragment dimcode"><br>  R2d3(List&lt;File&gt; visualizableFiles) {
-    this.files = visualizableFiles;
+    resources = finder.getResources()
+    return new R2D3(resources)
+  }<br></span> <span class="fragment dimcode"><br>  R2d3(Resources resources) {
+    this.resources = resources;
   }<br></span>  ...
 }</p></pre><aside class="notes">You can make incremental refactorings that
 get you closer to ideal. Better than passing
@@ -180,23 +200,23 @@ factories everywhere</aside></section><section><p>Static factory can be pulled o
  <span class="fragment dimcode hiddencode"><br>  public static R2D3 provide() {
     ResourceService finder = 
       new FileFinder(projectRoot)
-    files = finder.getResources()
-    return new R2D3(files)<br></span>  }</p></pre></section><section><p>Ci3po: the translator</p><pre class="fragment dimcode">class Ci3po {
+    resources = finder.getResources()
+    return new R2D3(resources)<br></span>  }</p></pre></section><section><div class="fragment"><p>When are static methods OK?</p><p class="fragment dimafter">Providers are better than</p><p class="fragment dimafter">Static factory methods, which are MUCH better than</p><p class="fragment dimafter">new in constructor, which is ENORMOUSLY better than</p><p class="fragment dimafter">extending collaborators</p></div></section><section><p>Ci3proto: the translator</p><pre class="fragment dimcode">class Ci3proto {
   ...
   public translate() {
     ...
   }
-}</pre></section><section><pre class="fragment dimcode">class Ci3po {
+}</pre></section><section><pre class="fragment dimcode">class Ci3proto {
   ...
-  public translate(TaskContainer t) {<span class="fragment dimcode"><br>    List&lt;File&gt; files = t
+  public translate(TaskContainer t) {<span class="fragment dimcode"><br>    Resources resources = t
       .getByPath(:app:fileFinder")
       .fileFinder
       .getResources();<br></span>    ...
   }
-}</pre><ul><li class="fragment dimafter">Reaching into collaborators (Google Testability)</li><li class="fragment dimafter">Interface Segregation (Fowler)</li><li class="fragment">single responsibility? (Fowler)</li></ul><aside class="notes">This is tightly coupled, to mock it:</aside></section><section><div class="fragment"><p>Annoying to mock.</p></div></section><section><pre class="fragment dimcode">    Ci3po.translate(new TaskContainer() {<span class="fragment dimcode"><br>      public getByPath(String s) {<br></span>        return resourceService
+}</pre><ul><li class="fragment dimafter">Reaching into collaborators (Google Testability)</li><li class="fragment dimafter">Interface Segregation (Fowler)</li><li class="fragment">single responsibility? (Fowler)</li></ul><aside class="notes">This is tightly coupled, to mock it:</aside></section><section><div class="fragment"><p>Annoying to mock.</p></div></section><section><pre class="fragment dimcode">    Ci3proto.translate(new TaskContainer() {<span class="fragment dimcode"><br>      public getByPath(String s) {<br></span>        return resourceService
       }<span class="fragment dimcode"><br>      ... (40 more lines of code)<br></span>    })</pre><aside class="notes">If we want to mock just the internal service, we have to
-mock the full api, including the 40-some odd methods that are unused</aside></section><section><div class="fragment"><p>Easier: Just pass the right thing in!</p></div></section><section><pre class="fragment dimcode">    Ci3po.translate(resourceService.getResources())</pre><div class="fragment dimafter visiblestart"><p>If we're both objects:</p><p>Don't do things to my data.</p><p>Ask me to do things.</p></div><p class="fragment replaceafter">Law of demeter</p></section><section><div class="fragment dimafter visiblestart"><p>Law of demeter: </p></div><p class="fragment">Tell a dog to walk:</p><p class="fragment">Don't tell the dog's legs to walk.</p><p class="fragment">Tell the dog.</p></section><section><div class="fragment"><p>A method may only call things in direct scope</p></div></section><section><p>It can call a method of it's own class</p><pre class="fragment dimcode">this.draw()</pre></section><section><p>Or methods of objects injected in</p><pre class="fragment dimcode">graphics.draw()</pre></section><section><p>Or methods of objects it made</p><pre class="fragment dimcode">local = new Gif()
-local.draw()</pre></section><section><p>Or methods of objects in it's class</p><pre class="fragment dimcode">this.helper.draw()</pre></section><section><div class="fragment"><p>But it should avoid reaching into other classes</p><pre class="fragment dimcode">this.helper.getPainter.draw()</pre></div></section><section><div class="fragment"><p>This creates couplings:</p><p>Now it depends on both the helper and the painter's code not changing.</p></div></section><section><div class="fragment"><p>If you can do it anyway, why am I doing it for you?</p></div></section><section><div class="fragment"><p>Law of demeter is about <em>behavior</em> of objects</p></div></section><section><div class="fragment dimafter visiblestart">A lot of data is hierarchical</div><pre class="fragment hiddencode dimcode">"person": [
+mock the full api, including the 40-some odd methods that are unused</aside></section><section><div class="fragment"><p>Easier: Just pass the right thing in!</p></div></section><section><pre class="fragment dimcode">    Ci3proto.translate(resourceService.getResources())</pre><div class="fragment dimafter visiblestart"><p>If we're both objects:</p><p>Don't do things to my data.</p><p>Ask me to do things.</p></div><p class="fragment replaceafter">Law of demeter</p></section><section><div class="fragment dimafter visiblestart"><p>Law of demeter: </p></div><p class="fragment">Tell a dog to walk:</p><p class="fragment">Don't tell the dog's legs to walk.</p><p class="fragment">Tell the dog.</p><img src="resources/dog_pants.jpg" height="350" class="fragment noborder"></section><section><div class="fragment"><p>A method may only call things in direct scope</p></div></section><section><p>It can call a method of it's own class</p><pre class="fragment dimcode">this.draw()</pre></section><section><p>Or methods of objects injected in</p><pre class="fragment dimcode">graphics.draw()</pre></section><section><p>Or methods of objects it made</p><pre class="fragment dimcode">local = new Gif()
+local.draw()</pre></section><section><p>Or methods of objects in it's class</p><pre class="fragment dimcode">this.helper.draw()</pre></section><section><div class="fragment"><p>But it should avoid reaching into other classes</p><pre class="fragment dimcode">this.helper.getPainter().draw()</pre></div></section><section><div class="fragment"><p>This creates couplings:</p><p>Now it depends on both the helper and the painter's code not changing.</p></div></section><section><div class="fragment"><p>If you can do it anyway, why am I doing it for you?</p></div></section><section><div class="fragment"><p>Law of demeter is about <em>behavior</em> of objects</p></div></section><section><div class="fragment dimafter visiblestart">A lot of data is hierarchical</div><pre class="fragment hiddencode dimcode">"person": [
   "head": [ "hair": "brown", "eyes": "blue" ], 
   "legs": 2]</pre></section><section><div class="fragment dimafter visiblestart">Can be encoded as objects</div><pre class="fragment hiddencode dimcode">person = new Person(
   new Head(new Hair("brown"), new Eyes("blue")), 
@@ -208,48 +228,51 @@ parameter lists simpler</aside></section><section><p>Bad: Getting data from obje
     if (personPainter<span class="fragment dimcode"><br>      .getPerson().hair().equals("brown") {<br></span>      // Vary paint style
     }</pre><aside class="notes">What happens when a higher level class reaches into
 a bheavior object's inner state?</aside></section><section><pre class="fragment dimcode">interface ResourceService
-  public List&lt;File&gt; getResources()</pre><p>vs</p><div class="fragment"><pre class="fragment dimcode">interface ResourceService
-  public List&lt;File&gt; getResources()
+  public Resources getResources()</pre><p>vs</p><div class="fragment"><pre class="fragment dimcode">interface ResourceService
+  public Resources getResources()
   public void delete()
-  public File find(String path)</pre></div><aside class="notes">if a class doesn't need elements of an interface
+  public Resource find(String path)</pre></div><aside class="notes">if a class doesn't need elements of an interface
   let's not make it more complex because of them</aside></section><section><p>Inevitably:</p><pre class="fragment dimcode">class YourResourceService extends ResourceService
   public delete() {
     throw new UnsupportedOperationException("nooo!")
   }
-  ...</pre><div class="fragment"><p><em>tight coupled inputs through</em></p><p><em>extreme liskov substitution</em></p></div></section><section><div class="fragment"><p>High cohesion: Avoid unneeded scope.</p></div></section><section><pre class="fragment dimcode">interface ResourceService
-  public List&lt;File&gt; getResources()</pre><div class="fragment"><pre class="fragment dimcode">class FileFinder
-  public List&lt;File&gt; getResources() {
-  ...<span class="fragment dimcode"><br>  public void deleteFiles() {<br></span>  ...</pre></div><aside class="notes"><p>Let's assume you've got a interface, resource service</p><p>and a class that implements it</p><p>maybe that class has a lot of other methods</p><p>that are weird</p></aside></section><section><pre class="fragment dimcode">class Ci3po {
-  ...<span class="fragment dimcode"><br>  public translate(FileFinder f) {<br></span>    List&lt;File&gt; = f.getResources()
+  ...</pre><div class="fragment"><em>liskov substitution principle (fowler)</em></div></section><section><div class="fragment"><p>High cohesion: Avoid unneeded scope.</p></div></section><section><p>It's okay to have interfaces to different use-cases</p><pre class="fragment dimcode">interface ResourceReader
+  public Resources getResources();</pre><pre class="fragment hiddencode dimcode">interface ResourceService extends ResourceReader
+  public Resources deleteResources();</pre></section><section><div class="fragment"><div class="fragment"><pre class="fragment dimcode">class FileFinder implements ResourceService
+  public Resources getResources() {
+  ...<span class="fragment dimcode"><br>  public void refreshResources() {<br></span>  ...</pre></div><aside class="notes"><p>Let's assume you've got a interface, resource service</p><p>and a class that implements it</p><p>maybe that class has a lot of other methods</p><p>that are weird</p></aside></div></section><section><pre class="fragment dimcode">class Ci3proto {
+  ...<span class="fragment dimcode"><br>  public translate(FileFinder f) {<br></span>    Resources resources = f.getResources()
     ...
   }
-}</pre><div class="fragment"> <p><em>tightly coupled inputs through</em></p><p><em>overly specific implementation</em></p></div><aside class="notes">Now I'm locked into creating a FileFinder,
+}</pre><div class="fragment"> <ul><li class="fragment">Interface segregation principle (fowler)</li></ul></div><aside class="notes">Now I'm locked into creating a FileFinder,
 if it has a lot of extra scope, I don't
 want to have to build that state.
-Let me pass in what you'll use!</aside></section><section><p>I would have to extend a real implementation.</p><pre class="fragment dimcode">ci3po.translate(new FileFinder() {...});</pre></section><section><pre class="fragment dimcode">class Ci3po {
+Let me pass in what you'll use!</aside></section><section><p>I would have to extend a real implementation.</p><pre class="fragment dimcode">ci3proto.translate(new FileFinder() {...});</pre></section><section><pre class="fragment dimcode">class Ci3proto {
   ...
-  public translate(ResourceService f) {<span class="fragment dimcode"><br>    if (f instanceof FileFinder) {<br></span>      List&lt;File&gt; files = (FileFinder) f.getResources()
+  public translate(ResourceService rs) {<span class="fragment dimcode"><br>    if (rs instanceof FileFinder) {<br></span>      Resources resources = (FileFinder) rs.getResources()
       ...
     }
   }
-}</pre><div class="fragment"> <p><em>tightly coupled inputs through</em></p><p><em>closed for extension code</em></p></div><aside class="notes">I'm STILL locked into creating a FileFinder,
-because you are using instanceof</aside></section><section><div class="fragment"><h2>instanceof only on datatypes</h2><p class="fragment">further reading: scala case classes</p><!-- TODO: add matcher here--><!-- TODO: fully grep this--><aside class="notes">because: if its not immutable data, can ask it to solve problem
-for you.</aside></div></section><section><p>Ci3po: Translations as a service</p><pre class="fragment dimcode">class Ci3po {
+}</pre><div class="fragment"> <ul><lu>open/closed principle (fowler)</lu></ul></div><aside class="notes">I'm STILL locked into creating a FileFinder,
+because you are using instanceof</aside></section><section><div class="fragment"><p>Tip: instanceof only on datatypes</p><p class="fragment">see: functional programming</p><p class="fragment">further reading: scala case classes</p><!-- TODO: add matcher here--><!-- TODO: fully grep this--><aside class="notes">because: if its not immutable data, can ask it to solve problem
+for you.</aside></div></section><section><p>Ci3proto: Translations as a service</p><pre class="fragment dimcode">class Ci3proto {
  <span class="fragment dimcode"><br>  Uploader uploader;<br></span> 
   public translate(ResourceService f) {
     ...
   }
-}</pre><aside class="notes">Ok, now let's say Ci3po has an uploader it uses</aside></section><section><pre class="fragment dimcode">class Ci3po {
+}</pre><aside class="notes">Ok, now let's say Ci3proto has an uploader it uses</aside></section><section><pre class="fragment dimcode">class Ci3proto {
  
   Uploader uploader;
  
   public translate(ResourceService f) {<span class="fragment dimcode"><br>    uploader.setEndpoint('http://ci/translations')
     uploader.sendGet(
        new HttpGet('hasTranslations', 
-       params(f.getFiles()))<br></span>    ...
+       params(f.getResources()))<br></span>    ...
   }
-}</pre><div class="fragment"> <p><em>tightly coupled inputs through</em></p><p><em>reaching into state</em></p></div><aside class="notes">Translator calls into an uploader, instead of asking it
-if it has translations, it makes a request, coupling to httpclient</aside></section><section><p>better</p><pre class="fragment dimcode"> uploader.hasTranslations(files)</pre></section><section><div class="fragment"><h2>Cohesive Software Principles</h2><ol><li class="fragment">Understand the Difference between Data and Objects</li><li class="fragment">Objects should have a single responsibility</li><li class="fragment">Objects can't see what they don't need</li></ol></div></section><section><div class="fragment"><p>Real world applications</p></div></section><section><div class="fragment"><p>per-ide onboarding instructions</p><div style="background:#777;"><img src="resources/refactoring_1_needs.png" class="noborder"></div><aside class="notes">We used to build the IDE onboarding instructions per IDE.
+}</pre><div class="fragment"> <ul><li class="fragment">Reaching into collaborators (google testability)</li><li class="fragment">class does too much (google testability)</li><li class="fragment">Getters and Setters are evil (Holub)</li></ul></div><aside class="notes">Translator calls into an uploader, instead of asking it
+if it has translations, it makes a request, coupling to httpclient
+Who knows if set methods are thread safe or if other instances have
+reference.</aside></section><section><p>better</p><pre class="fragment dimcode"> uploader.hasTranslations(resources)</pre></section><section><div class="fragment"><h2>Cohesive Software Principles</h2><ol><li class="fragment">Understand the Difference between Data and Objects</li><li class="fragment">Objects should have a single responsibility</li><li class="fragment">Objects can't see what they don't need</li></ol></div></section><section><div class="fragment"><p>thank you</p><img src="resources/c3po_r2d2_2.gif" height="400" class="noborder"><p>jakeout@</p></div></section><section><div class="fragment"><p>Real world applications</p></div></section><section><div class="fragment"><p>per-ide onboarding instructions</p><div style="background:#777;"><img src="resources/refactoring_1_needs.png" class="noborder"></div><aside class="notes">We used to build the IDE onboarding instructions per IDE.
 Every time a new dev needed to add onboarding instructions, they had
 to change intellij and eclipse
 The problem was, there was a difference between the data "what needed to be onboarded",
@@ -260,7 +283,7 @@ When we need the ability for people to jump into a context for migration,
 the code for this got really gross, so we made each view dumb.
 Views only respond to and generate events and show sub-views. They don't transition
 to new states. This is heirarchical, so subviews are dumb, but the higher level view
-might have some controller logic</aside></div></section><section><div class="fragment"><p>dumb-views</p><div style="background:#777;"><img src="resources/refactoring_2_needs.png" class="noborder"></div></div></section><section><div class="fragment"><p>Conclusions</p><ul><li class="fragment">"object oriented"</li><li class="fragment">cohesion -- best practices</li></ul></div></section><section><div class="fragment"><p>thank you</p><img src="resources/c3po_r2d2_2.gif" height="400" class="noborder"></div></section></div></div><script src="lib/js/head.min.js"></script><script src="js/reveal.js"></script><script>// Full list of configuration options available at:
+might have some controller logic</aside></div></section><section><div class="fragment"><p>dumb-views</p><div style="background:#777;"><img src="resources/refactoring_2_needs.png" class="noborder"></div></div></section><section><div class="fragment"><p>Conclusions</p><ul><li class="fragment">"object oriented"</li><li class="fragment">cohesion -- best practices</li></ul></div></section></div></div><script src="lib/js/head.min.js"></script><script src="js/reveal.js"></script><script>// Full list of configuration options available at:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
 controls: true,

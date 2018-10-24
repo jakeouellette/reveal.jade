@@ -4,6 +4,7 @@ include mixins.jade
 // 
 +slide
   strong Highly Cohesive Software Programming
+  p jakeout@
 +slide
   p Let's pretend you're a software engineer
   p.fragment Senior Jawa Developer
@@ -15,7 +16,7 @@ include mixins.jade
   p.fragment.dimafter new feature
 +slide
   p.fragment.dimafter a service to upload translations to ci
-  p.fragment ci-3po
+  p.fragment ci-3proto
 +slide
   p.fragment.dimafter awesome. 
   p.fragment.dimafter Your teammate just finished a tool to convert resources into d3 visualizations in jawa
@@ -27,7 +28,7 @@ include mixins.jade
   img.fragment.noborder(src='resources/c3po_r2d2_1.gif')
   p.fragment oh dear
   +notes.
-    It turns out, r-2-d3 and ci-3po were both mutating the same file resources
+    It turns out, r2d3 and ci3proto were both mutating the same resources in memory.
     you see, r2d3 was built unextensibly
 +slide
   p They're tangled together
@@ -47,7 +48,7 @@ include mixins.jade
 +slide
   p Benefits of High Cohesion
   p.fragment.replaceafter Enables reuse (e.g., MVC)
-  p.fragment.replaceafter Minimizes refactorings
+  p.fragment.replaceafter Reduces size of refactorings
   p.fragment.replaceafter Makes things easier to test
   p.fragment Enables Separation of Concerns
 +slide

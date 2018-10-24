@@ -7,7 +7,7 @@ include mixins.jade
   +codeexample
     p
       | class R2D3 {
-      |   public visualize() {
+      |   public visualize(Surface surface) {
       |     ...
       |   }
       | }
@@ -22,12 +22,12 @@ include mixins.jade
       | 
       +revealedcodeblock
         |   public visualize(String projectRoot) {
-        |     List&lt;File&gt; resources = getResources(projectRoot)
+        |     Resources resources = getResources(projectRoot)
         |     // Visualizer code
         |   }
       | 
       +revealedcodeblock
-        |   private List&lt;File&gt; getResources(String projectRoot) {
+        |   private Resources getResources(String projectRoot) {
         |     ...
         |   }
       | }
@@ -40,9 +40,10 @@ include mixins.jade
   +notes
     p so this visualize task
     p calls this getResources method
-+slide
-  p getResources(...): Tightly coupled to visualize(...)
-  p.fragment getResources(...): Difficult to mock
++readyslide
+  p.fragment.dimafter Because visualize is tightly coupled to getResources...
+  p.fragment.dimafter ...if getResources must be mocked...
+  p.fragment.dimafter visualize is difficult to test.
 +slide
   p Testing requires looking at internals
   img(src='resources/c3po_naked.jpg', height='400', class='noborder')
@@ -57,14 +58,14 @@ include mixins.jade
       |   .createPartialMock(
       |     R2D3.class, 
       |     "getResources")
-      |   .andReturn(files);
+      |   .andReturn(resources);
     | 
   +notes.
     To change the behavior in unit test, you'd have to mock this get resources
     method.
 +slide
-  p Implies an iceberg
-  img(src='resources/iceberg.jpg', height='400', class='noborder')
+  img(src='resources/no_moon.png', height='400', class='noborder')
+  p.fragment You don't know what's inside that moon.
   +notes.
     The need to powermock implies a tight coupling on internal behavior, not
     a single responsibility
@@ -77,7 +78,7 @@ include mixins.jade
     | 
     |   public visualize(String projectRoot) {
     +codeblock
-      |     List&lt;File&gt; resources = getResources(projectRoot)
+      |     Resources resources = getResources(projectRoot)
     |     // Visualizer code
     |   }
     | }
@@ -98,7 +99,7 @@ include mixins.jade
       |    .createPartialMock(
       |      FileFinder.class, 
       |      "getResources")
-      |    .andReturn(files);
+      |    .andReturn(resources);
     | 
   +notes.
     Still need to mock out the behavior in test, and
@@ -106,24 +107,25 @@ include mixins.jade
     then you get into tree-hierarchy searches that are complicated
 +slide
   p Hard to Swap
-  img(src='resources/swap_board.gif', height='500', class='noborder')
+  img(src='resources/swap_head.gif', height='500', class='noborder')
   +notes.
     hard to change behaviors, hard to swap out
 +readyslide
+  p What about setting it up in the constructor?
   div.row
     div.column
       +codeexample
         | class R2D3 {
-        |   List&lt;File&gt; files;
+        |   Resources resources;
         | 
         +codeblock
           |   R2d3(String projectRoot) {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
-        |     files = finder.getResources()
+        |     resources = finder.getResources()
         |   }
         | 
-        |   public visualize() {
+        |   public visualize(Surface surface) {
         |     ...
         |   }
         | }
@@ -140,7 +142,7 @@ include mixins.jade
   +codeexample
     | 
     | expectNew(FileFinder.class, "projectRoot")
-    |   .andReturn(files);
+    |   .andReturn(resources);
     | 
   +notes.
     Now, in order to change the behavior you have to mock out internals.
@@ -153,11 +155,11 @@ include mixins.jade
   p ok, no new in my constructor!!!1
   +codeexample
     | class R2D3 {
-    |   List&lt;File&gt; files;
+    |   Resources resources;
     | 
     |   R2d3(String projectRoot) {
     +codeblock
-      |     files = FileFinder.getResources(projectRoot)
+      |     resources = FileFinder.getResources(projectRoot)
     |   }
     | }
   ul
@@ -177,39 +179,23 @@ include mixins.jade
       |      "getResources");
       |  EasyMock.expect(
       |    FileFinder.getResources(...))
-      |  .andReturn(files);
+      |  .andReturn(resources);
     | 
   +notes.
     Still mocking internals
-+slide
-  p When do statics improve code?
-  p.fragment.dimafter no this
-  p.fragment.dimafter pure functions
-  p.fragment.dimafter Still is coupling
-  +notes.
-    Avoid bleeding local scope. Handy for pure functions, good no intent to override
 +readyslide
-  +codeexample
-    | class R2D4 extends R2D3 {
-    | 
-    |   @override
-    |   public List&lt;File&gt; getResources()
-  +notes.
-    One of the nice things about statics is they prevent inheritance
-    from being used to replace collaborator behaviors
-+readyslide
-  p perfect code
+  p `Testable code`
   +codeexample
     | class R2D3 {
-    |   final List&lt;File&gt; files;
+    |   final Resources resources;
     | 
     +codeblock
-      |   R2d3(List&lt;File&gt; visualizableFiles) {
-      |     this.files = visualizableFiles;
+      |   R2d3(Resources resources) {
+      |     this.resources = resources;
       |   }
     | 
     +codeblock
-      |   public visualize() {
+      |   public visualize(Surface surface) {
       |     // visualization code
       |   }
     | }
@@ -219,23 +205,57 @@ include mixins.jade
     you might also inject it into the
     visualize method depending on how it works
 +readyslide
+  p Testing with a mock-in-the-middle
+  +codeexample
+    |  class R2d3Test {
+    |    R2d3 r2d3;
+    |  
+    |    @Before
+    |    public void setupDroid() {
+    |      Resources resources = mock(Resources.class);
+    |      ResourceService mockResourceService = mock(mockResourceService);
+    |      when(mockResourceService.getResources).thenReturn(mockResources);
+    |      r2d3 = new R2d3(mockResourceService);
+    |    }
+    |  
+    |    @Test
+    |    public void r2d3Visualizes() {
+    |      // test r2d3
++readyslide
+  p Testing becomes easy.
+  +codeexample
+    |  class R2d3Test {
+    |    R2d3 r2d3;
+    | 
+    |    @Before
+    |    public void setupDroid() {
+    |      Resources mockResources = mock(resources.class);
+    |      r2d3 = new R2d3(mockResources)
+    |    }
+    | 
+    |    @Test
+    |    public void r2d3Visualizes() {
+    |      // test r2d3
+  ul
+    li.fragment dependency injection (fowler, in a good way)
++readyslide
   p static factories are better than nothing
   +codeexample
     p
       | class R2D3 {
-      |   List&lt;File&gt; files;
+      |   Resources resources;
       | 
       +revealedcodeblock
         |   public static R2D3 create(String projectRoot) {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
-        |     files = finder.getResources()
-        |     return new R2D3(files)
+        |     resources = finder.getResources()
+        |     return new R2D3(resources)
         |   }
       | 
       +codeblock
-        |   R2d3(List&lt;File&gt; visualizableFiles) {
-        |     this.files = visualizableFiles;
+        |   R2d3(Resources resources) {
+        |     this.resources = resources;
         |   }
       |   ...
       | }
@@ -254,13 +274,19 @@ include mixins.jade
         |   public static R2D3 provide() {
         |     ResourceService finder = 
         |       new FileFinder(projectRoot)
-        |     files = finder.getResources()
-        |     return new R2D3(files)
+        |     resources = finder.getResources()
+        |     return new R2D3(resources)
       |   }
++slide
+  p When are static methods OK?
+  p.fragment.dimafter Providers are better than
+  p.fragment.dimafter Static factory methods, which are MUCH better than
+  p.fragment.dimafter new in constructor, which is ENORMOUSLY better than
+  p.fragment.dimafter extending collaborators
 +readyslide
-  p Ci3po: the translator
+  p Ci3proto: the translator
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     |   ...
     |   public translate() {
     |     ...
@@ -268,11 +294,11 @@ include mixins.jade
     | }
 +readyslide
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     |   ...
     |   public translate(TaskContainer t) {
     +codeblock
-      |     List&lt;File&gt; files = t
+      |     Resources resources = t
       |       .getByPath(:app:fileFinder")
       |       .fileFinder
       |       .getResources();
@@ -289,7 +315,7 @@ include mixins.jade
   p Annoying to mock.
 +readyslide
   +codeexample
-    |     Ci3po.translate(new TaskContainer() {
+    |     Ci3proto.translate(new TaskContainer() {
     +codeblock
       |       public getByPath(String s) {
     |         return resourceService
@@ -304,7 +330,7 @@ include mixins.jade
   p Easier: Just pass the right thing in!
 +readyslide
   +codeexample
-    |     Ci3po.translate(resourceService.getResources())
+    |     Ci3proto.translate(resourceService.getResources())
   +hiddenheader
     p If we're both objects:
     p Don't do things to my data.
@@ -316,6 +342,7 @@ include mixins.jade
   p.fragment Tell a dog to walk:
   p.fragment Don't tell the dog's legs to walk.
   p.fragment Tell the dog.
+  img.fragment(src='resources/dog_pants.jpg', height='350', class='noborder')
 +slide
   p A method may only call things in direct scope
 +readyslide
@@ -338,7 +365,7 @@ include mixins.jade
 +slide
   p But it should avoid reaching into other classes
   +codeexample
-    | this.helper.getPainter.draw()
+    | this.helper.getPainter().draw()
 +slide
   p This creates couplings:
   p Now it depends on both the helper and the painter's code not changing.
@@ -392,14 +419,14 @@ include mixins.jade
 +readyslide
   +codeexample
     | interface ResourceService
-    |   public List&lt;File&gt; getResources()
+    |   public Resources getResources()
   p vs
   div.fragment
     +codeexample
       | interface ResourceService
-      |   public List&lt;File&gt; getResources()
+      |   public Resources getResources()
       |   public void delete()
-      |   public File find(String path)
+      |   public Resource find(String path)
   +notes.
     if a class doesn't need elements of an interface
       let's not make it more complex because of them
@@ -412,23 +439,25 @@ include mixins.jade
     |   }
     |   ...
   div.fragment
-    p
-      em tight coupled inputs through
-    p
-      em extreme liskov substitution
+      em liskov substitution principle (fowler)
 +slide
   p High cohesion: Avoid unneeded scope.
 +readyslide
+  p It's okay to have interfaces to different use-cases
   +codeexample
-    | interface ResourceService
-    |   public List&lt;File&gt; getResources()
+    | interface ResourceReader
+    |   public Resources getResources();
+  +revealedcodeexample
+    | interface ResourceService extends ResourceReader
+    |   public Resources deleteResources();
++slide
   div.fragment
     +codeexample
-      | class FileFinder
-      |   public List&lt;File&gt; getResources() {
+      | class FileFinder implements ResourceService
+      |   public Resources getResources() {
       |   ...
       +codeblock
-        |   public void deleteFiles() {
+        |   public void refreshResources() {
       |   ...
   +notes
     p Let's assume you've got a interface, resource service
@@ -437,19 +466,17 @@ include mixins.jade
     p that are weird
 +readyslide
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     |   ...
     +codeblock
       |   public translate(FileFinder f) {
-    |     List&lt;File&gt; = f.getResources()
+    |     Resources resources = f.getResources()
     |     ...
     |   }
     | }
   div.fragment 
-    p
-      em tightly coupled inputs through
-    p
-      em overly specific implementation
+    ul
+      li.fragment Interface segregation principle (fowler)
   +notes.
     Now I'm locked into creating a FileFinder,
     if it has a lot of extra scope, I don't
@@ -458,29 +485,28 @@ include mixins.jade
 +readyslide
   p I would have to extend a real implementation.
   +codeexample
-    | ci3po.translate(new FileFinder() {...});
+    | ci3proto.translate(new FileFinder() {...});
 +readyslide
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     |   ...
-    |   public translate(ResourceService f) {
+    |   public translate(ResourceService rs) {
     +codeblock
-      |     if (f instanceof FileFinder) {
-    |       List&lt;File&gt; files = (FileFinder) f.getResources()
+      |     if (rs instanceof FileFinder) {
+    |       Resources resources = (FileFinder) rs.getResources()
     |       ...
     |     }
     |   }
     | }
   div.fragment 
-    p
-      em tightly coupled inputs through
-    p
-      em closed for extension code
+    ul
+      lu open/closed principle (fowler)
   +notes.
     I'm STILL locked into creating a FileFinder,
     because you are using instanceof
 +slide
-  h2 instanceof only on datatypes
+  p Tip: instanceof only on datatypes
+  p.fragment see: functional programming
   p.fragment further reading: scala case classes
   // TODO: add matcher here
   // TODO: fully grep this
@@ -488,9 +514,9 @@ include mixins.jade
     because: if its not immutable data, can ask it to solve problem
     for you.
 +readyslide
-  p Ci3po: Translations as a service
+  p Ci3proto: Translations as a service
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     | 
     +codeblock
       |   Uploader uploader;
@@ -500,10 +526,10 @@ include mixins.jade
     |   }
     | }
   +notes.
-    Ok, now let's say Ci3po has an uploader it uses
+    Ok, now let's say Ci3proto has an uploader it uses
 +readyslide
   +codeexample
-    | class Ci3po {
+    | class Ci3proto {
     | 
     |   Uploader uploader;
     | 
@@ -512,19 +538,21 @@ include mixins.jade
       |     uploader.setEndpoint('http://ci/translations')
       |     uploader.sendGet(
       |        new HttpGet('hasTranslations', 
-      |        params(f.getFiles()))
+      |        params(f.getResources()))
     |     ...
     |   }
     | }
   div.fragment 
-    p
-      em tightly coupled inputs through
-    p
-      em reaching into state
+    ul
+      li.fragment Reaching into collaborators (google testability)
+      li.fragment class does too much (google testability)
+      li.fragment Getters and Setters are evil (Holub)
   +notes.
     Translator calls into an uploader, instead of asking it
     if it has translations, it makes a request, coupling to httpclient
+    Who knows if set methods are thread safe or if other instances have
+    reference.
 +readyslide
   p better
   +codeexample
-    |  uploader.hasTranslations(files)
+    |  uploader.hasTranslations(resources)
