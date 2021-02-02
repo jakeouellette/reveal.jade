@@ -1,8 +1,129 @@
+
+
+/* body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+} */
+@keyframes logo {
+  from {
+    width: 100%;
+    opacity: 1;
+ }
+  90% {
+    opacity: 1;
+ }
+  to {
+    width: 0%;
+    opacity: 0;
+ }
+}
+@keyframes farfar {
+  0% {
+    opacity: 0;
+ }
+  15% {
+    opacity: 1;
+ }
+  95% {
+    opacity: 1;
+ }
+  100% {
+    opacity: 0;
+ }
+}
+@keyframes swcrawl {
+  0% {
+    transform: rotatex(45deg) translateY(470px);
+    opacity: 1;
+ }
+  25% {
+    opacity: 1;
+ }
+  65% {
+    opacity: 1;
+ }
+  100% {
+    opacity: 0;
+    transform: rotatex(45deg) translateY(-50px);
+ }
+}
+body .reveal {
+  background: url('http://www.ultradrive.com/images/rdx_starfield.jpg');
+  color: rgb(75, 213, 238);
+  overflow: hidden;
+  font-family: 'Franklin Gothic Book', sans-serif;
+}
+.galaxy {
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  color: #e6ca3a;
+}
+.galaxy .away {
+  margin: auto;
+  animation-duration: 4s;
+  animation-delay: 10s;
+  animation-name: farfar;
+  opacity: 0;
+  width: 350px;
+  display: block;
+  text-indent: 0;
+  padding-top: 25%;
+  position: absolute;
+  font-weight: normal;
+}
+.galaxy .logo {
+  margin: auto;
+  text-align: center;
+  padding-top: 125px;
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+}
+.galaxy > div > img {
+  width: 100%;
+  opacity: 0;
+  animation-name: logo;
+  animation-duration: 9s;
+}
+.galaxy > .fall {
+  font-size: 32px;
+  line-height: 50px;
+  text-indent: 50px;
+  margin: auto;
+  text-align: justify;
+  perspective: 400px;
+  font-weight: bold;
+}
+.visible .galaxy > .fall > p {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  text-align: justify;
+  animation-name: swcrawl;
+  animation-delay: -1s;
+  animation-duration: 10s;
+  opacity: 0;
+}
+.galaxy > .fall > p > i {
+  text-align: left;
+  display: block;
+  width: 100%;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+
+
+
+
 .reveal .slides section .fragment.blur-non-current {
   color: transparent;
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
   opacity: 1;
-  visibility: visible; 
+  visibility: visible;
 }
 
 .reveal .slides pre {
@@ -36,7 +157,7 @@
 
 .reveal .slides section .fragment.always-visible:not(visible) {
   opacity: 1;
-  visibility: visible; 
+  visibility: visible;
 }
 
 .reveal .slides section .visiblestart.fragment:not(.visible) {
@@ -47,7 +168,7 @@
 .reveal .slides section .fragment.visible:not(.current-fragment).dimafter {
   color: inherit;
   opacity: 0.1;
-  visibility: visible; 
+  visibility: visible;
 }
 
 .dimafter {
@@ -70,7 +191,7 @@ pre {
   color: rgba(255,255, 255, 1);
   text-shadow: inherit;
   opacity: 1;
-  visibility: hidden; 
+  visibility: hidden;
   transition-property: all;
   transition-duration: 0s;
   transition-timing-function: ease;
@@ -81,7 +202,7 @@ pre {
   color: rgba(255,255, 255, 1);
   text-shadow: inherit;
   opacity: 1;
-  visibility: visible; 
+  visibility: visible;
   transition-property: all;
   transition-duration: 0s;
   transition-timing-function: ease;
@@ -93,7 +214,7 @@ pre {
   color: inherit;
   text-shadow: inherit;
   opacity: inherit;
-  visibility: hidden; 
+  visibility: hidden;
   transition-property: all;
   transition-duration: 0s;
   transition-timing-function: ease;
@@ -104,7 +225,7 @@ pre {
   color: inherit;
   text-shadow: inherit;
   opacity: inherit;
-  visibility: inherit; 
+  visibility: inherit;
   transition-property: all;
   transition-duration: 0s;
   transition-timing-function: ease;
@@ -113,12 +234,12 @@ pre {
 
 .reveal .slides section .fragment.visible:not(.current-fragment).dimcode {
   color: rgba(255,255, 255, 0.3);
-  visibility: visible; 
+  visibility: visible;
 }
 
 .reveal .slides section .fragment.visible.current-fragment.dimcode {
   color: rgba(255,255, 255, 1);
-  visibility: visible; 
+  visibility: visible;
 }
 
 .reveal .slides section .fragment:not(.visible).unhide {
@@ -152,3 +273,40 @@ pre {
   position:relative;
   display:inherit;
 }
+
+
+
+
+
+
+/* star wars blue: */
+/* Center it, set the color, size and hide the text */
+/* .intro {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  z-index: 1;
+  animation: intro 6s ease-out 1s;
+  color: rgb(75, 213, 238);
+  font-weight: 400;
+  font-size: 300%;
+  opacity: 0;
+}
+
+@keyframes intro {
+  0% {
+      opacity: 0;
+  }
+  20% {
+      opacity: 1;
+  }
+  90% {
+      opacity: 1;
+  }
+  100% {
+      opacity: 0;
+  }
+}
+ */
+
+

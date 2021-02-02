@@ -1,0 +1,563 @@
+include mixins.pug
++slide
+  div.galaxy
+    div.fall
+      p
+        i Episode II
+      p Cohesion:
+      p How to limit objects' scope
+      p How to limit objects' responsibilities
+
++readyslide
+  +codeexample
+    p
+      | class R2D3 {
+      |   public visualize(Surface surface) {
+      |     ...
+      |   }
+      | }
+  +notes.
+    Let's talk about R2D3.
+    We said it visualizes resources using d3
+    a javascript framework
++readyslide
+  +codeexample
+    p
+      | class R2D3 {
+      |
+      +revealedcodeblock
+        |   public visualize(String projectRoot) {
+        |     Resources resources = getResources(projectRoot)
+        |     // Visualizer code
+        |   }
+      |
+      +revealedcodeblock
+        |   private Resources getResources(String projectRoot) {
+        |     ...
+        |   }
+      | }
+  div.fragment
+    p
+      em Multiple-responsibility
+    ol
+      li.fragment visualizer
+      li.fragment resource-getter
+  +notes
+    p so this visualize task
+    p calls this getResources method
++readyslide
+  p.fragment.dimafter Because visualize is tightly coupled to getResources...
+  p.fragment.dimafter ...if getResources must be mocked...
+  p.fragment.dimafter visualize is difficult to test.
++slide
+  p Testing requires looking at internals
+  img(src='resources/c3po_naked.jpg', height='400', class='noborder')
+  +notes.
+      a hidden collaborator
++readyslide
+  p E.g., can use "Powermock"
+  +codeexample
+    |
+    | PowerMock
+    +revealedcodeblock
+      |   .createPartialMock(
+      |     R2D3.class,
+      |     "getResources")
+      |   .andReturn(resources);
+    |
+  +notes.
+    To change the behavior in unit test, you'd have to mock this get resources
+    method.
++slide
+  img(src='resources/no_moon.png', height='400', class='noborder')
+  p.fragment You don't know what's inside that moon.
+  +notes.
+    The need to powermock implies a tight coupling on internal behavior, not
+    a single responsibility
+    Not taking advantage of OO facilities to separate behaviors
++readyslide
+  p `Extends`: The same, but more hidden
+  +codeexample
+    +codeblock
+      | class R2D3 extends FileFinder {
+    |
+    |   public visualize(String projectRoot) {
+    +codeblock
+      |     Resources resources = getResources(projectRoot)
+    |     // Visualizer code
+    |   }
+    | }
+  div.fragment
+    ul
+      li.fragment extends is evil (Holub)
+      li.fragment single responsibility (Fowler)
+      li.fragment open/closed (Fowler)
+      li.fragment Class does too much (Google Testability)
+  +notes.
+    the problem is this method is tightly coupled
+    to this class's implementation of get resources
++readyslide
+  +codeexample
+    |
+    | PowerMock
+    +revealedcodeblock
+      |    .createPartialMock(
+      |      FileFinder.class,
+      |      "getResources")
+      |    .andReturn(resources);
+    |
+  +notes.
+    Still need to mock out the behavior in test, and
+    if that internal class references something mock-worthy, but it, itself, isnt,
+    then you get into tree-hierarchy searches that are complicated
++slide
+  p Hard to Swap
+  img(src='resources/swap_head.gif', height='500', class='noborder')
+  +notes.
+    hard to change behaviors, hard to swap out
++readyslide
+  p What about setting it up in the constructor?
+  div.row
+    div.column
+      +codeexample
+        | class R2D3 {
+        |   Resources resources;
+        |
+        +codeblock
+          |   R2d3(String projectRoot) {
+        |     ResourceService finder =
+        |       new FileFinder(projectRoot)
+        |     resources = finder.getResources()
+        |   }
+        |
+        |   public visualize(Surface surface) {
+        |     ...
+        |   }
+        | }
+    div.column
+      ul
+        li.fragment open/closed (Fowler)
+        li.fragment Constructors do real work (Google Testability)
+        li.fragment single responsibility? (Fowler)
+  +notes
+    p OK, we can extract FileFinder out
+    p create it ahead of time in our constructor
++readyslide
+  p Testing requires knowledge of internals :(
+  +codeexample
+    |
+    | expectNew(FileFinder.class, "projectRoot")
+    |   .andReturn(resources);
+    |
+  +notes.
+    Now, in order to change the behavior you have to mock out internals.
++slide
+  h2 avoid new in constructors
+  p.fragment dependency inversion
+  +notes.
+    // TODO: motivate
++readyslide
+  p ok, no new in my constructor!!!1
+  +codeexample
+    | class R2D3 {
+    |   Resources resources;
+    |
+    |   R2d3(String projectRoot) {
+    +codeblock
+      |     resources = FileFinder.getResources(projectRoot)
+    |   }
+    | }
+  ul
+    li.fragment open/closed (Fowler)
+    li.fragment Has Singletons(Google Testability)
+    li.fragment single responsibility? (Fowler)
+  +notes.
+    OK
++readyslide
+  p Testing requires knowledge of internals :(
+  +codeexample
+    |
+    |  PowerMock
+    +revealedcodeblock
+      |    .mockStaticPartial(
+      |      FileFinder.class,
+      |      "getResources");
+      |  EasyMock.expect(
+      |    FileFinder.getResources(...))
+      |  .andReturn(resources);
+    |
+  +notes.
+    Still mocking internals
++readyslide
+  p `Testable code`
+  +codeexample
+    | class R2D3 {
+    |   final Resources resources;
+    |
+    +codeblock
+      |   R2d3(Resources resources) {
+      |     this.resources = resources;
+      |   }
+    |
+    +codeblock
+      |   public visualize(Surface surface) {
+      |     // visualization code
+      |   }
+    | }
+  +notes.
+    A good pattern is to separate
+    out the concerns and JUST pass in the files
+    you might also inject it into the
+    visualize method depending on how it works
++readyslide
+  p Testing with a mock-in-the-middle
+  +codeexample
+    |  class R2d3Test {
+    |    R2d3 r2d3;
+    |
+    |    @Before
+    |    public void setupDroid() {
+    |      Resources resources = mock(Resources.class);
+    |      ResourceService mockResourceService = mock(mockResourceService);
+    |      when(mockResourceService.getResources).thenReturn(mockResources);
+    |      r2d3 = new R2d3(mockResourceService);
+    |    }
+    |
+    |    @Test
+    |    public void r2d3Visualizes() {
+    |      // test r2d3
++readyslide
+  p Testing becomes easy.
+  +codeexample
+    |  class R2d3Test {
+    |    R2d3 r2d3;
+    |
+    |    @Before
+    |    public void setupDroid() {
+    |      Resources mockResources = mock(resources.class);
+    |      r2d3 = new R2d3(mockResources)
+    |    }
+    |
+    |    @Test
+    |    public void r2d3Visualizes() {
+    |      // test r2d3
+  ul
+    li.fragment dependency injection (fowler, in a good way)
++readyslide
+  p static factories are better than nothing
+  +codeexample
+    p
+      | class R2D3 {
+      |   Resources resources;
+      |
+      +revealedcodeblock
+        |   public static R2D3 create(String projectRoot) {
+        |     ResourceService finder =
+        |       new FileFinder(projectRoot)
+        |     resources = finder.getResources()
+        |     return new R2D3(resources)
+        |   }
+      |
+      +codeblock
+        |   R2d3(Resources resources) {
+        |     this.resources = resources;
+        |   }
+      |   ...
+      | }
+  +notes.
+    You can make incremental refactorings that
+    get you closer to ideal. Better than passing
+    factories everywhere
++readyslide
+  p Static factory can be pulled out into a provider later.
+  +codeexample
+    p
+      | class R2D3Provider implements Provider&lt;R2D3&gt; {
+      |   @Inject String projectRoot
+      |
+      +revealedcodeblock
+        |   public static R2D3 provide() {
+        |     ResourceService finder =
+        |       new FileFinder(projectRoot)
+        |     resources = finder.getResources()
+        |     return new R2D3(resources)
+      |   }
++slide
+  p When are static methods OK?
+  p.fragment.dimafter Providers are better than
+  p.fragment.dimafter Static factory methods, which are MUCH better than
+  p.fragment.dimafter new in constructor, which is ENORMOUSLY better than
+  p.fragment.dimafter extending collaborators
++readyslide
+  p Ci3proto: the translator
+  +codeexample
+    | class Ci3proto {
+    |   ...
+    |   public translate() {
+    |     ...
+    |   }
+    | }
++readyslide
+  +codeexample
+    | class Ci3proto {
+    |   ...
+    |   public translate(TaskContainer t) {
+    +codeblock
+      |     Resources resources = t
+      |       .getByPath(:app:fileFinder")
+      |       .fileFinder
+      |       .getResources();
+    |     ...
+    |   }
+    | }
+  ul
+    li.fragment.dimafter Reaching into collaborators (Google Testability)
+    li.fragment.dimafter Interface Segregation (Fowler)
+    li.fragment single responsibility? (Fowler)
+  +notes.
+    This is tightly coupled, to mock it:
++slide
+  p Annoying to mock.
++readyslide
+  +codeexample
+    |     Ci3proto.translate(new TaskContainer() {
+    +codeblock
+      |       public getByPath(String s) {
+    |         return resourceService
+    |       }
+    +codeblock
+      |       ... (40 more lines of code)
+    |     })
+  +notes.
+    If we want to mock just the internal service, we have to
+    mock the full api, including the 40-some odd methods that are unused
++slide
+  p Easier: Just pass the right thing in!
++readyslide
+  +codeexample
+    |     Ci3proto.translate(resourceService.getResources())
+  +hiddenheader
+    p If we're both objects:
+    p Don't do things to my data.
+    p Ask me to do things.
+  p.fragment.replaceafter Law of demeter
++readyslide
+  +hiddenheader
+    p Law of demeter:
+  p.fragment Tell a dog to walk:
+  p.fragment Don't tell the dog's legs to walk.
+  p.fragment Tell the dog.
+  img.fragment(src='resources/dog_pants.jpg', height='350', class='noborder')
++slide
+  p A method may only call things in direct scope
++readyslide
+  p It can call a method of it's own class
+  +codeexample
+    | this.draw()
++readyslide
+  p Or methods of objects injected in
+  +codeexample
+    | graphics.draw()
++readyslide
+  p Or methods of objects it made
+  +codeexample
+    | local = new Gif()
+    | local.draw()
++readyslide
+  p Or methods of objects in it's class
+  +codeexample
+    | this.helper.draw()
++slide
+  p But it should avoid reaching into other classes
+  +codeexample
+    | this.helper.getPainter().draw()
++slide
+  p This creates couplings:
+  p Now it depends on both the helper and the painter's code not changing.
++slide
+  p If you can do it anyway, why am I doing it for you?
++slide
+  p Law of demeter is about #[em behavior] of objects
++readyslide
+  +hiddenheader A lot of data is hierarchical
+  +revealedcodeexample
+    | "person": [
+    |   "head": [ "hair": "brown", "eyes": "blue" ],
+    |   "legs": 2]
++readyslide
+  +hiddenheader Can be encoded as objects
+  +revealedcodeexample
+    | person = new Person(
+    |   new Head(new Hair("brown"), new Eyes("blue")),
+    |   new Legs(2), ...)
++readyslide
+  +hiddenheader Does this violate law of demeter?
+  +revealedcodeexample
+    | person.getHair().getColor()
++slide
+  p Here, person is just data
+  p.fragment just an immutable data-structure
++readyslide
+  +hiddenheader Higher level data makes simpler parameter lists
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Person p)
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public PersonPainter(Hair h, Legs l, ...)
+  +notes.
+    One benefit of immutable abstractions is it makes
+    parameter lists simpler
++readyslide
+  p Bad: Getting data from objects.
+  +codeexample
+    | public class View {
+    |   public void paint() {
+    |     if (personPainter
+    +codeblock
+      |       .getPerson().hair().equals("brown") {
+    |       // Vary paint style
+    |     }
+  +notes.
+    What happens when a higher level class reaches into
+    a bheavior object's inner state?
++readyslide
+  +codeexample
+    | interface ResourceService
+    |   public Resources getResources()
+  p vs
+  div.fragment
+    +codeexample
+      | interface ResourceService
+      |   public Resources getResources()
+      |   public void delete()
+      |   public Resource find(String path)
+  +notes.
+    if a class doesn't need elements of an interface
+      let's not make it more complex because of them
++readyslide
+  p Inevitably:
+  +codeexample
+    | class YourResourceService extends ResourceService
+    |   public delete() {
+    |     throw new UnsupportedOperationException("nooo!")
+    |   }
+    |   ...
+  div.fragment
+      em liskov substitution principle (fowler)
++slide
+  p High cohesion: Avoid unneeded scope.
++readyslide
+  p It's okay to have interfaces to different use-cases
+  +codeexample
+    | interface ResourceReader
+    |   public Resources getResources();
+  +revealedcodeexample
+    | interface ResourceService extends ResourceReader
+    |   public Resources deleteResources();
++slide
+  div.fragment
+    +codeexample
+      | class FileFinder implements ResourceService
+      |   public Resources getResources() {
+      |   ...
+      +codeblock
+        |   public void refreshResources() {
+      |   ...
+  +notes
+    p Let's assume you've got a interface, resource service
+    p and a class that implements it
+    p maybe that class has a lot of other methods
+    p that are weird
++readyslide
+  +codeexample
+    | class Ci3proto {
+    |   ...
+    +codeblock
+      |   public translate(FileFinder f) {
+    |     Resources resources = f.getResources()
+    |     ...
+    |   }
+    | }
+  div.fragment
+    ul
+      li.fragment Interface segregation principle (fowler)
+  +notes.
+    Now I'm locked into creating a FileFinder,
+    if it has a lot of extra scope, I don't
+    want to have to build that state.
+    Let me pass in what you'll use!
++readyslide
+  p I would have to extend a real implementation.
+  +codeexample
+    | ci3proto.translate(new FileFinder() {...});
++readyslide
+  +codeexample
+    | class Ci3proto {
+    |   ...
+    |   public translate(ResourceService rs) {
+    +codeblock
+      |     if (rs instanceof FileFinder) {
+    |       Resources resources = (FileFinder) rs.getResources()
+    |       ...
+    |     }
+    |   }
+    | }
+  div.fragment
+    ul
+      lu open/closed principle (fowler)
+  +notes.
+    I'm STILL locked into creating a FileFinder,
+    because you are using instanceof
++slide
+  p Tip: instanceof only on datatypes
+  p.fragment see: functional programming
+  p.fragment further reading: scala case classes
+  // TODO: add matcher here
+  // TODO: fully grep this
+  +notes.
+    because: if its not immutable data, can ask it to solve problem
+    for you.
++readyslide
+  p Ci3proto: Translations as a service
+  +codeexample
+    | class Ci3proto {
+    |
+    +codeblock
+      |   Uploader uploader;
+    |
+    |   public translate(ResourceService f) {
+    |     ...
+    |   }
+    | }
+  +notes.
+    Ok, now let's say Ci3proto has an uploader it uses
++readyslide
+  +codeexample
+    | class Ci3proto {
+    |
+    |   Uploader uploader;
+    |
+    |   public translate(ResourceService f) {
+    +codeblock
+      |     uploader.setEndpoint('http://ci/translations')
+      |     uploader.sendGet(
+      |        new HttpGet('hasTranslations',
+      |        params(f.getResources()))
+    |     ...
+    |   }
+    | }
+  div.fragment
+    ul
+      li.fragment Reaching into collaborators (google testability)
+      li.fragment class does too much (google testability)
+      li.fragment Getters and Setters are evil (Holub)
+  +notes.
+    Translator calls into an uploader, instead of asking it
+    if it has translations, it makes a request, coupling to httpclient
+    Who knows if set methods are thread safe or if other instances have
+    reference.
++readyslide
+  p better
+  +codeexample
+    |  uploader.hasTranslations(resources)

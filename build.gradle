@@ -22,8 +22,8 @@ task setupTalkResources(type: Copy) {
 }
 
 task exportJade(type: Exec, dependsOn: setupTalkResources) {
-	    inputs.dir talkCanonicalPath + '/src/main/components/jade'
-	    commandLine 'jade', (talkCanonicalPath + '/src/main/components/jade'), '--out', (talkCanonicalPath + '/out')
+	    inputs.dir talkCanonicalPath + '/src/main/components/pug'
+	    commandLine 'pug', (talkCanonicalPath + '/src/main/components/pug'), '--out', (talkCanonicalPath + '/out')
 }
 
 task export(dependsOn: exportJade)

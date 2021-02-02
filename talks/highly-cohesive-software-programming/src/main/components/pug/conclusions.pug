@@ -1,0 +1,52 @@
+include mixins.pug
+
++slide
+  h2 Cohesive Software Principles
+  ol
+    li.fragment Understand the Difference between Data and Objects
+    li.fragment Objects should have a single responsibility
+    li.fragment Objects can't see what they don't need
++slide
+  p thank you
+  img(src='resources/c3po_r2d2_2.gif', height='400', class='noborder')
+  p jakeout@
++slide
+  p Real world applications
++slide
+  p per-ide onboarding instructions
+  div(style="background:#777;")
+    img(src='resources/refactoring_1_needs.png', class='noborder')
+  +notes.
+    We used to build the IDE onboarding instructions per IDE.
+    Every time a new dev needed to add onboarding instructions, they had
+    to change intellij and eclipse
+    The problem was, there was a difference between the data "what needed to be onboarded",
+    and the process of onboarding
++slide
+  p Refactored
+  div(style="background:#777;")
+    img(src='resources/refactoring_1.png', class='noborder')
+  +notes.
+    We pulled the IDE onboarding instructions out, they were just data
+    now each IDE responds to data independently
++slide
+  p view-owning-controller
+  div(style="background:#777;")
+    img(src='resources/refactoring_2.png', class='noborder')
+  +notes.
+    Another example: our view owned our controller, any time we wanted
+    to change navigation, we were manipulating classes that were constructing jlabels
+    When we need the ability for people to jump into a context for migration,
+    the code for this got really gross, so we made each view dumb.
+    Views only respond to and generate events and show sub-views. They don't transition
+    to new states. This is heirarchical, so subviews are dumb, but the higher level view
+    might have some controller logic
++slide
+  p dumb-views
+  div(style="background:#777;")
+    img(src='resources/refactoring_2_needs.png', class='noborder')
++slide
+  p Conclusions
+  ul
+    li.fragment "object oriented"
+    li.fragment cohesion -- best practices

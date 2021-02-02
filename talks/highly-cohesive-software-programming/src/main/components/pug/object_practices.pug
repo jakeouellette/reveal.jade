@@ -1,0 +1,98 @@
+include mixins.pug
+
++readyslide
++slide
+  p "Object Oriented" programming
+  p in contrast with "functional" programming
++readyslide
+  +hiddenheader Let's say you've got a couple of classes
+  +revealedcodeexample
+    | public class PersonPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
+  +revealedcodeexample
+    | public class DogPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
++slide
+  p New classes for same behaviors through extends
+  div(style="background:#fff;")
+    img(src='resources/new_class.gif', height='150', class='noborder')
++readyslide
+  +hiddenheader Let's say you want to add a behavior
+  +revealedcodeexample
+    |  interface Drawable {
+    |    public void draw(Graphics g);
+    +revealedcodeblock
+      |    public void drawOutline(Graphics g);
+    |  }
++readyslide
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    |   public void draw(Graphics g) {
+    |      ...
+    |   }
+    |
+    +codeblock
+      |
+      |   public void drawOutline(Graphics g) {
+      |      ...
++slide
+  div(style="background:#fff;")
+    img(src='resources/new_function.gif', height='150', class='noborder')
++slide
+  p Could pull "Painting" behavior into single class:
+  +revealedcodeexample
+    | public class Painter {
+    |
+    |   public void draw(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    |   }
+    +revealedcodeblock
+      |   public void drawOutline(Object o) {
+      |     if (o instanceof Person) {
+      |       ...
+      |     }
+    |     ...
+    |   }
++readyslide
+  p But then, the only way to extend types is to add to every behavior
+  +codeexample
+    | public class Painter {
+    |
+    |   public drawOutline(Object o) {
+    |     if (o instanceof Person) {
+    |       ...
+    |     }
+    +revealedcodeblock
+      |     if (o instanceof Dog) {
+      |       ...
+      |     }
+    +revealedcodeblock
+      |     if (o instanceof Cat) {
+      |       ...
+      |     }
+    |     ...
+//- +slide
+//-   p There are solutions
+//-   div.fragment(style="background:#fff;")
+//-     p Clojure Protocols
+//-     img(src='resources/protocols.gif', height='300', class='noborder')
++slide
+  p Object: Painter, PersonPainter
+  p Data: Person
++readyslide
+  p Watch out for mixing concepts:
+  +codeexample
+    | public class PersonPainter implements Drawable {
+    +codeblock
+      |   public void draw(Graphics g) {
+      |     ...
+      |   }
+    |
+    +codeblock
+      |   public Color getHair() {

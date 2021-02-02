@@ -1,18 +1,18 @@
-<section></section><section><div class="fragment"><p>"Object Oriented" programming </p><p>in contrast with "functional" programming</p></div></section><section><div class="fragment dimafter visiblestart">Let's say you've got a couple of classes</div><pre class="fragment hiddencode dimcode">public class PersonPainter implements Drawable {
+<section></section><section><div class="fragment"><p>"Object Oriented" programming</p><p>in contrast with "functional" programming</p></div></section><section><div class="fragment dimafter visiblestart">Let's say you've got a couple of classes</div><pre class="fragment hiddencode dimcode">public class PersonPainter implements Drawable {
   public void draw(Graphics g) {
      ...
   }</pre><pre class="fragment hiddencode dimcode">public class DogPainter implements Drawable {
   public void draw(Graphics g) {
      ...
-  }</pre></section><section><div class="fragment"><p>New classes for same behaviors through extends</p><div style="background:#fff;"><img src="resources/new_class.gif" height="150" class="noborder"/></div></div></section><section><div class="fragment dimafter visiblestart">Let's say you want to add a behavior</div><pre class="fragment hiddencode dimcode"> interface Drawable {
+  }</pre></section><section><div class="fragment"><p>New classes for same behaviors through extends</p><div style="background:#fff;"><img class="noborder" src="resources/new_class.gif" height="150"/></div></div></section><section><div class="fragment dimafter visiblestart">Let's say you want to add a behavior</div><pre class="fragment hiddencode dimcode"> interface Drawable {
    public void draw(Graphics g);<span class="fragment dimcode hiddencode"><br/>   public void drawOutline(Graphics g);<br/></span> }</pre></section><section><pre class="fragment dimcode">public class PersonPainter implements Drawable {
   public void draw(Graphics g) {
      ...
   }
- <span class="fragment dimcode"><br/> 
+<span class="fragment dimcode"><br/>
   public void drawOutline(Graphics g) {
-     ...<br/></span></pre></section><section><div class="fragment"><div style="background:#fff;"><img src="resources/new_function.gif" height="150" class="noborder"/></div></div></section><section><div class="fragment"><p>Could pull "Painting" behavior into single class:</p><pre class="fragment hiddencode dimcode">public class Painter {
- 
+     ...<br/></span></pre></section><section><div class="fragment"><div style="background:#fff;"><img class="noborder" src="resources/new_function.gif" height="150"/></div></div></section><section><div class="fragment"><p>Could pull "Painting" behavior into single class:</p><pre class="fragment hiddencode dimcode">public class Painter {
+
   public void draw(Object o) {
     if (o instanceof Person) {
       ...
@@ -22,7 +22,7 @@
       ...
     }<br/></span>    ...
   }</pre></div></section><section><p>But then, the only way to extend types is to add to every behavior</p><pre class="fragment dimcode">public class Painter {
- 
+
   public drawOutline(Object o) {
     if (o instanceof Person) {
       ...
@@ -32,4 +32,4 @@
       ...
     }<br/></span>    ...</pre></section><section><div class="fragment"><p>Object: Painter, PersonPainter</p><p>Data: Person</p></div></section><section><p>Watch out for mixing concepts:</p><pre class="fragment dimcode">public class PersonPainter implements Drawable {<span class="fragment dimcode"><br/>  public void draw(Graphics g) {
     ...
-  }<br/></span>  <span class="fragment dimcode"><br/>  public Color getHair() {<br/></span></pre></section>
+  }<br/></span><span class="fragment dimcode"><br/>  public Color getHair() {<br/></span></pre></section>
