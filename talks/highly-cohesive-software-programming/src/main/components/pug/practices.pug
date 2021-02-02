@@ -125,8 +125,9 @@ include mixins.pug
         |
         +codeblock
           |   R2d3(String projectRoot) {
-        |     ResourceService finder =
-        |       new FileFinder(projectRoot)
+        +codeblock
+          |     ResourceService finder =
+          |       new FileFinder(projectRoot)
         |     resources = finder.getResources()
         |   }
         |
@@ -283,11 +284,15 @@ include mixins.pug
         |     return new R2D3(resources)
       |   }
 +slide
-  p When are static methods OK?
-  p.fragment.dimafter Providers are better than
-  p.fragment.dimafter Static factory methods, which are MUCH better than
-  p.fragment.dimafter new in constructor, which is ENORMOUSLY better than
-  p.fragment.dimafter extending collaborators
+  p.fragment.replaceafter
+    strong When are static methods OK?
+  p.fragment
+    strong Jake's "HIERARCHY OF COUPLING":
+  ol
+    li.fragment.dimafter Providers &#62;
+    li.fragment.dimafter Static factory methods &#62;&#62;
+    li.fragment.dimafter New in constructor &#62;&#62;&#62;&#62;
+    li.fragment.dimafter "Extends" on collaborators
 +readyslide
   p Ci3proto: the translator
   +codeexample
