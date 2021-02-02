@@ -29,9 +29,8 @@ PowerMock<span class="fragment dimcode hiddencode"><br/>   .createPartialMock(
 if that internal class references something mock-worthy, but it, itself, isnt,
 then you get into tree-hierarchy searches that are complicated</aside></section><section><div class="fragment"><p>Hard to Swap</p><img class="noborder" src="resources/swap_head.gif" height="500"/><aside class="notes">hard to change behaviors, hard to swap out</aside></div></section><section><p>What about setting it up in the constructor?</p><div class="row"><div class="column"><pre class="fragment dimcode">class R2D3 {
   Resources resources;
-<span class="fragment dimcode"><br/>  R2d3(String projectRoot) {<br/></span>    ResourceService finder =
-      new FileFinder(projectRoot)
-    resources = finder.getResources()
+<span class="fragment dimcode"><br/>  R2d3(String projectRoot) {<br/></span><span class="fragment dimcode"><br/>    ResourceService finder =
+      new FileFinder(projectRoot)<br/></span>    resources = finder.getResources()
   }
 
   public visualize(Surface surface) {
@@ -101,7 +100,7 @@ factories everywhere</aside></section><section><p>Static factory can be pulled o
     ResourceService finder =
       new FileFinder(projectRoot)
     resources = finder.getResources()
-    return new R2D3(resources)<br/></span>  }</p></pre></section><section><div class="fragment"><p>When are static methods OK?</p><p class="fragment dimafter">Providers are better than</p><p class="fragment dimafter">Static factory methods, which are MUCH better than</p><p class="fragment dimafter">new in constructor, which is ENORMOUSLY better than</p><p class="fragment dimafter">extending collaborators</p></div></section><section><p>Ci3proto: the translator</p><pre class="fragment dimcode">class Ci3proto {
+    return new R2D3(resources)<br/></span>  }</p></pre></section><section><div class="fragment"><p class="fragment replaceafter"><strong>When are static methods OK?</strong></p><p class="fragment"><strong>Jake's "HIERARCHY OF COUPLING":</strong></p><ol><li class="fragment dimafter">Providers &#62;</li><li class="fragment dimafter">Static factory methods &#62;&#62;</li><li class="fragment dimafter">New in constructor &#62;&#62;&#62;&#62;</li><li class="fragment dimafter">"Extends" on collaborators</li></ol></div></section><section><p>Ci3proto: the translator</p><pre class="fragment dimcode">class Ci3proto {
   ...
   public translate() {
     ...
